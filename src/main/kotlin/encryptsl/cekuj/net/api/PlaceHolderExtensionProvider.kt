@@ -1,7 +1,7 @@
 package encryptsl.cekuj.net.api
 
 import encryptsl.cekuj.net.LiteEco
-import encryptsl.cekuj.net.extensions.isDecimal
+import encryptsl.cekuj.net.extensions.isNumeric
 import encryptsl.cekuj.net.extensions.playerPosition
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.Bukkit
@@ -15,7 +15,7 @@ class PlaceHolderExtensionProvider(private val liteEco: LiteEco) : PlaceholderEx
 
     override fun getAuthor(): String = "EncryptSL"
 
-    override fun getVersion(): String = "1.0.3"
+    override fun getVersion(): String = "1.0.2"
 
     override fun persist(): Boolean = true
 
@@ -31,18 +31,18 @@ class PlaceHolderExtensionProvider(private val liteEco: LiteEco) : PlaceholderEx
         if (player == null) return null
 
         if (identifier.startsWith("top_formatted_")) {
-            val split = this.spliterator(identifier, 2)
-            return if (split.isDecimal()) liteEco.api.formatting(balanceByRank(split.toInt())) else null
+            val split = this.spliterator(identifier)
+            return if (split.isNumeric()) liteEco.api.formatting(balanceByRank(split.toInt())) else null
         }
 
         if (identifier.startsWith("top_balance_")) {
-            val split = this.spliterator(identifier, 2)
-            return if (split.isDecimal()) balanceByRank(split.toInt()).toString() else null
+            val split = this.spliterator(identifier)
+            return if (split.isNumeric()) balanceByRank(split.toInt()).toString() else null
         }
 
         if (identifier.startsWith("top_player_")) {
-            val split = this.spliterator(identifier, 2)
-            return if (!split.isDecimal()) {
+            val split = this.spliterator(identifier)
+            return if (!split.isNumeric()) {
                 null
             } else if (nameByRank(split.toInt()) == "EMPTY") {
                 nameByRank(split.toInt())
@@ -53,20 +53,19 @@ class PlaceHolderExtensionProvider(private val liteEco: LiteEco) : PlaceholderEx
 
         return when(identifier) {
             "balance" -> liteEco.api.getBalance(player).toString()
-            "balance_compacted" -> liteEco.api.compacted(liteEco.api.getBalance(player))
             "balance_formatted" -> liteEco.api.formatting(liteEco.api.getBalance(player))
             "top_rank_player" -> nameByRank(1)
             else -> null
         }
     }
 
-    private fun spliterator(pattern: String, index: Int): String {
+    private fun spliterator(pattern: String, index: Int = 2): String {
         val args: List<String> = pattern.split("_")
         return args[index]
     }
 
     private fun nameByRank(rank: Int): String {
-        topBalance()?.playerPosition { index, entry ->
+        topBalance().playerPosition { index, entry ->
             if (index == rank) {
                 return entry.key
             }
@@ -75,7 +74,7 @@ class PlaceHolderExtensionProvider(private val liteEco: LiteEco) : PlaceholderEx
     }
 
     private fun balanceByRank(rank: Int): Double {
-        topBalance()?.playerPosition { index, entry ->
+        topBalance().playerPosition { index, entry ->
             if (index == rank) {
                 return entry.value
             }
@@ -84,13 +83,12 @@ class PlaceHolderExtensionProvider(private val liteEco: LiteEco) : PlaceholderEx
         return 0.0
     }
 
-    private fun topBalance(): LinkedHashMap<String, Double>? {
+    private fun topBalance(): LinkedHashMap<String, Double> {
         return liteEco.api.getTopBalance()
-            .entries
-            .stream()
-            .filter { data -> Bukkit.getOfflinePlayer(UUID.fromString(data.key)).hasPlayedBefore() }
-            .sorted(compareByDescending{o1 -> o1.value})
-            .collect(
-                Collectors.toMap({ e -> e.key }, { e -> e.value }, { _, e2 -> e2 }) { LinkedHashMap() })
+            .filterKeys { uuid -> Bukkit.getOfflinePlayer(UUID.fromString(uuid)).hasPlayedBefore() }
+            .toList()
+            .sortedByDescending { (_, balance) -> balance }
+            .toMap()
+            .let { LinkedHashMap<String, Double>(it) }
     }
 }
