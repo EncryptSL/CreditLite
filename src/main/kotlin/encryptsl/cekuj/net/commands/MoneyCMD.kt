@@ -4,13 +4,15 @@ import cloud.commandframework.annotations.*
 import cloud.commandframework.annotations.specifier.Range
 import encryptsl.cekuj.net.LiteEco
 import encryptsl.cekuj.net.api.Paginator
-import encryptsl.cekuj.net.api.enums.CheckLevel
 import encryptsl.cekuj.net.api.enums.LangKey
 import encryptsl.cekuj.net.api.enums.MigrationKey
 import encryptsl.cekuj.net.api.enums.PurgeKey
 import encryptsl.cekuj.net.api.events.*
 import encryptsl.cekuj.net.api.objects.ModernText
-import encryptsl.cekuj.net.extensions.*
+import encryptsl.cekuj.net.extensions.isNegative
+import encryptsl.cekuj.net.extensions.isZero
+import encryptsl.cekuj.net.extensions.moneyFormat
+import encryptsl.cekuj.net.extensions.positionIndexed
 import encryptsl.cekuj.net.utils.MigrationData
 import encryptsl.cekuj.net.utils.MigrationTool
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
@@ -27,26 +29,10 @@ import java.util.*
 @CommandDescription("Provided plugin by LiteEco")
 class MoneyCMD(private val liteEco: LiteEco) {
 
-    private fun validateAmount(amountStr: String, commandSender: CommandSender, checkLevel: CheckLevel = CheckLevel.FULL): Double? {
-        val amount = amountStr.toValidDecimal()
-        if (amount == null) {
-            commandSender.sendMessage(ModernText.miniModernText(liteEco.translationConfig.getMessage("messages.format_amount_error")))
-            return null
-        }
-        if (checkLevel == CheckLevel.ONLY_NEGATIVE && amount.isNegative() ||
-            checkLevel == CheckLevel.FULL && (amount.isApproachingZero())
-        ) {
-            commandSender.sendMessage(ModernText.miniModernText(liteEco.translationConfig.getMessage("messages.negative_amount_error")))
-            return null
-        }
-        return amount
-    }
-
-
     @CommandMethod("money help")
     @CommandPermission("lite.eco.help")
     fun onHelp(commandSender: CommandSender) {
-        liteEco.translationConfig.getList("messages.help")?.forEach { s ->
+        liteEco.locale.getList("messages.help")?.forEach { s ->
             commandSender.sendMessage(ModernText.miniModernText(s.toString()))
         }
     }
@@ -64,7 +50,7 @@ class MoneyCMD(private val liteEco: LiteEco) {
             if (offlinePlayer == null) {
                 commandSender.sendMessage(
                     ModernText.miniModernText(
-                        liteEco.translationConfig.getMessage("messages.balance_format"),
+                        liteEco.locale.getMessage("messages.balance_format"),
                         TagResolver.resolver(
                             Placeholder.parsed(
                                 "money",
@@ -77,7 +63,7 @@ class MoneyCMD(private val liteEco: LiteEco) {
             }
             commandSender.sendMessage(
                 ModernText.miniModernText(
-                    liteEco.translationConfig.getMessage("messages.balance_format_target"),
+                    liteEco.locale.getMessage("messages.balance_format_target"),
                     TagResolver.resolver(
                         Placeholder.parsed("target", offlinePlayer.name.toString()),
                         Placeholder.parsed(
@@ -91,7 +77,7 @@ class MoneyCMD(private val liteEco: LiteEco) {
             if (offlinePlayer != null) {
                 commandSender.sendMessage(
                     ModernText.miniModernText(
-                        liteEco.translationConfig.getMessage("messages.balance_format_target"),
+                        liteEco.locale.getMessage("messages.balance_format_target"),
                         TagResolver.resolver(
                             Placeholder.parsed("target", offlinePlayer.name.toString()),
                             Placeholder.parsed(
@@ -103,7 +89,7 @@ class MoneyCMD(private val liteEco: LiteEco) {
                 )
                 return
             }
-            liteEco.translationConfig.getList("messages.help")?.forEach { s ->
+            liteEco.locale.getList("messages.help")?.forEach { s ->
                 commandSender.sendMessage(ModernText.miniModernText(s.toString()))
             }
         }
@@ -117,7 +103,7 @@ class MoneyCMD(private val liteEco: LiteEco) {
         val balances = liteEco.api.getTopBalance().entries.sortedByDescending { e -> e.value }
             .filter { data -> Bukkit.getOfflinePlayer(UUID.fromString(data.key)).hasPlayedBefore() }
             .positionIndexed { index, mutableEntry -> LegacyComponentSerializer.legacyAmpersand().serialize(ModernText.miniModernText(
-                liteEco.translationConfig.getMessage("messages.balance_top_format"),
+                liteEco.locale.getMessage("messages.balance_top_format"),
                 TagResolver.resolver(
                     Placeholder.parsed("position", index.toString()),
                     Placeholder.parsed(
@@ -128,13 +114,11 @@ class MoneyCMD(private val liteEco: LiteEco) {
                 )
             )) }
 
-        if (balances.isEmpty()) return
-
         val pagination = Paginator(balances).apply { page(p) }
 
         if (p > pagination.maxPages) {
             commandSender.sendMessage(
-                ModernText.miniModernText(liteEco.translationConfig.getMessage("messages.balance_top_page_error"),
+                ModernText.miniModernText(liteEco.locale.getMessage("messages.balance_top_page_error"),
                     TagResolver.resolver(Placeholder.parsed("maxpage", pagination.maxPages.toString())))
             )
             return
@@ -142,12 +126,12 @@ class MoneyCMD(private val liteEco: LiteEco) {
 
         commandSender.sendMessage(
             ModernText.miniModernText(
-                liteEco.translationConfig.getMessage("messages.balance_top_line_first"),
+                liteEco.locale.getMessage("messages.balance_top_line_first"),
                 TagResolver.resolver(
                     Placeholder.parsed("page", pagination.page().toString()), Placeholder.parsed("maxpage", pagination.maxPages.toString())
                 ))
                 .appendNewline().append(LegacyComponentSerializer.legacyAmpersand().deserialize(pagination.display()))
-                .appendNewline().append(ModernText.miniModernText(liteEco.translationConfig.getMessage("messages.balance_top_line_second")))
+                .appendNewline().append(ModernText.miniModernText(liteEco.locale.getMessage("messages.balance_top_line_second")))
         )
     }
 
@@ -157,15 +141,18 @@ class MoneyCMD(private val liteEco: LiteEco) {
     fun onPayMoney(
         commandSender: CommandSender,
         @Argument(value = "player", suggestions = "players") offlinePlayer: OfflinePlayer,
-        @Argument(value = "amount") @Range(min = "1.00", max = "") amountStr: String
+        @Argument(value = "amount") @Range(min = "1.00", max = "") amount: Double
     ) {
         if (commandSender is Player) {
             if (commandSender.name == offlinePlayer.name) {
-                commandSender.sendMessage(ModernText.miniModernText(liteEco.translationConfig.getMessage("messages.self_pay_error")))
+                commandSender.sendMessage(ModernText.miniModernText(liteEco.locale.getMessage("messages.self_pay_error")))
                 return
             }
 
-            val amount = validateAmount(amountStr, commandSender) ?: return
+            if (amount.isNegative() || amount.isZero() || amount.moneyFormat() == "0.00") {
+                commandSender.sendMessage(ModernText.miniModernText(liteEco.locale.getMessage("messages.negative_amount_error")))
+                return
+            }
 
             liteEco.server.scheduler.runTask(liteEco) { ->
                 liteEco.pluginManager.callEvent(PlayerEconomyPayEvent(commandSender, offlinePlayer, amount))
@@ -178,7 +165,7 @@ class MoneyCMD(private val liteEco: LiteEco) {
     @CommandMethod("eco help")
     @CommandPermission("lite.eco.admin.help")
     fun adminHelp(commandSender: CommandSender) {
-        liteEco.translationConfig.getList("messages.admin-help")?.forEach { s ->
+        liteEco.locale.getList("messages.admin-help")?.forEach { s ->
             commandSender.sendMessage(ModernText.miniModernText(s.toString()))
         }
     }
@@ -188,9 +175,13 @@ class MoneyCMD(private val liteEco: LiteEco) {
     fun onAddMoney(
         commandSender: CommandSender,
         @Argument(value = "player", suggestions = "players") offlinePlayer: OfflinePlayer,
-        @Argument(value = "amount") @Range(min = "1.00", max = "") amountStr: String
+        @Argument(value = "amount") @Range(min = "1.00", max = "") amount: Double
     ) {
-        val amount = validateAmount(amountStr, commandSender) ?: return
+
+        if (amount.isNegative() || amount.isZero() || amount.moneyFormat() == "0.00") {
+            commandSender.sendMessage(ModernText.miniModernText(liteEco.locale.getMessage("messages.negative_amount_error")))
+            return
+        }
 
         liteEco.server.scheduler.runTask(liteEco) { ->
             liteEco.pluginManager.callEvent(AdminEconomyMoneyDepositEvent(commandSender, offlinePlayer, amount))
@@ -201,9 +192,12 @@ class MoneyCMD(private val liteEco: LiteEco) {
     @CommandPermission("lite.eco.admin.gadd")
     fun onGlobalAddMoney(
         commandSender: CommandSender,
-        @Argument("amount") @Range(min = "1.0", max = "") amountStr: String
+        @Argument("amount") @Range(min = "1.0", max = "") amount: Double
     ) {
-        val amount = validateAmount(amountStr, commandSender) ?: return
+        if (amount.isNegative() || amount.isZero() || amount.moneyFormat() == "0.00") {
+            commandSender.sendMessage(ModernText.miniModernText(liteEco.locale.getMessage("messages.negative_amount_error")))
+            return
+        }
 
         liteEco.server.scheduler.runTask(liteEco) { ->
             liteEco.pluginManager.callEvent(
@@ -217,10 +211,12 @@ class MoneyCMD(private val liteEco: LiteEco) {
     fun onSetBalance(
         commandSender: CommandSender,
         @Argument(value = "player", suggestions = "players") offlinePlayer: OfflinePlayer,
-        @Argument(value = "amount") amountStr: String
+        @Argument(value = "amount") amount: Double
     ) {
-        val amount = validateAmount(amountStr, commandSender, CheckLevel.ONLY_NEGATIVE) ?: return
-
+        if (amount.isNegative()) {
+            commandSender.sendMessage(ModernText.miniModernText(liteEco.locale.getMessage("messages.negative_amount_error")))
+            return
+        }
         liteEco.server.scheduler.runTask(liteEco) { ->
             liteEco.pluginManager.callEvent(
                 AdminEconomyMoneySetEvent(
@@ -236,9 +232,12 @@ class MoneyCMD(private val liteEco: LiteEco) {
     @CommandPermission("lite.eco.admin.gset")
     fun onGlobalSetMoney(
         commandSender: CommandSender,
-        @Argument("amount") @Range(min = "1.0", max = "") amountStr: String
+        @Argument("amount") @Range(min = "1.0", max = "") amount: Double
     ) {
-        val amount = validateAmount(amountStr, commandSender, CheckLevel.ONLY_NEGATIVE) ?: return
+        if (amount.isNegative()) {
+            commandSender.sendMessage(ModernText.miniModernText(liteEco.locale.getMessage("messages.negative_amount_error")))
+            return
+        }
 
         liteEco.server.scheduler.runTask(liteEco) { ->
             liteEco.pluginManager.callEvent(
@@ -252,9 +251,13 @@ class MoneyCMD(private val liteEco: LiteEco) {
     fun onRemoveMoney(
         commandSender: CommandSender,
         @Argument(value = "player", suggestions = "players") offlinePlayer: OfflinePlayer,
-        @Argument(value = "amount") @Range(min = "1.00", max = "") amountStr: String
+        @Argument(value = "amount") @Range(min = "1.00", max = "") amount: Double
     ) {
-        val amount = validateAmount(amountStr, commandSender) ?: return
+
+        if (amount.isNegative() || amount.isZero() || amount.moneyFormat() == "0.00") {
+            commandSender.sendMessage(ModernText.miniModernText(liteEco.locale.getMessage("messages.negative_amount_error")))
+            return
+        }
 
         liteEco.server.scheduler.runTask(liteEco) { ->
             liteEco.pluginManager.callEvent(
@@ -271,10 +274,8 @@ class MoneyCMD(private val liteEco: LiteEco) {
     @CommandPermission("lite.eco.admin.gremove")
     fun onGlobalRemoveMoney(
         commandSender: CommandSender,
-        @Argument("amount") @Range(min = "1.0", max = "") amountStr: String
+        @Argument("amount") @Range(min = "1.0", max = "") amount: Double
     ) {
-        val amount = validateAmount(amountStr, commandSender) ?: return
-
         liteEco.server.scheduler.runTask(liteEco) { ->
             liteEco.pluginManager.callEvent(
                 AdminEconomyGlobalWithdrawEvent(commandSender, amount)
@@ -289,11 +290,11 @@ class MoneyCMD(private val liteEco: LiteEco) {
         @Argument(value = "isoKey", suggestions = "langKeys") isoKey: String
     ) {
         try {
-            val langKey = LangKey.valueOf(isoKey)
-            liteEco.translationConfig.setTranslationFile(langKey)
+            val langKey = LangKey.valueOf(isoKey.uppercase())
+            liteEco.locale.setTranslationFile(langKey)
             commandSender.sendMessage(
                 ModernText.miniModernText(
-                    liteEco.translationConfig.getMessage("messages.translation_switch"),
+                    liteEco.locale.getMessage("messages.translation_switch"),
                     TagResolver.resolver(Placeholder.parsed("locale", langKey.name))
                 )
             )
@@ -313,14 +314,14 @@ class MoneyCMD(private val liteEco: LiteEco) {
         when (purgeKey) {
             PurgeKey.ACCOUNTS -> {
                 liteEco.preparedStatements.purgeAccounts()
-                commandSender.sendMessage(ModernText.miniModernText(liteEco.translationConfig.getMessage("messages.purge_accounts")))
+                commandSender.sendMessage(ModernText.miniModernText(liteEco.locale.getMessage("messages.purge_accounts")))
             }
             PurgeKey.DEFAULT_ACCOUNTS -> {
-                liteEco.preparedStatements.purgeDefaultAccounts(liteEco.config.getDouble("economy.starting_balance"))
-                commandSender.sendMessage(ModernText.miniModernText(liteEco.translationConfig.getMessage("messages.purge_default_accounts")))
+                liteEco.preparedStatements.purgeDefaultAccounts(liteEco.config.getDouble("plugin.economy.default_money"))
+                commandSender.sendMessage(ModernText.miniModernText(liteEco.locale.getMessage("messages.purge_default_accounts")))
             }
             else -> {
-                commandSender.sendMessage(ModernText.miniModernText(liteEco.translationConfig.getMessage("messages.purge_argument_error")))
+                commandSender.sendMessage(ModernText.miniModernText(liteEco.locale.getMessage("messages.purge_argument_error")))
             }
         }
     }
@@ -334,7 +335,7 @@ class MoneyCMD(private val liteEco: LiteEco) {
             MigrationKey.CSV -> {
                 migrationTool.migrateToCSV(output, "economy_migration")
                 commandSender.sendMessage(ModernText.miniModernText(
-                    liteEco.translationConfig.getMessage("messages.migration_success"),
+                    liteEco.locale.getMessage("messages.migration_success"),
                     TagResolver.resolver(
                         Placeholder.parsed("type", migrationKey.name)
                     )
@@ -343,7 +344,7 @@ class MoneyCMD(private val liteEco: LiteEco) {
             MigrationKey.SQL -> {
                 migrationTool.migrateToSQL(output, "economy_migration")
                 commandSender.sendMessage(ModernText.miniModernText(
-                    liteEco.translationConfig.getMessage("messages.migration_success"),
+                    liteEco.locale.getMessage("messages.migration_success"),
                     TagResolver.resolver(
                         Placeholder.parsed("type", migrationKey.name)
                     )
@@ -356,9 +357,9 @@ class MoneyCMD(private val liteEco: LiteEco) {
     @CommandPermission("lite.eco.admin.reload")
     fun onReload(commandSender: CommandSender) {
         liteEco.reloadConfig()
-        commandSender.sendMessage(ModernText.miniModernText(liteEco.translationConfig.getMessage("messages.config_reload")))
+        commandSender.sendMessage(ModernText.miniModernText(liteEco.locale.getMessage("messages.config_reload")))
         liteEco.logger.info("Config.yml was reloaded !")
         liteEco.saveConfig()
-        liteEco.translationConfig.reloadTranslationConfig()
+        liteEco.locale.reloadTranslation()
     }
 }
