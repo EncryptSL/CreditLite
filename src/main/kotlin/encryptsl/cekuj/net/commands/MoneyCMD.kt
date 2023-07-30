@@ -20,6 +20,7 @@ import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import java.lang.IllegalArgumentException
 import java.util.*
 
 @Suppress("UNUSED")
@@ -167,7 +168,7 @@ class MoneyCMD(private val liteEco: LiteEco) {
             val amount = validateAmount(amountStr, commandSender) ?: return
 
             liteEco.server.scheduler.runTask(liteEco) { ->
-                liteEco.pluginManger.callEvent(PlayerEconomyPayEvent(commandSender, offlinePlayer, amount))
+                liteEco.pluginManager.callEvent(PlayerEconomyPayEvent(commandSender, offlinePlayer, amount))
             }
         } else {
             commandSender.sendMessage(ModernText.miniModernText("<red>Only a player can use this command."))
@@ -192,7 +193,7 @@ class MoneyCMD(private val liteEco: LiteEco) {
         val amount = validateAmount(amountStr, commandSender) ?: return
 
         liteEco.server.scheduler.runTask(liteEco) { ->
-            liteEco.pluginManger.callEvent(AdminEconomyMoneyDepositEvent(commandSender, offlinePlayer, amount))
+            liteEco.pluginManager.callEvent(AdminEconomyMoneyDepositEvent(commandSender, offlinePlayer, amount))
         }
     }
 
@@ -205,7 +206,7 @@ class MoneyCMD(private val liteEco: LiteEco) {
         val amount = validateAmount(amountStr, commandSender) ?: return
 
         liteEco.server.scheduler.runTask(liteEco) { ->
-            liteEco.pluginManger.callEvent(
+            liteEco.pluginManager.callEvent(
                 AdminEconomyGlobalDepositEvent(commandSender, amount)
             )
         }
@@ -221,7 +222,7 @@ class MoneyCMD(private val liteEco: LiteEco) {
         val amount = validateAmount(amountStr, commandSender, CheckLevel.ONLY_NEGATIVE) ?: return
 
         liteEco.server.scheduler.runTask(liteEco) { ->
-            liteEco.pluginManger.callEvent(
+            liteEco.pluginManager.callEvent(
                 AdminEconomyMoneySetEvent(
                     commandSender,
                     offlinePlayer,
@@ -240,7 +241,7 @@ class MoneyCMD(private val liteEco: LiteEco) {
         val amount = validateAmount(amountStr, commandSender, CheckLevel.ONLY_NEGATIVE) ?: return
 
         liteEco.server.scheduler.runTask(liteEco) { ->
-            liteEco.pluginManger.callEvent(
+            liteEco.pluginManager.callEvent(
                 AdminEconomyGlobalSetEvent(commandSender, amount)
             )
         }
@@ -256,7 +257,7 @@ class MoneyCMD(private val liteEco: LiteEco) {
         val amount = validateAmount(amountStr, commandSender) ?: return
 
         liteEco.server.scheduler.runTask(liteEco) { ->
-            liteEco.pluginManger.callEvent(
+            liteEco.pluginManager.callEvent(
                 AdminEconomyMoneyWithdrawEvent(
                     commandSender,
                     offlinePlayer,
@@ -275,7 +276,7 @@ class MoneyCMD(private val liteEco: LiteEco) {
         val amount = validateAmount(amountStr, commandSender) ?: return
 
         liteEco.server.scheduler.runTask(liteEco) { ->
-            liteEco.pluginManger.callEvent(
+            liteEco.pluginManager.callEvent(
                 AdminEconomyGlobalWithdrawEvent(commandSender, amount)
             )
         }
@@ -285,48 +286,23 @@ class MoneyCMD(private val liteEco: LiteEco) {
     @CommandPermission("lite.eco.admin.lang")
     fun onLangSwitch(
         commandSender: CommandSender,
-        @Argument(value = "isoKey", suggestions = "langKeys") langKey: LangKey
+        @Argument(value = "isoKey", suggestions = "langKeys") isoKey: String
     ) {
-        when (langKey) {
-            LangKey.CS_CZ -> {
-                liteEco.translationConfig.setTranslationFile(LangKey.CS_CZ)
-                commandSender.sendMessage(
-                    ModernText.miniModernText(
-                        liteEco.translationConfig.getMessage("messages.translation_switch"),
-                        TagResolver.resolver(Placeholder.parsed("locale", langKey.name))
-                    )
+        try {
+            val langKey = LangKey.valueOf(isoKey)
+            liteEco.translationConfig.setTranslationFile(langKey)
+            commandSender.sendMessage(
+                ModernText.miniModernText(
+                    liteEco.translationConfig.getMessage("messages.translation_switch"),
+                    TagResolver.resolver(Placeholder.parsed("locale", langKey.name))
                 )
-            }
-
-            LangKey.EN_US -> {
-                liteEco.translationConfig.setTranslationFile(LangKey.EN_US)
-                commandSender.sendMessage(
-                    ModernText.miniModernText(
-                        liteEco.translationConfig.getMessage("messages.translation_switch"),
-                        TagResolver.resolver(Placeholder.parsed("locale", langKey.name))
-                    )
+            )
+        } catch (_: IllegalArgumentException) {
+            commandSender.sendMessage(
+                ModernText.miniModernText(
+                    "That translation doesn't exist."
                 )
-            }
-
-            LangKey.ES_ES -> {
-                liteEco.translationConfig.setTranslationFile(LangKey.ES_ES)
-                commandSender.sendMessage(
-                    ModernText.miniModernText(
-                        liteEco.translationConfig.getMessage("messages.translation_switch"),
-                        TagResolver.resolver(Placeholder.parsed("locale", langKey.name))
-                    )
-                )
-            }
-
-            LangKey.JA_JP -> {
-                liteEco.translationConfig.setTranslationFile(LangKey.JA_JP)
-                commandSender.sendMessage(
-                    ModernText.miniModernText(
-                        liteEco.translationConfig.getMessage("messages.translation_switch"),
-                        TagResolver.resolver(Placeholder.parsed("locale", langKey.name))
-                    )
-                )
-            }
+            )
         }
     }
 
@@ -381,7 +357,7 @@ class MoneyCMD(private val liteEco: LiteEco) {
     fun onReload(commandSender: CommandSender) {
         liteEco.reloadConfig()
         commandSender.sendMessage(ModernText.miniModernText(liteEco.translationConfig.getMessage("messages.config_reload")))
-        liteEco.getLogger().info("Config.yml was reloaded !")
+        liteEco.logger.info("Config.yml was reloaded !")
         liteEco.saveConfig()
         liteEco.translationConfig.reloadTranslationConfig()
     }
