@@ -6,13 +6,13 @@ import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import java.util.*
 
-class PlaceHolderExtensionProvider(private val liteEco: LiteEco) : PlaceholderExpansion() {
+class PlaceHolderExtensionProvider(private val liteEco: LiteEco, private val extVersion: String) : PlaceholderExpansion() {
 
     override fun getIdentifier(): String = "liteeco"
 
     override fun getAuthor(): String = "EncryptSL"
 
-    override fun getVersion(): String = "1.0.2"
+    override fun getVersion(): String = extVersion
 
     override fun getRequiredPlugin(): String = liteEco.name
 
@@ -31,6 +31,10 @@ class PlaceHolderExtensionProvider(private val liteEco: LiteEco) : PlaceholderEx
                 val rank = args[2].toIntOrNull()
                 rank?.let { liteEco.api.formatting(balanceByRank(it)) }
             }
+            identifier.startsWith("top_compacted_") -> {
+                val rank = args[2].toIntOrNull()
+                rank?.let { liteEco.api.compacted(balanceByRank(it)) }
+            }
             identifier.startsWith("top_balance_") -> {
                 val rank = args[2].toIntOrNull()
                 rank?.let { balanceByRank(it).toString() }
@@ -39,8 +43,9 @@ class PlaceHolderExtensionProvider(private val liteEco: LiteEco) : PlaceholderEx
                 val rank = args[2].toIntOrNull()
                 rank?.let { nameByRank(it) }
             }
-            identifier == "balance" -> liteEco.api.getBalance(player).toString()
             identifier == "balance_formatted" -> liteEco.api.formatting(liteEco.api.getBalance(player))
+            identifier == "balance_compacted" -> liteEco.api.compacted(liteEco.api.getBalance(player))
+            identifier == "balance" -> liteEco.api.getBalance(player).toString()
             identifier == "top_rank_player" -> nameByRank(1)
             else -> null
         }
@@ -73,5 +78,4 @@ class PlaceHolderExtensionProvider(private val liteEco: LiteEco) : PlaceholderEx
             .toMap()
             .let { LinkedHashMap<String, Double>(it) }
     }
-
 }
