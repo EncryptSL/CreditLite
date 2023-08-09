@@ -27,7 +27,7 @@ class AdminEconomyGlobalDepositListener(private val liteEco: LiteEco) : Listener
         sender.sendMessage(
             ModernText.miniModernText(liteEco.locale.getMessage("messages.sender_global_add"),
             TagResolver.resolver(
-                Placeholder.parsed("money", liteEco.api.formatting(money))
+                Placeholder.parsed("money", liteEco.api.fullFormatting(money))
             )
         ))
         if (!liteEco.config.getBoolean("plugin.disableMessages.g_broadcast_pay")) {
@@ -35,7 +35,7 @@ class AdminEconomyGlobalDepositListener(private val liteEco: LiteEco) : Listener
                 ModernText.miniModernText(liteEco.locale.getMessage("messages.g_broadcast_add"),
                 TagResolver.resolver(
                     Placeholder.parsed("sender", sender.name),
-                    Placeholder.parsed("money", liteEco.api.formatting(money))
+                    Placeholder.parsed("money", liteEco.api.fullFormatting(money))
                 )
             ))
         }
