@@ -10,9 +10,9 @@ plugin:
 
 economy:
   # Prefix of Currency
-  currency_prefix: $
+  currency_prefix: ''
   # Name of Currency
-  currency_name: CL
+  currency_name: ''
   # This amount is granted to players who don't have an existing account in the database.
   starting_balance: 30
   # Convert large currency values into a more compact format.

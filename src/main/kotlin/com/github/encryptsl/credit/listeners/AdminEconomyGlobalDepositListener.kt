@@ -24,17 +24,17 @@ class AdminEconomyGlobalDepositListener(private val creditLite: com.github.encry
         creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + offlinePlayers.size
 
         sender.sendMessage(
-            ModernText.miniModernText(creditLite.locale.getMessage("messages.global.add_money"),
+            ModernText.miniModernText(creditLite.locale.getMessage("messages.global.add_credit"),
             TagResolver.resolver(
-                Placeholder.parsed("money", creditLite.api.fullFormatting(money))
+                Placeholder.parsed("credit", creditLite.api.fullFormatting(money))
             )
         ))
         if (!creditLite.config.getBoolean("messages.global.notify_add")) {
             Bukkit.broadcast(
-                ModernText.miniModernText(creditLite.locale.getMessage("messages.broadcast.add_money"),
+                ModernText.miniModernText(creditLite.locale.getMessage("messages.broadcast.add_credit"),
                 TagResolver.resolver(
                     Placeholder.parsed("sender", sender.name),
-                    Placeholder.parsed("money", creditLite.api.fullFormatting(money))
+                    Placeholder.parsed("credit", creditLite.api.fullFormatting(money))
                 )
             ))
         }

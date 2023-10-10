@@ -39,7 +39,7 @@ class MigrationTool(private val creditLite: com.github.encryptsl.credit.CreditLi
                 val insertStatements = data.joinToString {
                     "\n(${it.id}, '${it.uuid}', ${it.money})"
                 }
-                writer.println("INSERT INTO lite_eco (id, uuid, money) VALUES $insertStatements;")
+                writer.println("INSERT INTO credits (id, uuid, credit) VALUES $insertStatements;")
             }
             true
         } catch (e: IOException) {

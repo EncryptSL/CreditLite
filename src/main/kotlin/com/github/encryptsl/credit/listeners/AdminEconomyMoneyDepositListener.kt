@@ -28,21 +28,21 @@ class AdminEconomyMoneyDepositListener(private val creditLite: com.github.encryp
         creditLite.api.depositMoney(target, money)
         if (sender.name == target.name && !target.isOp) {
             sender.sendMessage(
-                ModernText.miniModernText(creditLite.locale.getMessage("messages.error.self_pay"), TagResolver.resolver(Placeholder.parsed("money", creditLite.api.fullFormatting(money)))))
+                ModernText.miniModernText(creditLite.locale.getMessage("messages.error.self_pay"), TagResolver.resolver(Placeholder.parsed("credit", creditLite.api.fullFormatting(money)))))
             return
         }
 
         sender.sendMessage(
             ModernText.miniModernText(
-            creditLite.locale.getMessage("messages.sender.add_money"),
+            creditLite.locale.getMessage("messages.sender.add_credit"),
             TagResolver.resolver(Placeholder.parsed("target", target.name.toString()), Placeholder.parsed("credit", creditLite.api.fullFormatting(money)))
         ))
         if (target.isOnline && creditLite.config.getBoolean("messages.target.notify_add")) {
             target.player?.sendMessage(
-                ModernText.miniModernText(creditLite.locale.getMessage("messages.target.add_money"),
+                ModernText.miniModernText(creditLite.locale.getMessage("messages.target.add_credit"),
                 TagResolver.resolver(
                     Placeholder.parsed("sender", sender.name),
-                    Placeholder.parsed("money", creditLite.api.fullFormatting(money))
+                    Placeholder.parsed("credit", creditLite.api.fullFormatting(money))
                 )
             ))
         }

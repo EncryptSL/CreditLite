@@ -34,7 +34,7 @@ class AdminEconomyMoneyWithdrawListener(private val creditLite: com.github.encry
         if (sender.name == target.name) {
             sender.sendMessage(
                 ModernText.miniModernText(
-                    creditLite.locale.getMessage("messages.self.withdraw_money"),
+                    creditLite.locale.getMessage("messages.self.withdraw_credit"),
                     TagResolver.resolver(Placeholder.parsed("credit", creditLite.api.fullFormatting(money)))
                 )
             )
