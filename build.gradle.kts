@@ -1,11 +1,10 @@
 plugins {
     kotlin("jvm") version "1.9.0" apply true
-    id("io.papermc.paperweight.userdev") version "1.5.5"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("maven-publish")
 }
 
-group = "encryptsl.cekuj.net"
+group = "com.github.encryptsl.kredit"
 version = providers.gradleProperty("plugin_version").get()
 description = providers.gradleProperty("plugin_description").get()
 
@@ -33,16 +32,13 @@ kotlin {
 }
 
 dependencies {
-    paperweight.paperDevBundle(providers.gradleProperty("server_version").get())
+    compileOnly("io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT")
     compileOnly(kotlin("stdlib", "1.9.0"))
     compileOnly("me.lokka30:treasury-api:1.2.1")
-    compileOnly("com.github.MilkBowl:VaultAPI:1.7") {
-        exclude("org.bukkit", "bukkit")
-    }
     compileOnly("com.zaxxer:HikariCP:5.0.1")
     compileOnly("me.clip:placeholderapi:2.11.3")
-    compileOnly("org.jetbrains.exposed:exposed-core:0.42.0")
-    compileOnly("org.jetbrains.exposed:exposed-jdbc:0.42.0")
+    compileOnly("org.jetbrains.exposed:exposed-core:0.44.0")
+    compileOnly("org.jetbrains.exposed:exposed-jdbc:0.44.0")
     compileOnly("com.squareup.okhttp3:okhttp:4.10.0")
 
     implementation("org.bstats:bstats-bukkit:3.0.0")
@@ -60,7 +56,7 @@ dependencies {
 tasks {
 
     build {
-        dependsOn(reobfJar)
+        dependsOn(shadowJar)
     }
 
     test {
@@ -71,10 +67,6 @@ tasks {
         filesMatching("plugin.yml") {
             expand(project.properties)
         }
-    }
-
-    reobfJar {
-        outputJar.set(layout.buildDirectory.file("libs/${providers.gradleProperty("plugin_name").get()}-${version}.jar"))
     }
 
     shadowJar {

@@ -1,50 +1,49 @@
 # noinspection YAMLSchemaValidation
 name: ${name}
-main: encryptsl.cekuj.net.LiteEco
+main: com.github.encryptsl.CreditLite
 version: ${version}
 api-version: 1.13
 
 
-prefix: LiteEco
+prefix: CreditLite
 author: EncryptSL
-contributors: [LcyDev]
 website: https://encryptsl.cekuj.net
 
 load: STARTUP
 softdepend: [PlaceholderAPI, Vault, Treasury]
 libraries:
   - com.zaxxer:HikariCP:5.0.1
-  - org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0
-  - org.jetbrains.exposed:exposed-core:0.42.0
-  - org.jetbrains.exposed:exposed-jdbc:0.42.0
+  - org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10
+  - org.jetbrains.exposed:exposed-core:0.44.0
+  - org.jetbrains.exposed:exposed-jdbc:0.44.0
   - com.squareup.okhttp3:okhttp:4.10.0
 
 description: ${description}
 
 permissions:
-  lite.eco.player:
+  credit.player:
     default: true
     description: Gives access to all player commands
     children:
-      lite.eco.help: true
-      lite.eco.money: true
-      lite.eco.balance: true
-      lite.eco.top: true
-      lite.eco.pay: true
+      credit.help: true
+      credit.money: true
+      credit.balance: true
+      credit.top: true
+      credit.pay: true
 
-  lite.eco.admin:
+  credit.admin:
     default: op
     description: Gives access to all admin commands
     children:
-      lite.eco.admin.help: true
-      lite.eco.admin.eco: true
-      lite.eco.admin.add: true
-      lite.eco.admin.gadd: true
-      lite.eco.admin.set: true
-      lite.eco.admin.gset: true
-      lite.eco.admin.remove: true
-      lite.eco.admin.gremove: true
-      lite.eco.admin.lang: true
-      lite.eco.admin.purge: true
-      lite.eco.admin.migration: true
-      lite.eco.admin.reload: true
+      credit.admin.help: true
+      credit.admin.eco: true
+      credit.admin.add: true
+      credit.admin.gadd: true
+      credit.admin.set: true
+      credit.admin.gset: true
+      credit.admin.remove: true
+      credit.admin.gremove: true
+      credit.admin.lang: true
+      credit.admin.purge: true
+      credit.admin.migration: true
+      credit.admin.reload: true

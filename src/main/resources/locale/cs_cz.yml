@@ -1,41 +1,41 @@
 messages:
   # Balance messages
   balance:
-    format: "<prefix> <white>Stav tvého účtu je <green><money></green> [!]"
-    format_target: "<prefix> <white>Stav účtu <gold><target></gold> je <green><money></green> [!]"
-    top_format: "<yellow><position># <gold><player></gold> <gray>- <green><money></green>"
+    format: "<prefix> <white>Stav tvého účtu je <green><credit></green> [!]"
+    format_target: "<prefix> <white>Stav účtu <gold><target></gold> je <green><credit></green> [!]"
+    top_format: "<yellow><position># <gold><player></gold> <gray>- <green><credit></green>"
     top_header: "<gray><st>─━━━━━━─</st> <#64646F>[<#F9AD47>BOHATÍ HRÁČI</#F9AD47>]</#64646F> <st>─━━━━━━─</st></gray> <red><page>/<max_page><gray>"
     top_footer: "<gray><st>─━━━━━━─</st> <#64646F>[<#F9AD47>BOHATÍ HRÁČI</#F9AD47>]</#64646F> <st>─━━━━━━─</st></gray>"
 
   # Self-transaction messages
   self:
-    add_money: "<prefix> <white>Přidal jsi si <green><money></green>peněz."
-    withdraw_money: "<prefix> <white>Odebral jsi si <green><money></green>peněz."
-    set_money: "<prefix> <white>Nastavil jsi si <green><money></green>peněz."
+    add_credit: "<prefix> <white>Přidal jsi si <green><credit></green>peněz."
+    withdraw_credit: "<prefix> <white>Odebral jsi si <green><credit></green>peněz."
+    set_credit: "<prefix> <white>Nastavil jsi si <green><credit></green>peněz."
 
   # Transaction messages for target
   target:
-    add_money: "<prefix> <gold><sender></gold> <white>vám poslal <green><money></green>peněz."
-    withdraw_money: "<prefix> <gold><sender></gold> <white>vám odebral <green><money></green>peněz."
-    set: "<prefix> <gold><sender></gold> <white>vám nastavil <green><money></green>peněz."
+    add_credit: "<prefix> <gold><sender></gold> <white>vám poslal <green><credit></green>peněz."
+    withdraw_credit: "<prefix> <gold><sender></gold> <white>vám odebral <green><credit></green>peněz."
+    set: "<prefix> <gold><sender></gold> <white>vám nastavil <green><credit></green>peněz."
 
   # Transaction messages for sender
   sender:
-    add_money: "<prefix> <white>Poslal jsi <gold><target></gold> <green><money></green> <white>peněz."
-    withdraw_money: "<prefix> <white>Odebral jsi <gold><target></gold> <green><money></green> <white>peněz."
-    set_money: "<prefix> <white>Nastavil jsi <gold><target></gold> <green><money></green> <white>peněz."
+    add_credit: "<prefix> <white>Poslal jsi <gold><target></gold> <green><credit></green> <white>peněz."
+    withdraw_credit: "<prefix> <white>Odebral jsi <gold><target></gold> <green><credit></green> <white>peněz."
+    set_credit: "<prefix> <white>Nastavil jsi <gold><target></gold> <green><credit></green> <white>peněz."
 
   # Global actions messages (sent to the sender who made the global action)
   global:
-    add: "<prefix> <white>Přidal jsi všem <green><money></green>peněz."
-    withdraw: "<prefix> <white>Odstranil jsi všem <green><money></green>peněz."
-    set: "<prefix> <white>Nastavil jsi všem <green><money></green>peněz."
+    add: "<prefix> <white>Přidal jsi všem <green><credit></green>peněz."
+    withdraw: "<prefix> <white>Odstranil jsi všem <green><credit></green>peněz."
+    set: "<prefix> <white>Nastavil jsi všem <green><credit></green>peněz."
 
   # Broadcast messages (sent to all players after a global action)
   broadcast:
-    add_money: "<prefix> <gold><sender></gold> <white>přidal všem <green><money></green>peněz."
-    withdraw_money: "<prefix> <gold><sender></gold> <white>odstranil jsi všem <green><money></green>peněz."
-    set_money: "<prefix> <gold><sender></gold> <white>nastavil všem <green><money></green>peněz."
+    add_credit: "<prefix> <gold><sender></gold> <white>přidal všem <green><credit></green>peněz."
+    withdraw_credit: "<prefix> <gold><sender></gold> <white>odstranil jsi všem <green><credit></green>peněz."
+    set_credit: "<prefix> <gold><sender></gold> <white>nastavil všem <green><credit></green>peněz."
 
   # Error messages
   error:
@@ -63,26 +63,26 @@ messages:
   help:
     - "<gray><st>─━━━━━━━━━━━━━━━━━─</st> <prefix> <st>─━━━━━━━━━━━━━━━━━─</st></gray>"
     - " "
-    - "<white>[+] <gray>/money help <white>-<#CFE7F0> Vypíše příkazy pluginu"
-    - "<white>[+] <gray>/money top <#b37dc7>[page] <white>-<#CFE7F0> Vypíše nejbohatší hráče"
-    - "<white>[+] <gray>/money bal <yellow>[username] <white>-<#CFE7F0> Ukáže stav tvého účtu nebo jiného hráče."
-    - "<white>[+] <gray>/money pay <yellow>[username] <#3EE84D><amount> <white>-<#CFE7F0> Pošle hráči peníze."
+    - "<white>[+] <gray>/credit help <white>-<#CFE7F0> Vypíše příkazy pluginu"
+    - "<white>[+] <gray>/credit top <#b37dc7>[page] <white>-<#CFE7F0> Vypíše nejbohatší hráče"
+    - "<white>[+] <gray>/credit bal <yellow>[username] <white>-<#CFE7F0> Ukáže stav tvého účtu nebo jiného hráče."
+    - "<white>[+] <gray>/credit pay <yellow>[username] <#3EE84D><amount> <white>-<#CFE7F0> Pošle hráči peníze."
     - " "
     - "<gray><st>─━━━━━━━━━━━━━━━━━─</st> <prefix> <st>─━━━━━━━━━━━━━━━━━─</st></gray>"
 
   admin-help:
     - "<gray><st>─━━━━━━━━━━━━━━━━━─</st> <prefix> <st>─━━━━━━━━━━━━━━━━━─</st></gray>"
     - " "
-    - "<red>[★] <gray>/eco add <yellow>[username] <#3EE84D><amount> <white>-<#F39E9E> Přičte hráči peníze."
-    - "<red>[★] <gray>/eco set <yellow>[username] <#3EE84D><amount> <white>-<#F39E9E> Nastaví hráči určitou částku."
-    - "<red>[★] <gray>/eco remove <yellow>[username] <#3EE84D><amount> <white>-<#F39E9E> Odstraní hráči peníze."
-    - "<red>[★] <gray>/eco gadd <#3EE84D><amount> <white>-<#F39E9E> Přidá všem offline i online hráčům peníze."
-    - "<red>[★] <gray>/eco gset <#3EE84D><amount> <white>-<#F39E9E> Nastavím všem offline i online fixovanou částku peněz."
-    - "<red>[★] <gray>/eco gremove <#3EE84D><amount> <white>-<#F39E9E> Odebere všem offline i online hráčům peníze z účtu."
-    - "<red>[★] <gray>/eco lang <#b37dc7>[lang] <white>-<#F39E9E> Přepne překlad zpráv."
-    - "<red>[★] <gray>/eco purge <#b37dc7><argument> <white>-<#F39E9E> Čištění dat."
-    - "<red>[★] <gray>/eco migration <#b37dc7><argument> <white>-<#F39E9E> Migrace databáze do různých formátů."
-    - "<red>[★] <gray>/eco reload <white>-<#F39E9E> Znovu načte konfiguraci."
+    - "<red>[★] <gray>/credits add <yellow>[username] <#3EE84D><amount> <white>-<#F39E9E> Přičte hráči peníze."
+    - "<red>[★] <gray>/credits set <yellow>[username] <#3EE84D><amount> <white>-<#F39E9E> Nastaví hráči určitou částku."
+    - "<red>[★] <gray>/credits remove <yellow>[username] <#3EE84D><amount> <white>-<#F39E9E> Odstraní hráči peníze."
+    - "<red>[★] <gray>/credits gadd <#3EE84D><amount> <white>-<#F39E9E> Přidá všem offline i online hráčům peníze."
+    - "<red>[★] <gray>/credits gset <#3EE84D><amount> <white>-<#F39E9E> Nastavím všem offline i online fixovanou částku peněz."
+    - "<red>[★] <gray>/credits gremove <#3EE84D><amount> <white>-<#F39E9E> Odebere všem offline i online hráčům peníze z účtu."
+    - "<red>[★] <gray>/credits lang <#b37dc7>[lang] <white>-<#F39E9E> Přepne překlad zpráv."
+    - "<red>[★] <gray>/credits purge <#b37dc7><argument> <white>-<#F39E9E> Čištění dat."
+    - "<red>[★] <gray>/credits migration <#b37dc7><argument> <white>-<#F39E9E> Migrace databáze do různých formátů."
+    - "<red>[★] <gray>/credits reload <white>-<#F39E9E> Znovu načte konfiguraci."
     - " "
     - "<gray><st>─━━━━━━━━━━━━━━━━━─</st> <prefix> <st>─━━━━━━━━━━━━━━━━━─</st></gray>"
 
