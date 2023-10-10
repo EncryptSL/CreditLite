@@ -56,7 +56,7 @@ class Locales(private val creditLite: com.github.encryptsl.kredit.CreditLite, pr
 
     fun reloadTranslation() {
         val currentLocale: String = creditLite.config.getString("plugin.translation") ?: return
-        LangKey.values().find { it.name.equals(currentLocale, ignoreCase = true) }?.let {
+        LangKey.entries.find { it.name.equals(currentLocale, ignoreCase = true) }?.let {
             setTranslationFile(it)
         }
     }
