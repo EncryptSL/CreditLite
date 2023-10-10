@@ -36,7 +36,7 @@ class CreditLite : JavaPlugin() {
     override fun onLoad() {
         configAPI
             .create("database.db")
-            .createConfig("config.yml", com.github.encryptsl.kredit.CreditLite.Companion.CONFIG_VERSION)
+            .createConfig("config.yml", CONFIG_VERSION)
         locale
             .reloadTranslation()
         DatabaseConnector()
