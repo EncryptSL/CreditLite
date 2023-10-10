@@ -63,6 +63,7 @@ tasks {
     }
 
     shadowJar {
+        archiveFileName.set("${providers.gradleProperty("plugin_name").get()}-${providers.gradleProperty("plugin_version").get()}.jar")
         minimize {
             relocate("org.bstats", "encryptsl.cekuj.net.api.bstats")
             relocate("cloud.commandframework", "encryptsl.cekuj.net.cloud")

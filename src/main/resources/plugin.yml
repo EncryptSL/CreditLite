@@ -1,6 +1,6 @@
 # noinspection YAMLSchemaValidation
 name: ${name}
-main: com.github.encryptsl.CreditLite
+main: com.github.encryptsl.credit.CreditLite
 version: ${version}
 api-version: 1.13
 
