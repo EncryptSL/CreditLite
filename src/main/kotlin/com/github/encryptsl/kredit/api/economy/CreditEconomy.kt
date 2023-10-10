@@ -58,7 +58,7 @@ class CreditEconomy(val plugin: Plugin) : CreditAPI {
         if (playerAccount.isPlayerOnline(player.uniqueId)) {
             cacheAccount(player, getBalance(player).plus(amount))
         } else {
-            creditModel.depositMoney(player.uniqueId, amount)
+            creditModel.depositCredit(player.uniqueId, amount)
         }
     }
 
@@ -66,7 +66,7 @@ class CreditEconomy(val plugin: Plugin) : CreditAPI {
         if (playerAccount.isPlayerOnline(player.uniqueId)) {
             cacheAccount(player, getBalance(player).minus(amount))
         } else {
-            creditModel.withdrawMoney(player.uniqueId, amount)
+            creditModel.withdrawCredit(player.uniqueId, amount)
         }
     }
 
@@ -74,7 +74,7 @@ class CreditEconomy(val plugin: Plugin) : CreditAPI {
         if (playerAccount.isPlayerOnline(player.uniqueId)) {
             cacheAccount(player, amount)
         } else {
-            creditModel.setMoney(player.uniqueId, amount)
+            creditModel.setCredit(player.uniqueId, amount)
         }
     }
 

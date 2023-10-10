@@ -30,7 +30,7 @@ class PlayerAccount(val plugin: Plugin) : AccountAPI {
 
     override fun syncAccount(uuid: UUID) {
         runCatching {
-            creditModel.setMoney(uuid, getBalance(uuid))
+            creditModel.setCredit(uuid, getBalance(uuid))
         }.onSuccess {
             debugLogger.debug(Level.INFO,"Account $uuid was synced with database  !")
             removeAccount(uuid)
@@ -42,7 +42,7 @@ class PlayerAccount(val plugin: Plugin) : AccountAPI {
     override fun syncAccounts() {
         runCatching {
             cache.toList().forEach { a ->
-                creditModel.setMoney(a.first, a.second)
+                creditModel.setCredit(a.first, a.second)
             }
         }.onSuccess {
             debugLogger.debug(Level.INFO,"Accounts are synced with database !")

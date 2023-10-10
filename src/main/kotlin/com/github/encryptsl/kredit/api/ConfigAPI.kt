@@ -1,6 +1,6 @@
 package com.github.encryptsl.kredit.api
 
-import encryptsl.cekuj.net.api.interfaces.ConfigAPIProvider
+import com.github.encryptsl.kredit.api.interfaces.ConfigAPIProvider
 import java.io.File
 
 /**

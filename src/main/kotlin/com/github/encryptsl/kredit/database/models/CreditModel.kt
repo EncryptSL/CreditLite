@@ -17,7 +17,7 @@ class CreditModel : DatabaseSQLProvider {
         transaction {
             Account.insertIgnore {
                 it[Account.uuid] = uuid.toString()
-                it[Account.money] = credit
+                it[Account.credit] = credit
             }
         }
     }
@@ -34,38 +34,38 @@ class CreditModel : DatabaseSQLProvider {
 
     override fun getTopBalance(top: Int): MutableMap<String, Double> = transaction {
         Account.selectAll().limit(top).associate {
-            it[Account.uuid] to it[Account.money]
+            it[Account.uuid] to it[Account.credit]
         }.toMutableMap()
     }
 
     override fun getTopBalance(): MutableMap<String, Double> = transaction {
         Account.selectAll().associate {
-            it[Account.uuid] to it[Account.money]
+            it[Account.uuid] to it[Account.credit]
         }.toMutableMap()
     }
 
     override fun getBalance(uuid: UUID): Double = transaction {
-        Account.select(Account.uuid eq uuid.toString()).first()[Account.money]
+        Account.select(Account.uuid eq uuid.toString()).first()[Account.credit]
     }
 
     override fun depositCredit(uuid: UUID, credit: Double) {
         transaction {
             Account.update({ Account.uuid eq uuid.toString() }) {
-                it[Account.money] = Account.money plus credit
+                it[Account.credit] = Account.credit plus credit
             }
         }
     }
     override fun withdrawCredit(uuid: UUID, credit: Double) {
         transaction {
             Account.update({ Account.uuid eq uuid.toString() }) {
-                it[Account.money] = Account.money minus credit
+                it[Account.credit] = Account.credit minus credit
             }
         }
     }
-    override fun setCredit(uuid: UUID, money: Double) {
+    override fun setCredit(uuid: UUID, credit: Double) {
         transaction {
             Account.update({ Account.uuid eq uuid.toString() }) {
-                it[Account.money] = money
+                it[Account.credit] = credit
             }
         }
     }
@@ -74,8 +74,8 @@ class CreditModel : DatabaseSQLProvider {
         transaction { Account.deleteAll() }
     }
 
-    override fun purgeDefaultAccounts(defaultMoney: Double) {
-        transaction { Account.deleteWhere { money eq defaultMoney } }
+    override fun purgeDefaultAccounts(defaultCredit: Double) {
+        transaction { Account.deleteWhere { credit eq defaultCredit } }
     }
 
     override fun purgeInvalidAccounts() {

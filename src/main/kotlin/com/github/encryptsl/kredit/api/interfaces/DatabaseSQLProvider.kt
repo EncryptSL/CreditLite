@@ -11,8 +11,8 @@ interface DatabaseSQLProvider {
     fun getBalance(uuid: UUID): Double
     fun depositCredit(uuid: UUID, credit: Double)
     fun withdrawCredit(uuid: UUID, credit: Double)
-    fun setCredit(uuid: UUID, money: Double)
+    fun setCredit(uuid: UUID, credit: Double)
     fun purgeAccounts()
-    fun purgeDefaultAccounts(defaultMoney: Double)
+    fun purgeDefaultAccounts(defaultCredit: Double)
     fun purgeInvalidAccounts()
 }
