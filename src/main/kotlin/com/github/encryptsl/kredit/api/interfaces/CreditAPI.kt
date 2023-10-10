@@ -20,7 +20,7 @@ interface CreditAPI {
      * @return Boolean
      * @see Boolean
      * @see OfflinePlayer
-     * @see PreparedStatements.getBalance(uuid: UUID)
+     * @see CreditModel.getBalance(uuid: UUID)
      */
     fun cacheAccount(player: OfflinePlayer, amount: Double): Boolean
 

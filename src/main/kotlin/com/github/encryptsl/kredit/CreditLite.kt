@@ -1,19 +1,7 @@
 package com.github.encryptsl.kredit
 
-import cloud.commandframework.annotations.AnnotationParser
-import cloud.commandframework.arguments.parser.ParserParameters
-import cloud.commandframework.arguments.parser.StandardParameters
-import cloud.commandframework.bukkit.CloudBukkitCapabilities
-import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator
-import cloud.commandframework.meta.CommandMeta
-import cloud.commandframework.paper.PaperCommandManager
 import com.github.encryptsl.kredit.api.ConfigAPI
 import com.github.encryptsl.kredit.api.economy.CreditEconomy
-import com.github.encryptsl.kredit.api.enums.LangKey
-import com.github.encryptsl.kredit.api.enums.MigrationKey
-import com.github.encryptsl.kredit.api.enums.PurgeKey
-import com.github.encryptsl.kredit.commands.KreditAdminCMD
-import com.github.encryptsl.kredit.commands.KreditCMD
 import com.github.encryptsl.kredit.common.CommandManager
 import com.github.encryptsl.kredit.config.Locales
 import com.github.encryptsl.kredit.database.DatabaseConnector
@@ -22,11 +10,8 @@ import com.github.encryptsl.kredit.hook.HookManager
 import com.github.encryptsl.kredit.listeners.*
 import org.bstats.bukkit.Metrics
 import org.bstats.charts.SingleLineChart
-import org.bukkit.Bukkit
-import org.bukkit.command.CommandSender
 import org.bukkit.plugin.PluginManager
 import org.bukkit.plugin.java.JavaPlugin
-import java.util.function.Function
 import kotlin.system.measureTimeMillis
 
 class CreditLite : JavaPlugin() {

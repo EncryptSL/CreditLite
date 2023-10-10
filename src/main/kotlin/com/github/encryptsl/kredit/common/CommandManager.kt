@@ -33,7 +33,7 @@ class CommandManager(private val creditLite: CreditLite) {
 
     private fun createCommandManager(): PaperCommandManager<CommandSender> {
         val executionCoordinatorFunction = AsynchronousCommandExecutionCoordinator.builder<CommandSender>().build()
-        val mapperFunction = java.util.function.Function.identity<CommandSender>()
+        val mapperFunction = Function.identity<CommandSender>()
         val commandManager = PaperCommandManager(
             creditLite,
             executionCoordinatorFunction,
