@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.0" apply true
+    kotlin("jvm") version "1.9.10" apply true
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("maven-publish")
 }
@@ -11,18 +11,11 @@ description = providers.gradleProperty("plugin_description").get()
 repositories {
     mavenLocal()
     mavenCentral()
-    maven {
-        url = uri("https://jitpack.io")
-    }
-    maven {
-        url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-    }
-    maven {
-        url = uri("https://oss.sonatype.org/content/repositories/snapshots")
-    }
-    maven {
-        url = uri("https://repo.codemc.io/repository/maven-public/")
-    }
+    maven("https://jitpack.io")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
+    maven("https://repo.codemc.io/repository/maven-public/")
+    maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 kotlin {
@@ -33,7 +26,7 @@ kotlin {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT")
-    compileOnly(kotlin("stdlib", "1.9.0"))
+    compileOnly(kotlin("stdlib", "1.9.10"))
     compileOnly("me.lokka30:treasury-api:1.2.1")
     compileOnly("com.zaxxer:HikariCP:5.0.1")
     compileOnly("me.clip:placeholderapi:2.11.3")
