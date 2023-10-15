@@ -2,6 +2,7 @@ package com.github.encryptsl.credit
 
 import com.github.encryptsl.credit.api.ConfigAPI
 import com.github.encryptsl.credit.api.economy.CreditEconomy
+import com.github.encryptsl.credit.api.interfaces.CreditAPI
 import com.github.encryptsl.credit.common.CommandManager
 import com.github.encryptsl.credit.config.Locales
 import com.github.encryptsl.credit.database.DatabaseConnector
@@ -11,6 +12,7 @@ import com.github.encryptsl.credit.listeners.*
 import org.bstats.bukkit.Metrics
 import org.bstats.charts.SingleLineChart
 import org.bukkit.plugin.PluginManager
+import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
 import kotlin.system.measureTimeMillis
 
@@ -56,6 +58,7 @@ class CreditLite : JavaPlugin() {
             registerListeners()
         }
         logger.info("Plugin enabled in time $timeTaken ms")
+        server.servicesManager.register(CreditAPI::class.java, CreditEconomy(this), this, ServicePriority.Highest)
     }
 
     override fun onDisable() {

@@ -4,7 +4,7 @@ plugins {
     id("maven-publish")
 }
 
-group = "com.github.encryptsl.kredit"
+group = "com.github.encryptsl.credit"
 version = providers.gradleProperty("plugin_version").get()
 description = providers.gradleProperty("plugin_description").get()
 
@@ -34,7 +34,7 @@ dependencies {
     compileOnly("org.jetbrains.exposed:exposed-jdbc:0.44.0")
     compileOnly("com.squareup.okhttp3:okhttp:4.10.0")
 
-    implementation("org.bstats:bstats-bukkit:3.0.0")
+    implementation("org.bstats:bstats-bukkit:3.0.1")
     implementation("cloud.commandframework:cloud-paper:1.8.3")
     implementation("cloud.commandframework:cloud-annotations:1.8.3")
 
