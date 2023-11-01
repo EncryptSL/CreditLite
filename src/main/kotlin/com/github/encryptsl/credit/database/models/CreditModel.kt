@@ -13,9 +13,10 @@ import java.util.*
 
 class CreditModel : DatabaseSQLProvider {
 
-    override fun createPlayerAccount(uuid: UUID, credit: Double) {
+    override fun createPlayerAccount(username: String, uuid: UUID, credit: Double) {
         transaction {
             Account.insertIgnore {
+                it[Account.username] = username
                 it[Account.uuid] = uuid.toString()
                 it[Account.credit] = credit
             }

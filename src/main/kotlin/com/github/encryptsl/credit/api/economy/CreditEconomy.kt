@@ -16,7 +16,7 @@ class CreditEconomy(val plugin: Plugin) : CreditAPI {
     override fun createAccount(player: OfflinePlayer, startAmount: Double): Boolean {
         if (hasAccount(player)) return false
 
-        creditModel.createPlayerAccount(player.uniqueId, startAmount)
+        creditModel.createPlayerAccount(player.name.toString(), player.uniqueId, startAmount)
         return true
     }
 

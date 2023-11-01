@@ -216,7 +216,7 @@ class KreditAdminCMD(private val creditLite: com.github.encryptsl.credit.CreditL
 
         val time = measureTimeMillis {
             for (i in 1 .. amountStr) {
-                creditLite.creditModel.createPlayerAccount(UUID.randomUUID(), random.nextDouble(1000.0, 500000.0))
+                creditLite.creditModel.createPlayerAccount("", UUID.randomUUID(), random.nextDouble(1000.0, 500000.0))
             }
         }
 
