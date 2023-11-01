@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.10" apply true
+    kotlin("jvm") version "1.9.20" apply true
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("maven-publish")
 }
@@ -26,7 +26,7 @@ kotlin {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT")
-    compileOnly(kotlin("stdlib", "1.9.10"))
+    compileOnly(kotlin("stdlib", "1.9.20"))
     compileOnly("me.lokka30:treasury-api:1.2.1")
     compileOnly("com.zaxxer:HikariCP:5.0.1")
     compileOnly("me.clip:placeholderapi:2.11.5")
