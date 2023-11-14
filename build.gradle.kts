@@ -28,10 +28,10 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT")
     compileOnly(kotlin("stdlib", "1.9.20"))
     compileOnly("me.lokka30:treasury-api:1.2.1")
-    compileOnly("com.zaxxer:HikariCP:5.0.1")
+    compileOnly("com.zaxxer:HikariCP:5.1.0")
     compileOnly("me.clip:placeholderapi:2.11.5")
-    compileOnly("org.jetbrains.exposed:exposed-core:0.44.0")
-    compileOnly("org.jetbrains.exposed:exposed-jdbc:0.44.0")
+    compileOnly("org.jetbrains.exposed:exposed-core:0.44.1")
+    compileOnly("org.jetbrains.exposed:exposed-jdbc:0.44.1")
     compileOnly("com.squareup.okhttp3:okhttp:4.10.0")
 
     implementation("org.bstats:bstats-bukkit:3.0.1")

@@ -9,33 +9,33 @@ messages:
 
   # Self-transaction messages
   self:
-    add_credit: "<prefix> <white>Přidal jsi si <green><credit></green>peněz."
-    withdraw_credit: "<prefix> <white>Odebral jsi si <green><credit></green>peněz."
-    set_credit: "<prefix> <white>Nastavil jsi si <green><credit></green>peněz."
+    add_credit: "<prefix> <white>Přidal jsi si <green><credit></green>kreditů."
+    withdraw_credit: "<prefix> <white>Odebral jsi si <green><credit></green>kreditů."
+    set_credit: "<prefix> <white>Nastavil jsi si <green><credit></green>kreditů."
 
   # Transaction messages for target
   target:
-    add_credit: "<prefix> <gold><sender></gold> <white>vám poslal <green><credit></green>peněz."
-    withdraw_credit: "<prefix> <gold><sender></gold> <white>vám odebral <green><credit></green>peněz."
-    set: "<prefix> <gold><sender></gold> <white>vám nastavil <green><credit></green>peněz."
+    add_credit: "<prefix> <gold><sender></gold> <white>vám poslal <green><credit></green>kreditů."
+    withdraw_credit: "<prefix> <gold><sender></gold> <white>vám odebral <green><credit></green>kreditů."
+    set: "<prefix> <gold><sender></gold> <white>vám nastavil <green><credit></green>kreditů."
 
   # Transaction messages for sender
   sender:
-    add_credit: "<prefix> <white>Poslal jsi <gold><target></gold> <green><credit></green> <white>peněz."
-    withdraw_credit: "<prefix> <white>Odebral jsi <gold><target></gold> <green><credit></green> <white>peněz."
-    set_credit: "<prefix> <white>Nastavil jsi <gold><target></gold> <green><credit></green> <white>peněz."
+    add_credit: "<prefix> <white>Poslal jsi <gold><target></gold> <green><credit></green> <white>kreditů."
+    withdraw_credit: "<prefix> <white>Odebral jsi <gold><target></gold> <green><credit></green> <white>kreditů."
+    set_credit: "<prefix> <white>Nastavil jsi <gold><target></gold> <green><credit></green> <white>kreditů."
 
   # Global actions messages (sent to the sender who made the global action)
   global:
-    add: "<prefix> <white>Přidal jsi všem <green><credit></green>peněz."
-    withdraw: "<prefix> <white>Odstranil jsi všem <green><credit></green>peněz."
-    set: "<prefix> <white>Nastavil jsi všem <green><credit></green>peněz."
+    add: "<prefix> <white>Přidal jsi všem <green><credit></green>kreditů."
+    withdraw: "<prefix> <white>Odstranil jsi všem <green><credit></green>kreditů."
+    set: "<prefix> <white>Nastavil jsi všem <green><credit></green>kreditů."
 
   # Broadcast messages (sent to all players after a global action)
   broadcast:
-    add_credit: "<prefix> <gold><sender></gold> <white>přidal všem <green><credit></green>peněz."
-    withdraw_credit: "<prefix> <gold><sender></gold> <white>odstranil jsi všem <green><credit></green>peněz."
-    set_credit: "<prefix> <gold><sender></gold> <white>nastavil všem <green><credit></green>peněz."
+    add_credit: "<prefix> <gold><sender></gold> <white>přidal všem <green><credit></green>kreditů."
+    withdraw_credit: "<prefix> <gold><sender></gold> <white>odstranil jsi všem <green><credit></green>kreditů."
+    set_credit: "<prefix> <gold><sender></gold> <white>nastavil všem <green><credit></green>kreditů."
 
   # Error messages
   error:
