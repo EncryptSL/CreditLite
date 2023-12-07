@@ -25,7 +25,7 @@ import kotlin.system.measureTimeMillis
 
 @Suppress("UNUSED")
 @CommandDescription("Provided plugin by CreditLite")
-class KreditAdminCMD(private val creditLite: com.github.encryptsl.credit.CreditLite) {
+class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) {
     private val helper: Helper = Helper(creditLite)
 
     @CommandMethod("credits help")
@@ -36,17 +36,19 @@ class KreditAdminCMD(private val creditLite: com.github.encryptsl.credit.CreditL
         }
     }
 
-    @CommandMethod("credits add <player> <amount>")
+    @CommandMethod("credits add <player> <amount> [silent]")
     @CommandPermission("credit.admin.add")
     fun onAddCredit(
         commandSender: CommandSender,
+        @Argument(value = "silent") silent: String?,
         @Argument(value = "player", suggestions = "players") offlinePlayer: OfflinePlayer,
-        @Argument(value = "amount") @Range(min = "1.00", max = "") amountStr: String
+        @Argument(value = "amount") @Range(min = "1.00", max = "") amountStr: String,
     ) {
         val amount = helper.validateAmount(amountStr, commandSender) ?: return
+        val s = silent?.contains("-s") ?: false || silent?.contains("-silent") ?: false
 
         creditLite.server.scheduler.runTask(creditLite) { ->
-            creditLite.pluginManager.callEvent(AdminKreditDepositEvent(commandSender, offlinePlayer, amount))
+            creditLite.pluginManager.callEvent(CreditDepositEvent(commandSender, offlinePlayer, amount, s))
         }
     }
 
@@ -60,7 +62,7 @@ class KreditAdminCMD(private val creditLite: com.github.encryptsl.credit.CreditL
 
         creditLite.server.scheduler.runTask(creditLite) { ->
             creditLite.pluginManager.callEvent(
-                AdminGlobalDepositEvent(commandSender, amount)
+                GlobalCreditDepositEvent(commandSender, amount)
             )
         }
     }
@@ -76,7 +78,7 @@ class KreditAdminCMD(private val creditLite: com.github.encryptsl.credit.CreditL
 
         creditLite.server.scheduler.runTask(creditLite) { ->
             creditLite.pluginManager.callEvent(
-                AdminKreditSetEvent(
+                CreditSetEvent(
                     commandSender,
                     offlinePlayer,
                     amount
@@ -95,7 +97,7 @@ class KreditAdminCMD(private val creditLite: com.github.encryptsl.credit.CreditL
 
         creditLite.server.scheduler.runTask(creditLite) { ->
             creditLite.pluginManager.callEvent(
-                AdminGlobalSetEvent(commandSender, amount)
+                GlobalCreditSetEvent(commandSender, amount)
             )
         }
     }
@@ -111,7 +113,7 @@ class KreditAdminCMD(private val creditLite: com.github.encryptsl.credit.CreditL
 
         creditLite.server.scheduler.runTask(creditLite) { ->
             creditLite.pluginManager.callEvent(
-                AdminKreditWithdrawEvent(
+                CreditWithdrawEvent(
                     commandSender,
                     offlinePlayer,
                     amount
@@ -130,7 +132,7 @@ class KreditAdminCMD(private val creditLite: com.github.encryptsl.credit.CreditL
 
         creditLite.server.scheduler.runTask(creditLite) { ->
             creditLite.pluginManager.callEvent(
-                AdminGlobalWithdrawEvent(commandSender, amount)
+                GlobalCreditWithdrawEvent(commandSender, amount)
             )
         }
     }

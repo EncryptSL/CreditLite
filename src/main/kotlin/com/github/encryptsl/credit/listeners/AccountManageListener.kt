@@ -6,7 +6,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 
-class AccountEconomyManageListener(private val creditLite: com.github.encryptsl.credit.CreditLite) : Listener {
+class AccountManageListener(private val creditLite: com.github.encryptsl.credit.CreditLite) : Listener {
 
     @EventHandler
     fun onEconomyManage(event: AccountManageEvent) {

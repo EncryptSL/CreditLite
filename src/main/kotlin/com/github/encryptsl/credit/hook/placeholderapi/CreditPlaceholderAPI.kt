@@ -4,7 +4,7 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import java.util.*
-class KreditPlaceholderAPI(private val creditLite: com.github.encryptsl.credit.CreditLite, private val extVersion: String) : PlaceholderExpansion() {
+class CreditPlaceholderAPI(private val creditLite: com.github.encryptsl.credit.CreditLite, private val extVersion: String) : PlaceholderExpansion() {
 
     override fun getIdentifier(): String = "kredit"
 

@@ -9,6 +9,7 @@ import com.github.encryptsl.credit.database.DatabaseConnector
 import com.github.encryptsl.credit.database.models.CreditModel
 import com.github.encryptsl.credit.hook.HookManager
 import com.github.encryptsl.credit.listeners.*
+import com.github.encryptsl.credit.listeners.admin.*
 import org.bstats.bukkit.Metrics
 import org.bstats.charts.SingleLineChart
 import org.bukkit.plugin.PluginManager
@@ -86,14 +87,14 @@ class CreditLite : JavaPlugin() {
         var amount: Int
         val timeTaken = measureTimeMillis {
             val listeners = arrayListOf(
-                AccountEconomyManageListener(this),
-                PlayerEconomyPayListener(this),
-                AdminEconomyGlobalDepositListener(this),
-                AdminEconomyGlobalSetListener(this),
-                AdminEconomyGlobalWithdrawListener(this),
-                AdminEconomyMoneyDepositListener(this),
-                AdminEconomyMoneyWithdrawListener(this),
-                AdminEconomyMoneySetListener(this),
+                AccountManageListener(this),
+                PlayerCreditPayListener(this),
+                GlobalCreditDepositListener(this),
+                GlobalCreditSetListener(this),
+                GlobalCreditWithdrawListener(this),
+                CreditDepositListener(this),
+                CreditWithdrawListener(this),
+                CreditSetListener(this),
                 PlayerJoinListener(this),
                 PlayerQuitListener(this)
             )

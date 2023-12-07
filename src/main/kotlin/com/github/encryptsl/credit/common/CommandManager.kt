@@ -11,8 +11,8 @@ import com.github.encryptsl.credit.CreditLite
 import com.github.encryptsl.credit.api.enums.LangKey
 import com.github.encryptsl.credit.api.enums.MigrationKey
 import com.github.encryptsl.credit.api.enums.PurgeKey
-import com.github.encryptsl.credit.commands.KreditAdminCMD
-import com.github.encryptsl.credit.commands.KreditCMD
+import com.github.encryptsl.credit.commands.CreditsCmd
+import com.github.encryptsl.credit.commands.CreditCmd
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import java.util.function.Function
@@ -27,8 +27,8 @@ class CommandManager(private val creditLite: CreditLite) {
         registerSuggestionProviders(commandManager)
 
         val annotationParser = createAnnotationParser(commandManager)
-        annotationParser.parse(KreditCMD(creditLite))
-        annotationParser.parse(KreditAdminCMD(creditLite))
+        annotationParser.parse(CreditCmd(creditLite))
+        annotationParser.parse(CreditsCmd(creditLite))
     }
 
     private fun createCommandManager(): PaperCommandManager<CommandSender> {

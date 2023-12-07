@@ -1,6 +1,6 @@
-package com.github.encryptsl.credit.listeners
+package com.github.encryptsl.credit.listeners.admin
 
-import com.github.encryptsl.credit.api.events.AdminGlobalWithdrawEvent
+import com.github.encryptsl.credit.api.events.GlobalCreditWithdrawEvent
 import com.github.encryptsl.credit.api.objects.ModernText
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
@@ -9,9 +9,9 @@ import org.bukkit.command.CommandSender
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 
-class AdminEconomyGlobalWithdrawListener(private val creditLite: com.github.encryptsl.credit.CreditLite) : Listener {
+class GlobalCreditWithdrawListener(private val creditLite: com.github.encryptsl.credit.CreditLite) : Listener {
     @EventHandler
-    fun onAdminEconomyGlobalWithdraw(event: AdminGlobalWithdrawEvent) {
+    fun onGlobalCreditWithdraw(event: GlobalCreditWithdrawEvent) {
         val sender: CommandSender = event.commandSender
         val money = event.money
         val offlinePlayers = Bukkit.getOfflinePlayers()

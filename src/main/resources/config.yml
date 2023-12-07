@@ -2,7 +2,7 @@
 plugin:
   # Translations list of supported locales below
   # https://github.com/EncryptSL/LiteEco/blob/main/src/main/kotlin/encryptsl/cekuj/net/api/enums/LangKey.kt
-  translation: EN_US
+  translation: CS_CZ
   # Plugin prefix
   prefix: "<#64646F>[<#F9AD47>Credits<#64646F>]</#64646F>"
   # Debugging

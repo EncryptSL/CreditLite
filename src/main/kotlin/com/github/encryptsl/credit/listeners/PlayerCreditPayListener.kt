@@ -1,6 +1,6 @@
 package com.github.encryptsl.credit.listeners
 
-import com.github.encryptsl.credit.api.events.PlayerEconomyKreditPayEvent
+import com.github.encryptsl.credit.api.events.PlayerCreditPayEvent
 import com.github.encryptsl.credit.api.objects.ModernText
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
@@ -9,9 +9,9 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 
-class PlayerEconomyPayListener(private val creditLite: com.github.encryptsl.credit.CreditLite) : Listener {
+class PlayerCreditPayListener(private val creditLite: com.github.encryptsl.credit.CreditLite) : Listener {
     @EventHandler
-    fun onEconomyPay(event: PlayerEconomyKreditPayEvent) {
+    fun onEconomyPay(event: PlayerCreditPayEvent) {
         val sender: Player = event.sender
         val target: OfflinePlayer = event.target
         val money: Double = event.money

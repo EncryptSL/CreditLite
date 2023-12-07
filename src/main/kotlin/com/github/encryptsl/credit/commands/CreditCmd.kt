@@ -3,7 +3,7 @@ package com.github.encryptsl.credit.commands
 import cloud.commandframework.annotations.*
 import cloud.commandframework.annotations.specifier.Range
 import com.github.encryptsl.credit.api.Paginator
-import com.github.encryptsl.credit.api.events.PlayerEconomyKreditPayEvent
+import com.github.encryptsl.credit.api.events.PlayerCreditPayEvent
 import com.github.encryptsl.credit.api.objects.ModernText
 import com.github.encryptsl.credit.extensions.positionIndexed
 import com.github.encryptsl.credit.utils.Helper
@@ -17,7 +17,7 @@ import java.util.*
 
 @Suppress("UNUSED")
 @CommandDescription("Provided plugin by CreditLite")
-class KreditCMD(private val creditLite: com.github.encryptsl.credit.CreditLite) {
+class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) {
     private val helper: Helper = Helper(creditLite)
 
     @CommandMethod("credit help")
@@ -142,7 +142,7 @@ class KreditCMD(private val creditLite: com.github.encryptsl.credit.CreditLite) 
             val amount = helper.validateAmount(amountStr, commandSender) ?: return
 
             creditLite.server.scheduler.runTask(creditLite) { ->
-                creditLite.pluginManager.callEvent(PlayerEconomyKreditPayEvent(commandSender, offlinePlayer, amount))
+                creditLite.pluginManager.callEvent(PlayerCreditPayEvent(commandSender, offlinePlayer, amount))
             }
         } else {
             commandSender.sendMessage(ModernText.miniModernText("<red>Only a player can use this command."))

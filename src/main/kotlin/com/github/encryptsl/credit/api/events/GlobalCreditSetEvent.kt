@@ -1,13 +1,12 @@
 package com.github.encryptsl.credit.api.events
 
-import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
 import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 
 @Suppress("UNUSED")
-class AdminKreditDepositEvent(val commandSender: CommandSender, val offlinePlayer: OfflinePlayer, val money: Double): Event(), Cancellable {
+class GlobalCreditSetEvent(val commandSender: CommandSender, val money: Double): Event(), Cancellable {
 
     private var isCancelled: Boolean = false
 

@@ -6,7 +6,7 @@ import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 
 @Suppress("UNUSED")
-class AdminGlobalWithdrawEvent(val commandSender: CommandSender, val money: Double): Event(), Cancellable {
+class GlobalCreditWithdrawEvent(val commandSender: CommandSender, val money: Double): Event(), Cancellable {
 
     private var isCancelled: Boolean = false
 

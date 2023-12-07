@@ -1,13 +1,13 @@
 package com.github.encryptsl.credit.api.events
 
 import org.bukkit.OfflinePlayer
-import org.bukkit.entity.Player
+import org.bukkit.command.CommandSender
 import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 
 @Suppress("UNUSED")
-class PlayerEconomyKreditPayEvent(val sender: Player, val target: OfflinePlayer, val money: Double) : Event(), Cancellable {
+class CreditDepositEvent(val commandSender: CommandSender, val offlinePlayer: OfflinePlayer, val money: Double, val silent: Boolean): Event(), Cancellable {
 
     private var isCancelled: Boolean = false
 

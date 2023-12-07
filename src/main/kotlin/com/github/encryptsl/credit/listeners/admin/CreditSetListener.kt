@@ -1,6 +1,6 @@
-package com.github.encryptsl.credit.listeners
+package com.github.encryptsl.credit.listeners.admin
 
-import com.github.encryptsl.credit.api.events.AdminKreditSetEvent
+import com.github.encryptsl.credit.api.events.CreditSetEvent
 import com.github.encryptsl.credit.api.objects.ModernText
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
@@ -9,10 +9,10 @@ import org.bukkit.command.CommandSender
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 
-class AdminEconomyMoneySetListener(private val creditLite: com.github.encryptsl.credit.CreditLite) : Listener {
+class CreditSetListener(private val creditLite: com.github.encryptsl.credit.CreditLite) : Listener {
 
     @EventHandler
-    fun onAdminEconomyMoneySet(event: AdminKreditSetEvent) {
+    fun onAdminEconomyMoneySet(event: CreditSetEvent) {
         val sender: CommandSender = event.commandSender
         val target: OfflinePlayer = event.offlinePlayer
         val money: Double = event.money
