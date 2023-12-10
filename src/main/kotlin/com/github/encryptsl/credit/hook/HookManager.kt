@@ -1,6 +1,7 @@
 package com.github.encryptsl.credit.hook
 
 import com.github.encryptsl.credit.hook.placeholderapi.CreditPlaceholderAPI
+import com.github.encryptsl.credit.hook.tradesystem.TradeSystemListener
 
 class HookManager(private val creditLite: com.github.encryptsl.credit.CreditLite) {
 
@@ -40,4 +41,19 @@ class HookManager(private val creditLite: com.github.encryptsl.credit.CreditLite
             creditLite.logger.info("###################################")
         }
     }
+
+    fun hookTradeSystem() {
+        if (isPluginInstalled("TradeSystem")) {
+            creditLite.logger.info("###################################")
+            creditLite.logger.info("# TradeSystem Found Hook Success  #")
+            creditLite.logger.info("###################################")
+            creditLite.pluginManager.registerEvents(TradeSystemListener(creditLite), creditLite)
+        } else {
+            creditLite.logger.info("###################################")
+            creditLite.logger.info("#      TradeSystem not Found      #")
+            creditLite.logger.info("# please download TradeSystem api #")
+            creditLite.logger.info("###################################")
+        }
+    }
+
 }

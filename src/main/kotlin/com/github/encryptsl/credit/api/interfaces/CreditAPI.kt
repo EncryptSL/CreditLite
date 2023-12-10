@@ -57,28 +57,28 @@ interface CreditAPI {
     fun getBalance(player: OfflinePlayer): Double
 
     /**
-     * Deposit money to player account
+     * Deposit credits to player account
      * @param player is OfflinePlayer
      * @param amount is amount added to player account
      * @see OfflinePlayer
      */
-    fun depositMoney(player: OfflinePlayer, amount: Double)
+    fun deposit(player: OfflinePlayer, amount: Double)
 
     /**
-     * WithDraw money from player account
+     * Withdraw credits from player account
      * @param player is OfflinePlayer
      * @param amount is amount removed from player account
      * @see OfflinePlayer
      */
-    fun withDrawMoney(player: OfflinePlayer, amount: Double)
+    fun withdraw(player: OfflinePlayer, amount: Double)
 
     /**
-     * Set fixed money to player account
+     * Set fixed credits to player account
      * @param player is OfflinePlayer
      * @param amount is amount fixed value
      * @see OfflinePlayer
      */
-    fun setMoney(player: OfflinePlayer, amount: Double)
+    fun set(player: OfflinePlayer, amount: Double)
 
     /**
      * Synchronize cache with database

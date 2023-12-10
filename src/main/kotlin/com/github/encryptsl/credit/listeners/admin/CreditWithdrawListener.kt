@@ -30,7 +30,7 @@ class CreditWithdrawListener(private val creditLite: com.github.encryptsl.credit
         }
 
         creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + 1
-        creditLite.api.withDrawMoney(target, money)
+        creditLite.api.withdraw(target, money)
         if (sender.name == target.name) {
             sender.sendMessage(
                 ModernText.miniModernText(

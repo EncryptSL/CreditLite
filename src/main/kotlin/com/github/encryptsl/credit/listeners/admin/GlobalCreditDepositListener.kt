@@ -18,7 +18,7 @@ class GlobalCreditDepositListener(private val creditLite: com.github.encryptsl.c
         val offlinePlayers = Bukkit.getOfflinePlayers()
 
         offlinePlayers.filter { p -> creditLite.api.hasAccount(p) }.forEach { a ->
-            creditLite.api.depositMoney(a, money)
+            creditLite.api.deposit(a, money)
         }
 
         creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + offlinePlayers.size

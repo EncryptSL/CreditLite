@@ -25,8 +25,8 @@ class PlayerCreditPayListener(private val creditLite: com.github.encryptsl.credi
             sender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.insufficient_funds")))
             return
         }
-        creditLite.api.withDrawMoney(sender, money)
-        creditLite.api.depositMoney(target, money)
+        creditLite.api.withdraw(sender, money)
+        creditLite.api.deposit(target, money)
         creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + 1
         sender.sendMessage(
             ModernText.miniModernText(

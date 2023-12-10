@@ -17,7 +17,7 @@ class GlobalCreditSetListener(private val creditLite: com.github.encryptsl.credi
         val offlinePlayers = Bukkit.getOfflinePlayers()
 
         offlinePlayers.filter { a -> creditLite.api.hasAccount(a) }.forEach { offlinePlayer ->
-            creditLite.api.setMoney(offlinePlayer, money)
+            creditLite.api.set(offlinePlayer, money)
         }
 
         creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + offlinePlayers.size

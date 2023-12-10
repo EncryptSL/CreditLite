@@ -15,7 +15,7 @@ class MigrationTool(private val creditLite: com.github.encryptsl.credit.CreditLi
         return try {
             file.parentFile.mkdirs()
             PrintWriter(FileWriter(file)).use { writer ->
-                writer.println("id,uuid,credit")
+                writer.println("id,uuid, username,credit")
                 data.forEach {
                     writer.println("${it.id},${it.uuid},${it.money}")
                 }
@@ -35,11 +35,11 @@ class MigrationTool(private val creditLite: com.github.encryptsl.credit.CreditLi
             file.parentFile.mkdirs()
             PrintWriter(FileWriter(file)).use { writer ->
                 writer.println("DROP TABLE IF EXISTS credits;")
-                writer.println("CREATE TABLE credits (id INT, uuid VARCHAR(36), money DOUBLE);")
+                writer.println("CREATE TABLE credits (id INT, uuid VARCHAR(36), username VARCHAR(16), credit DOUBLE);")
                 val insertStatements = data.joinToString {
                     "\n(${it.id}, '${it.uuid}', ${it.money})"
                 }
-                writer.println("INSERT INTO credits (id, uuid, credit) VALUES $insertStatements;")
+                writer.println("INSERT INTO credits (id, uuid, username, credit) VALUES $insertStatements;")
             }
             true
         } catch (e: IOException) {

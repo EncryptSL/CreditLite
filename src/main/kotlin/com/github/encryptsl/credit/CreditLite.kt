@@ -74,6 +74,7 @@ class CreditLite : JavaPlugin() {
 
     private fun hookRegistration() {
         hookManager.hookPAPI()
+        hookManager.hookTradeSystem()
     }
 
     private fun setupMetrics() {

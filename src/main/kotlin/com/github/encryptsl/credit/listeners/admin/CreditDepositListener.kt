@@ -26,7 +26,7 @@ class CreditDepositListener(private val creditLite: com.github.encryptsl.credit.
 
         creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + 1
 
-        creditLite.api.depositMoney(target, money)
+        creditLite.api.deposit(target, money)
         if (sender.name == target.name && !target.isOp) {
             sender.sendMessage(
                 ModernText.miniModernText(creditLite.locale.getMessage("messages.error.self_pay"), TagResolver.resolver(Placeholder.parsed("credit", creditLite.api.fullFormatting(money)))))

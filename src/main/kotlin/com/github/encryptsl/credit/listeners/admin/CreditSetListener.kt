@@ -26,7 +26,7 @@ class CreditSetListener(private val creditLite: com.github.encryptsl.credit.Cred
 
         creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + 1
 
-        creditLite.api.setMoney(target, money)
+        creditLite.api.set(target, money)
         if (sender.name == target.name) {
             sender.sendMessage(
                 ModernText.miniModernText(

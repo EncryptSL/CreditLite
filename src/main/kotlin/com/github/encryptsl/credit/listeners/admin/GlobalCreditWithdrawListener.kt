@@ -17,7 +17,7 @@ class GlobalCreditWithdrawListener(private val creditLite: com.github.encryptsl.
         val offlinePlayers = Bukkit.getOfflinePlayers()
 
         offlinePlayers.filter { p -> creditLite.api.hasAccount(p) }.forEach { a ->
-            creditLite.api.withDrawMoney(a, money)
+            creditLite.api.withdraw(a, money)
         }
 
         creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + 1

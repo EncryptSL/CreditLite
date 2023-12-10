@@ -54,7 +54,7 @@ class CreditEconomy(val plugin: Plugin) : CreditAPI {
             creditModel.getBalance(player.uniqueId)
     }
 
-    override fun depositMoney(player: OfflinePlayer, amount: Double) {
+    override fun deposit(player: OfflinePlayer, amount: Double) {
         if (playerAccount.isPlayerOnline(player.uniqueId)) {
             cacheAccount(player, getBalance(player).plus(amount))
         } else {
@@ -62,7 +62,7 @@ class CreditEconomy(val plugin: Plugin) : CreditAPI {
         }
     }
 
-    override fun withDrawMoney(player: OfflinePlayer, amount: Double) {
+    override fun withdraw(player: OfflinePlayer, amount: Double) {
         if (playerAccount.isPlayerOnline(player.uniqueId)) {
             cacheAccount(player, getBalance(player).minus(amount))
         } else {
@@ -70,7 +70,7 @@ class CreditEconomy(val plugin: Plugin) : CreditAPI {
         }
     }
 
-    override fun setMoney(player: OfflinePlayer, amount: Double) {
+    override fun set(player: OfflinePlayer, amount: Double) {
         if (playerAccount.isPlayerOnline(player.uniqueId)) {
             cacheAccount(player, amount)
         } else {
