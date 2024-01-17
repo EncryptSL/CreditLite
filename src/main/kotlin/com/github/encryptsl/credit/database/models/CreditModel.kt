@@ -30,7 +30,7 @@ class CreditModel : DatabaseSQLProvider {
     }
 
     override fun getExistPlayerAccount(uuid: UUID): Boolean = transaction {
-        !Account.select(Account.uuid eq uuid.toString()).empty()
+        !Account.select(Account.uuid).where(Account.uuid eq uuid.toString()).empty()
     }
 
     override fun getTopBalance(top: Int): MutableMap<String, Double> = transaction {
@@ -46,7 +46,7 @@ class CreditModel : DatabaseSQLProvider {
     }
 
     override fun getBalance(uuid: UUID): Double = transaction {
-        Account.select(Account.uuid eq uuid.toString()).first()[Account.credit]
+        Account.select(Account.uuid, Account.uuid).where(Account.uuid eq uuid.toString()).first()[Account.credit]
     }
 
     override fun depositCredit(uuid: UUID, credit: Double) {

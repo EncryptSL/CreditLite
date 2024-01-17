@@ -9,14 +9,13 @@ prefix: CreditLite
 author: EncryptSL
 website: https://encryptsl.cekuj.net
 
-load: STARTUP
 softdepend: [PlaceholderAPI, Vault, Treasury, TradeSystem]
+loadbefore: [TradeSystem]
 libraries:
   - com.zaxxer:HikariCP:5.1.0
-  - org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20
-  - org.jetbrains.exposed:exposed-core:0.44.1
-  - org.jetbrains.exposed:exposed-jdbc:0.44.1
-  - com.squareup.okhttp3:okhttp:4.10.0
+  - org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.22
+  - org.jetbrains.exposed:exposed-core:0.46.0
+  - org.jetbrains.exposed:exposed-jdbc:0.46.0
 
 description: ${description}
 
