@@ -8,25 +8,22 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.math.BigDecimal
 
-class CreditTradeIcon(
-    val creditLite: CreditLite,
-    itemStack: ItemStack
-) : EconomyIcon<ShowCreditTradeIcon>(itemStack, "Credit", "Credits", true) {
+class CreditTradeIcon(itemStack: ItemStack) : EconomyIcon<ShowCreditTradeIcon>(itemStack, "Credit", "Credits", false) {
 
     override fun getTargetClass(): Class<ShowCreditTradeIcon> {
         return ShowCreditTradeIcon::class.java
     }
 
     override fun getBalance(player: Player): BigDecimal {
-        return creditLite.api.getBalance(player).toBigDecimal()
+        return CreditLite().getAPI().getBalance(player).toBigDecimal()
     }
 
     override fun withdraw(player: Player, value: BigDecimal) {
-        creditLite.api.withdraw(player, value.toDouble())
+        CreditLite().getAPI().withdraw(player, value.toDouble())
     }
 
     override fun deposit(player: Player, value: BigDecimal) {
-        creditLite.api.deposit(player, value.toDouble())
+        CreditLite().getAPI().deposit(player, value.toDouble())
     }
 
     override fun getMaxSupportedValue(): TypeCap {

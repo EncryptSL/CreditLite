@@ -1,7 +1,7 @@
 package com.github.encryptsl.credit.commands
 
+import cloud.commandframework.annotation.specifier.Range
 import cloud.commandframework.annotations.*
-import cloud.commandframework.annotations.specifier.Range
 import com.github.encryptsl.credit.api.Paginator
 import com.github.encryptsl.credit.api.events.PlayerCreditPayEvent
 import com.github.encryptsl.credit.api.objects.ModernText
@@ -20,22 +20,22 @@ import java.util.*
 class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) {
     private val helper: Helper = Helper(creditLite)
 
-    @CommandMethod("credit help")
-    @CommandPermission("credit.help")
+    @Command("credit help")
+    @Permission("credit.help")
     fun onHelp(commandSender: CommandSender) {
         creditLite.locale.getList("messages.help")?.forEach { s ->
             commandSender.sendMessage(ModernText.miniModernText(s.toString()))
         }
     }
 
-    @CommandMethod("cbal|cbalance [player]")
-    @CommandPermission("credit.balance")
+    @Command("cbal|cbalance [player]")
+    @Permission("credit.balance")
     fun onBalanceProxy(commandSender: CommandSender, @Argument(value = "player", suggestions = "players") offlinePlayer: OfflinePlayer?) {
         onBalance(commandSender, offlinePlayer)
     }
 
-    @CommandMethod("credit bal [player]")
-    @CommandPermission("credit.balance")
+    @Command("credit bal [player]")
+    @Permission("credit.balance")
     fun onBalance(commandSender: CommandSender, @Argument(value = "player", suggestions = "players") offlinePlayer: OfflinePlayer?) {
         if (commandSender is Player) {
             if (offlinePlayer == null) {
@@ -87,8 +87,8 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
     }
 
     @ProxiedBy("cbaltop")
-    @CommandMethod("credit top [page]")
-    @CommandPermission("credit.top")
+    @Command("credit top [page]")
+    @Permission("credit.top")
     fun onTopBalance(commandSender: CommandSender, @Argument(value = "page") @Range(min = "1", max="") page: Int?) {
         val p = page ?: 1
 
@@ -126,8 +126,8 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
     }
 
     @ProxiedBy("cpay")
-    @CommandMethod("credit pay <player> <amount>")
-    @CommandPermission("credit.pay")
+    @Command("credit pay <player> <amount>")
+    @Permission("credit.pay")
     fun onPayCredit(
         commandSender: CommandSender,
         @Argument(value = "player", suggestions = "players") offlinePlayer: OfflinePlayer,

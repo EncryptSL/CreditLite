@@ -8,11 +8,9 @@ import com.github.encryptsl.credit.extensions.moneyFormat
 import org.bukkit.OfflinePlayer
 import org.bukkit.plugin.Plugin
 
-class CreditEconomy(val plugin: Plugin) : CreditAPI {
+class CreditEconomy(val plugin: Plugin, val playerAccount: PlayerAccount) : CreditAPI {
 
     private val creditModel: CreditModel by lazy { CreditModel() }
-    private val playerAccount: PlayerAccount by lazy { PlayerAccount(plugin) }
-
     override fun createAccount(player: OfflinePlayer, startAmount: Double): Boolean {
         if (hasAccount(player)) return false
 

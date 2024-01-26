@@ -33,11 +33,11 @@ dependencies {
     compileOnly("org.jetbrains.exposed:exposed-core:0.46.0")
     compileOnly("org.jetbrains.exposed:exposed-jdbc:0.46.0")
     compileOnly("com.github.CodingAir:TradeSystem:v2.5.2")
+    compileOnly("com.github.CodingAir:CodingAPI:1.77")
 
-    implementation("com.github.CodingAir:CodingAPI:1.76")
     implementation("org.bstats:bstats-bukkit:3.0.1")
-    implementation("cloud.commandframework:cloud-paper:1.8.3")
-    implementation("cloud.commandframework:cloud-annotations:1.8.3")
+    implementation("cloud.commandframework:cloud-paper:2.0.0-SNAPSHOT")
+    implementation("cloud.commandframework:cloud-annotations:2.0.0-SNAPSHOT")
 
     testImplementation(kotlin("test", "1.9.22"))
     testImplementation("com.zaxxer:HikariCP:5.1.0")
@@ -65,9 +65,12 @@ tasks {
 
     shadowJar {
         archiveFileName.set("${providers.gradleProperty("plugin_name").get()}-${providers.gradleProperty("plugin_version").get()}.jar")
+
+        relocate("de.codingair.codingapi", "com.github.encryptsl.codingair")
+
         minimize {
-            relocate("org.bstats", "encryptsl.cekuj.net.api.bstats")
-            relocate("cloud.commandframework", "encryptsl.cekuj.net.cloud")
+            relocate("org.bstats", "bstats")
+            relocate("cloud.commandframework", "cloud-core")
         }
     }
 }

@@ -10,7 +10,6 @@ author: EncryptSL
 website: https://encryptsl.cekuj.net
 
 softdepend: [PlaceholderAPI, Vault, Treasury, TradeSystem]
-loadbefore: [TradeSystem]
 libraries:
   - com.zaxxer:HikariCP:5.1.0
   - org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.22

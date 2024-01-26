@@ -1,10 +1,11 @@
 package com.github.encryptsl.credit.commands
 
+import cloud.commandframework.annotation.specifier.Range
 import cloud.commandframework.annotations.Argument
+import cloud.commandframework.annotations.Command
 import cloud.commandframework.annotations.CommandDescription
-import cloud.commandframework.annotations.CommandMethod
-import cloud.commandframework.annotations.CommandPermission
-import cloud.commandframework.annotations.specifier.Range
+import cloud.commandframework.annotations.Flag
+import cloud.commandframework.annotations.Permission
 import com.github.encryptsl.credit.api.enums.CheckLevel
 import com.github.encryptsl.credit.api.enums.LangKey
 import com.github.encryptsl.credit.api.enums.MigrationKey
@@ -28,32 +29,31 @@ import kotlin.system.measureTimeMillis
 class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) {
     private val helper: Helper = Helper(creditLite)
 
-    @CommandMethod("credits help")
-    @CommandPermission("credit.admin.help")
+    @Command("credits help")
+    @Permission("credit.admin.help")
     fun adminHelp(commandSender: CommandSender) {
         creditLite.locale.getList("messages.admin-help")?.forEach { s ->
             commandSender.sendMessage(ModernText.miniModernText(s.toString()))
         }
     }
 
-    @CommandMethod("credits add <player> <amount> [silent]")
-    @CommandPermission("credit.admin.add")
+    @Command("credits add <player> <amount> [silent]")
+    @Permission("credit.admin.add")
     fun onAddCredit(
         commandSender: CommandSender,
-        @Argument(value = "silent") silent: String?,
+        @Flag(value = "-silent", aliases = ["-s"]) silent: Boolean,
         @Argument(value = "player", suggestions = "players") offlinePlayer: OfflinePlayer,
         @Argument(value = "amount") @Range(min = "1.00", max = "") amountStr: String,
     ) {
         val amount = helper.validateAmount(amountStr, commandSender) ?: return
-        val s = silent?.contains("-s") ?: false || silent?.contains("-silent") ?: false
 
         creditLite.server.scheduler.runTask(creditLite) { ->
-            creditLite.pluginManager.callEvent(CreditDepositEvent(commandSender, offlinePlayer, amount, s))
+            creditLite.pluginManager.callEvent(CreditDepositEvent(commandSender, offlinePlayer, amount, silent))
         }
     }
 
-    @CommandMethod("credits gadd <amount>")
-    @CommandPermission("credit.admin.gadd")
+    @Command("credits gadd <amount>")
+    @Permission("credit.admin.gadd")
     fun onGlobalAddCredits(
         commandSender: CommandSender,
         @Argument("amount") @Range(min = "1.0", max = "") amountStr: String
@@ -67,8 +67,8 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         }
     }
 
-    @CommandMethod("credits set <player> <amount>")
-    @CommandPermission("credit.admin.set")
+    @Command("credits set <player> <amount>")
+    @Permission("credit.admin.set")
     fun onSetBalance(
         commandSender: CommandSender,
         @Argument(value = "player", suggestions = "players") offlinePlayer: OfflinePlayer,
@@ -87,8 +87,8 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         }
     }
 
-    @CommandMethod("credits gset <amount>")
-    @CommandPermission("credit.admin.gset")
+    @Command("credits gset <amount>")
+    @Permission("credit.admin.gset")
     fun onGlobalSetCredits(
         commandSender: CommandSender,
         @Argument("amount") @Range(min = "1.0", max = "") amountStr: String
@@ -102,8 +102,8 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         }
     }
 
-    @CommandMethod("credits remove <player> <amount>")
-    @CommandPermission("credit.admin.remove")
+    @Command("credits remove <player> <amount>")
+    @Permission("credit.admin.remove")
     fun onRemoveCredit(
         commandSender: CommandSender,
         @Argument(value = "player", suggestions = "players") offlinePlayer: OfflinePlayer,
@@ -122,8 +122,8 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         }
     }
 
-    @CommandMethod("credits gremove <amount>")
-    @CommandPermission("credit.admin.gremove")
+    @Command("credits gremove <amount>")
+    @Permission("credit.admin.gremove")
     fun onGlobalRemoveCredit(
         commandSender: CommandSender,
         @Argument("amount") @Range(min = "1.0", max = "") amountStr: String
@@ -137,8 +137,8 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         }
     }
 
-    @CommandMethod("credits lang <isoKey>")
-    @CommandPermission("credit.admin.lang")
+    @Command("credits lang <isoKey>")
+    @Permission("credit.admin.lang")
     fun onLangSwitch(
         commandSender: CommandSender,
         @Argument(value = "isoKey", suggestions = "langKeys") isoKey: String
@@ -161,8 +161,8 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         }
     }
 
-    @CommandMethod("credits purge <argument>")
-    @CommandPermission("credit.admin.purge")
+    @Command("credits purge <argument>")
+    @Permission("credit.admin.purge")
     fun onPurge(commandSender: CommandSender, @Argument(value = "argument", suggestions = "purgeKeys") purgeKey: PurgeKey)
     {
         @Suppress("REDUNDANT_ELSE_IN_WHEN")
@@ -185,8 +185,8 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         }
     }
 
-    @CommandMethod("credits migration <argument>")
-    @CommandPermission("credit.admin.migration")
+    @Command("credits migration <argument>")
+    @Permission("credit.admin.migration")
     fun onMigration(commandSender: CommandSender, @Argument(value = "argument", suggestions = "migrationKeys") migrationKey: MigrationKey) {
         val migrationTool = MigrationTool(creditLite)
         val output = creditLite.api.getTopBalance().toList().positionIndexed { index, k -> MigrationData(index, k.first, k.second) }
@@ -210,8 +210,8 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         ))
     }
 
-    @CommandMethod("credits debug create accounts <amount>")
-    @CommandPermission("credit.admin.debug.create.accounts")
+    @Command("credits debug create accounts <amount>")
+    @Permission("credit.admin.debug.create.accounts")
     fun onDebugCreateAccounts(commandSender: CommandSender, @Argument("amount") @Range(min = "1", max = "100") amountStr: Int) {
 
         val random = ThreadLocalRandom.current()
@@ -225,8 +225,8 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         commandSender.sendMessage("Into database was insterted $amountStr fake accounts in time $time ms")
     }
 
-    @CommandMethod("credits reload")
-    @CommandPermission("credit.admin.reload")
+    @Command("credits reload")
+    @Permission("credit.admin.reload")
     fun onReload(commandSender: CommandSender) {
         creditLite.reloadConfig()
         commandSender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.admin.config_reload")))
