@@ -1,11 +1,11 @@
 package com.github.encryptsl.credit.commands
 
-import cloud.commandframework.annotation.specifier.Range
-import cloud.commandframework.annotations.Argument
-import cloud.commandframework.annotations.Command
-import cloud.commandframework.annotations.CommandDescription
-import cloud.commandframework.annotations.Flag
-import cloud.commandframework.annotations.Permission
+import org.incendo.cloud.annotation.specifier.Range
+import org.incendo.cloud.annotations.Argument
+import org.incendo.cloud.annotations.Command
+import org.incendo.cloud.annotations.CommandDescription
+import org.incendo.cloud.annotations.Flag
+import org.incendo.cloud.annotations.Permission
 import com.github.encryptsl.credit.api.enums.CheckLevel
 import com.github.encryptsl.credit.api.enums.LangKey
 import com.github.encryptsl.credit.api.enums.MigrationKey

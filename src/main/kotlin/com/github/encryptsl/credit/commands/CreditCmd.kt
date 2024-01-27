@@ -1,7 +1,7 @@
 package com.github.encryptsl.credit.commands
 
-import cloud.commandframework.annotation.specifier.Range
-import cloud.commandframework.annotations.*
+import org.incendo.cloud.annotation.specifier.Range
+import org.incendo.cloud.annotations.*
 import com.github.encryptsl.credit.api.Paginator
 import com.github.encryptsl.credit.api.events.PlayerCreditPayEvent
 import com.github.encryptsl.credit.api.objects.ModernText

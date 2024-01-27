@@ -11,7 +11,6 @@ description = providers.gradleProperty("plugin_description").get()
 repositories {
     mavenLocal()
     mavenCentral()
-    maven("https://jitpack.io")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven("https://repo.codemc.io/repository/maven-public/")
@@ -27,7 +26,6 @@ kotlin {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     compileOnly(kotlin("stdlib", "1.9.22"))
-    compileOnly("me.lokka30:treasury-api:1.2.1")
     compileOnly("com.zaxxer:HikariCP:5.1.0")
     compileOnly("me.clip:placeholderapi:2.11.5")
     compileOnly("org.jetbrains.exposed:exposed-core:0.46.0")
@@ -36,8 +34,8 @@ dependencies {
     compileOnly("com.github.CodingAir:CodingAPI:1.77")
 
     implementation("org.bstats:bstats-bukkit:3.0.1")
-    implementation("cloud.commandframework:cloud-paper:2.0.0-SNAPSHOT")
-    implementation("cloud.commandframework:cloud-annotations:2.0.0-SNAPSHOT")
+    implementation("org.incendo:cloud-paper:2.0.0-beta.1")
+    implementation("org.incendo:cloud-annotations:2.0.0-beta.1")
 
     testImplementation(kotlin("test", "1.9.22"))
     testImplementation("com.zaxxer:HikariCP:5.1.0")
@@ -68,9 +66,9 @@ tasks {
 
         relocate("de.codingair.codingapi", "com.github.encryptsl.codingair")
 
+        relocate("cloud.commandframework", "com.github.encryptsl.credit.cloud")
         minimize {
             relocate("org.bstats", "bstats")
-            relocate("cloud.commandframework", "cloud-core")
         }
     }
 }

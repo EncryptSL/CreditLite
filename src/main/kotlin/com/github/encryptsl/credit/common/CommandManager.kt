@@ -1,11 +1,10 @@
 package com.github.encryptsl.credit.common
 
-import cloud.commandframework.SenderMapper
-import cloud.commandframework.annotations.AnnotationParser
-import cloud.commandframework.bukkit.CloudBukkitCapabilities
-import cloud.commandframework.execution.ExecutionCoordinator
-import cloud.commandframework.paper.PaperCommandManager
-import cloud.commandframework.suggestion.Suggestion
+import org.incendo.cloud.SenderMapper
+import org.incendo.cloud.annotations.AnnotationParser
+import org.incendo.cloud.bukkit.CloudBukkitCapabilities
+import org.incendo.cloud.execution.ExecutionCoordinator
+import org.incendo.cloud.suggestion.Suggestion
 import com.github.encryptsl.credit.CreditLite
 import com.github.encryptsl.credit.api.enums.LangKey
 import com.github.encryptsl.credit.api.enums.MigrationKey
@@ -14,28 +13,32 @@ import com.github.encryptsl.credit.commands.CreditCmd
 import com.github.encryptsl.credit.commands.CreditsCmd
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
+import org.incendo.cloud.paper.PaperCommandManager
 import java.util.concurrent.CompletableFuture
 
 class CommandManager(private val creditLite: CreditLite) {
 
     fun registerCommands() {
-        creditLite.logger.info("Registering commands with Cloud Command Framework !")
+        try {
+            creditLite.logger.info("Registering commands with Cloud Command Framework !")
 
-        val commandManager = createCommandManager()
+            val commandManager = createCommandManager()
 
-        registerSuggestionProviders(commandManager)
+            registerSuggestionProviders(commandManager)
 
-        val annotationParser = createAnnotationParser(commandManager)
-        annotationParser.parse(CreditCmd(creditLite))
-        annotationParser.parse(CreditsCmd(creditLite))
+            val annotationParser = createAnnotationParser(commandManager)
+            annotationParser.parse(CreditCmd(creditLite))
+            annotationParser.parse(CreditsCmd(creditLite))
+        } catch (e : NoClassDefFoundError) {
+            creditLite.logger.severe(e.message ?: e.localizedMessage)
+        }
     }
 
     private fun createCommandManager(): PaperCommandManager<CommandSender> {
-        val executionCoordinatorFunction = ExecutionCoordinator.builder<CommandSender>().build()
         val mapperFunction = SenderMapper.identity<CommandSender>()
         val commandManager = PaperCommandManager(
             creditLite,
-            executionCoordinatorFunction,
+            ExecutionCoordinator.simpleCoordinator(),
             mapperFunction
         )
         if (commandManager.hasCapability(CloudBukkitCapabilities.NATIVE_BRIGADIER)) {
@@ -68,12 +71,10 @@ class CommandManager(private val creditLite: CreditLite) {
     }
 
     private fun createAnnotationParser(commandManager: PaperCommandManager<CommandSender>): AnnotationParser<CommandSender> {
-        val annotationParser: AnnotationParser<CommandSender> = AnnotationParser(
+        return AnnotationParser(
             commandManager,
             CommandSender::class.java
         )
-
-        return annotationParser
     }
 
 }
