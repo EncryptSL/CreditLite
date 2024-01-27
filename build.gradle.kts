@@ -66,9 +66,9 @@ tasks {
 
         relocate("de.codingair.codingapi", "com.github.encryptsl.codingair")
 
-        relocate("cloud.commandframework", "com.github.encryptsl.credit.cloud")
         minimize {
-            relocate("org.bstats", "bstats")
+            relocate("cloud.commandframework", "com.github.encryptsl.credit.cloud")
+            relocate("org.bstats", "com.github.encryptsl.credit.metrics")
         }
     }
 }
