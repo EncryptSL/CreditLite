@@ -15,15 +15,15 @@ class CreditTradeIcon(itemStack: ItemStack) : EconomyIcon<ShowCreditTradeIcon>(i
     }
 
     override fun getBalance(player: Player): BigDecimal {
-        return CreditLite().getAPI().getBalance(player).toBigDecimal()
+        return CreditLite().api.getBalance(player).toBigDecimal()
     }
 
     override fun withdraw(player: Player, value: BigDecimal) {
-        CreditLite().getAPI().withdraw(player, value.toDouble())
+        CreditLite().api.withdraw(player, value.toDouble())
     }
 
     override fun deposit(player: Player, value: BigDecimal) {
-        CreditLite().getAPI().deposit(player, value.toDouble())
+        CreditLite().api.deposit(player, value.toDouble())
     }
 
     override fun getMaxSupportedValue(): TypeCap {

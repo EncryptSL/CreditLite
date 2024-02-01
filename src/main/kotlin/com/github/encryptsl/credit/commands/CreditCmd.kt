@@ -45,7 +45,7 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
                         TagResolver.resolver(
                             Placeholder.parsed(
                                 "credit",
-                                creditLite.api.fullFormatting(creditLite.api.getBalance(commandSender))
+                                creditLite.creditEconomyFormatting.fullFormatting(creditLite.api.getBalance(commandSender))
                             )
                         )
                     )
@@ -59,7 +59,7 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
                         Placeholder.parsed("target", offlinePlayer.name.toString()),
                         Placeholder.parsed(
                             "credit",
-                            creditLite.api.fullFormatting(creditLite.api.getBalance(offlinePlayer))
+                            creditLite.creditEconomyFormatting.fullFormatting(creditLite.api.getBalance(offlinePlayer))
                         )
                     )
                 )
@@ -73,7 +73,7 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
                             Placeholder.parsed("target", offlinePlayer.name.toString()),
                             Placeholder.parsed(
                                 "credit",
-                                creditLite.api.fullFormatting(creditLite.api.getBalance(offlinePlayer))
+                                creditLite.creditEconomyFormatting.fullFormatting(creditLite.api.getBalance(offlinePlayer))
                             )
                         )
                     )
@@ -98,7 +98,7 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
                 creditLite.locale.getMessage("messages.balance.top_format")
                     .replace("<position>", index.toString())
                     .replace("<player>", Bukkit.getOfflinePlayer(UUID.fromString(pair.first)).name.toString())
-                    .replace("<credit>", creditLite.api.fullFormatting(pair.second))
+                    .replace("<credit>", creditLite.creditEconomyFormatting.fullFormatting(pair.second))
             }
         if (topPlayers.isEmpty()) return
 

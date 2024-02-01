@@ -3,24 +3,18 @@ package com.github.encryptsl.credit.api
 import com.github.encryptsl.credit.api.interfaces.AccountAPI
 import com.github.encryptsl.credit.database.models.CreditModel
 import com.github.encryptsl.credit.api.objects.AccountCache
-import com.github.encryptsl.credit.utils.DebugLogger
 import org.bukkit.Bukkit
-import org.bukkit.plugin.Plugin
 import java.util.*
-import java.util.logging.Level
 
-class PlayerAccount(val plugin: Plugin) : AccountAPI {
+class PlayerAccount : AccountAPI {
 
     private val creditModel: CreditModel by lazy { CreditModel() }
-    val debugLogger: DebugLogger by lazy { DebugLogger(plugin) }
 
     override fun cacheAccount(uuid: UUID, value: Double) {
         if (!isAccountCached(uuid)) {
             AccountCache.cache[uuid] = value
-            debugLogger.debug(Level.INFO, "Account $uuid with $value was changed successfully !")
         } else {
             AccountCache.cache[uuid] = value
-            debugLogger.debug(Level.INFO, "Account $uuid with $value was changed successfully  !")
         }
     }
 
@@ -29,27 +23,19 @@ class PlayerAccount(val plugin: Plugin) : AccountAPI {
     }
 
     override fun syncAccount(uuid: UUID) {
-        runCatching {
+        try {
             creditModel.setCredit(uuid, getBalance(uuid))
-        }.onSuccess {
-            debugLogger.debug(Level.INFO,"Account $uuid was synced with database  !")
             removeAccount(uuid)
-        }.onFailure {
-            debugLogger.debug(Level.SEVERE,it.message ?: it.localizedMessage)
-        }
+        } catch (_ : Exception) {}
     }
 
     override fun syncAccounts() {
-        runCatching {
+        try {
             AccountCache.cache.toList().forEach { k ->
                 creditModel.setCredit(k.first, k.second)
             }
-        }.onSuccess {
-            debugLogger.debug(Level.INFO,"Accounts are synced with database !")
             AccountCache.cache.clear()
-        }.onFailure {
-            debugLogger.debug(Level.SEVERE,it.message ?: it.localizedMessage)
-        }
+        } catch (_: Exception) {}
     }
 
     override fun removeAccount(uuid: UUID) {

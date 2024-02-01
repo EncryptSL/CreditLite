@@ -25,7 +25,7 @@ class GlobalCreditWithdrawListener(private val creditLite: com.github.encryptsl.
         sender.sendMessage(
             ModernText.miniModernText(creditLite.locale.getMessage("messages.global.withdraw_credit"),
             TagResolver.resolver(
-                Placeholder.parsed("money", creditLite.api.fullFormatting(money))
+                Placeholder.parsed("money", creditLite.creditEconomyFormatting.fullFormatting(money))
             )
         ))
         if (creditLite.config.getBoolean("messages.global.notify_withdraw"))
@@ -33,7 +33,7 @@ class GlobalCreditWithdrawListener(private val creditLite: com.github.encryptsl.
                 ModernText.miniModernText(creditLite.locale.getMessage("messages.broadcast.withdraw_credit"),
                 TagResolver.resolver(
                     Placeholder.parsed("sender", sender.name),
-                    Placeholder.parsed("credit", creditLite.api.fullFormatting(money))
+                    Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
                 )
             ))
         return

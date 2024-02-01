@@ -6,10 +6,12 @@ import com.github.encryptsl.credit.database.models.CreditModel
 import com.github.encryptsl.credit.extensions.compactFormat
 import com.github.encryptsl.credit.extensions.moneyFormat
 import org.bukkit.OfflinePlayer
+import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.plugin.Plugin
 
-class CreditEconomy(val plugin: Plugin, val playerAccount: PlayerAccount) : CreditAPI {
+class CreditEconomy : CreditAPI {
 
+    private val playerAccount: PlayerAccount by lazy { PlayerAccount() }
     private val creditModel: CreditModel by lazy { CreditModel() }
     override fun createAccount(player: OfflinePlayer, startAmount: Double): Boolean {
         if (hasAccount(player)) return false
@@ -86,23 +88,5 @@ class CreditEconomy(val plugin: Plugin, val playerAccount: PlayerAccount) : Cred
 
     override fun getTopBalance(): MutableMap<String, Double> {
         return creditModel.getTopBalance() // This must be same, because cache can be removed or cleared if player leave.
-    }
-
-    override fun compacted(amount: Double): String {
-        return amount.compactFormat(plugin.config.getString("formatting.currency_pattern").toString(), plugin.config.getString("formatting.compact_pattern").toString(), plugin.config.getString("formatting.currency_locale").toString())
-    }
-
-    override fun formatted(amount: Double): String {
-        return amount.moneyFormat(plugin.config.getString("formatting.currency_pattern").toString(), plugin.config.getString("formatting.currency_locale").toString())
-    }
-
-    override fun fullFormatting(amount: Double): String {
-        val value = if (plugin.config.getBoolean("plugin.economy.compact_display")) {
-            compacted(amount)
-        }
-        else {
-            formatted(amount)
-        }
-        return "${plugin.config.getString("economy.currency_prefix").toString()}${value} ${plugin.config.getString("economy.currency_name").toString()}"
     }
 }

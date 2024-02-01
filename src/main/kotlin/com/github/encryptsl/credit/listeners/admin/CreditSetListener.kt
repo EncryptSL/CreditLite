@@ -30,21 +30,21 @@ class CreditSetListener(private val creditLite: com.github.encryptsl.credit.Cred
         if (sender.name == target.name) {
             sender.sendMessage(
                 ModernText.miniModernText(
-                    creditLite.locale.getMessage("messages.self.set_credit"), TagResolver.resolver(Placeholder.parsed("credit", creditLite.api.fullFormatting(money)))))
+                    creditLite.locale.getMessage("messages.self.set_credit"), TagResolver.resolver(Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money)))))
             return
         }
 
         sender.sendMessage(
             ModernText.miniModernText(
             creditLite.locale.getMessage("messages.sender.set_credit"),
-            TagResolver.resolver(Placeholder.parsed("target", target.name.toString()), Placeholder.parsed("credit", creditLite.api.fullFormatting(money)))))
+            TagResolver.resolver(Placeholder.parsed("target", target.name.toString()), Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money)))))
 
         if (target.isOnline && creditLite.config.getBoolean("messages.target.notify_set")) {
             target.player?.sendMessage(
                 ModernText.miniModernText(creditLite.locale.getMessage("messages.target.set_credit"),
                 TagResolver.resolver(
                     Placeholder.parsed("sender", sender.name),
-                    Placeholder.parsed("credit", creditLite.api.fullFormatting(money))
+                    Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
                 )
             ))
         }

@@ -31,13 +31,13 @@ class PlayerCreditPayListener(private val creditLite: com.github.encryptsl.credi
         sender.sendMessage(
             ModernText.miniModernText(
                 creditLite.locale.getMessage("messages.sender.add_credit"),
-                TagResolver.resolver(Placeholder.parsed("target", target.name.toString()), Placeholder.parsed("credit", creditLite.api.fullFormatting(money)))))
+                TagResolver.resolver(Placeholder.parsed("target", target.name.toString()), Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money)))))
         if (target.isOnline) {
             target.player?.sendMessage(
                 ModernText.miniModernText(creditLite.locale.getMessage("messages.target.add_credit"),
                 TagResolver.resolver(
                     Placeholder.parsed("sender", sender.name),
-                    Placeholder.parsed("credit", creditLite.api.fullFormatting(money))
+                    Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
                 )
             ))
         }

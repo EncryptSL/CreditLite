@@ -35,7 +35,7 @@ class CreditWithdrawListener(private val creditLite: com.github.encryptsl.credit
             sender.sendMessage(
                 ModernText.miniModernText(
                     creditLite.locale.getMessage("messages.self.withdraw_credit"),
-                    TagResolver.resolver(Placeholder.parsed("credit", creditLite.api.fullFormatting(money)))
+                    TagResolver.resolver(Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money)))
                 )
             )
             return
@@ -44,13 +44,13 @@ class CreditWithdrawListener(private val creditLite: com.github.encryptsl.credit
         sender.sendMessage(
             ModernText.miniModernText(
                 creditLite.locale.getMessage("messages.sender.withdraw_credit"),
-                TagResolver.resolver(Placeholder.parsed("target", target.name.toString()), Placeholder.parsed("credit", creditLite.api.fullFormatting(money)))))
+                TagResolver.resolver(Placeholder.parsed("target", target.name.toString()), Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money)))))
         if (target.isOnline && creditLite.config.getBoolean("messages.target.notify_withdraw")) {
             target.player?.sendMessage(
                 ModernText.miniModernText(creditLite.locale.getMessage("messages.target.withdraw_credit"),
                 TagResolver.resolver(
                     Placeholder.parsed("sender", sender.name),
-                    Placeholder.parsed("credit", creditLite.api.fullFormatting(money))
+                    Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
                 )
             ))
         }

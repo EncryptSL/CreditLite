@@ -5,8 +5,6 @@ plugin:
   translation: CS_CZ
   # Plugin prefix
   prefix: "<#64646F>[<#F9AD47>Credits<#64646F>]</#64646F>"
-  # Debugging
-  debug: false
 
 economy:
   # Prefix of Currency

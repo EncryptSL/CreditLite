@@ -51,12 +51,9 @@ class CommandManager(private val creditLite: CreditLite) {
     }
 
     private fun registerSuggestionProviders(commandManager: PaperCommandManager<CommandSender>) {
-        commandManager.parserRegistry().registerSuggestionProvider("players") { _, input ->
+        commandManager.parserRegistry().registerSuggestionProvider("players") { _, _ ->
             CompletableFuture.completedFuture(Bukkit.getOfflinePlayers()
-                .filter { p -> p.name?.startsWith(input.input(), false) ?: false }
-                .map {
-                    Suggestion.simple(it.name ?: it.uniqueId.toString())
-                }
+                .map { Suggestion.simple(it.name.toString()) }
             )
         }
         commandManager.parserRegistry().registerSuggestionProvider("langKeys") { _, _ ->

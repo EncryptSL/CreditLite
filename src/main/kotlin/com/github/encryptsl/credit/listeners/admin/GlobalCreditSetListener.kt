@@ -25,7 +25,7 @@ class GlobalCreditSetListener(private val creditLite: com.github.encryptsl.credi
         sender.sendMessage(
             ModernText.miniModernText(creditLite.locale.getMessage("messages.global.set_credit"),
             TagResolver.resolver(
-                Placeholder.parsed("money", creditLite.api.fullFormatting(money))
+                Placeholder.parsed("money", creditLite.creditEconomyFormatting.fullFormatting(money))
             )
         ))
         if (creditLite.config.getBoolean("messages.global.notify_set"))
@@ -33,7 +33,7 @@ class GlobalCreditSetListener(private val creditLite: com.github.encryptsl.credi
                 ModernText.miniModernText(creditLite.locale.getMessage("messages.broadcast.set_credit"),
                     TagResolver.resolver(
                         Placeholder.parsed("sender", sender.name),
-                        Placeholder.parsed("credit", creditLite.api.fullFormatting(money))
+                        Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
                     )))
             return
     }

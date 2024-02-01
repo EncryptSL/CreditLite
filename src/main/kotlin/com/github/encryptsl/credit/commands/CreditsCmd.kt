@@ -37,13 +37,13 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         }
     }
 
-    @Command("credits add <player> <amount> [silent]")
+    @Command("credits add <player> <amount>")
     @Permission("credit.admin.add")
     fun onAddCredit(
         commandSender: CommandSender,
-        @Flag(value = "-silent", aliases = ["-s"]) silent: Boolean,
         @Argument(value = "player", suggestions = "players") offlinePlayer: OfflinePlayer,
         @Argument(value = "amount") @Range(min = "1.00", max = "") amountStr: String,
+        @Flag(value = "silent", aliases = ["s"]) silent: Boolean,
     ) {
         val amount = helper.validateAmount(amountStr, commandSender) ?: return
 

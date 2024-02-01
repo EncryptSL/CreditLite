@@ -26,7 +26,7 @@ class GlobalCreditDepositListener(private val creditLite: com.github.encryptsl.c
         sender.sendMessage(
             ModernText.miniModernText(creditLite.locale.getMessage("messages.global.add_credit"),
             TagResolver.resolver(
-                Placeholder.parsed("credit", creditLite.api.fullFormatting(money))
+                Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
             )
         ))
         if (!creditLite.config.getBoolean("messages.global.notify_add")) {
@@ -34,7 +34,7 @@ class GlobalCreditDepositListener(private val creditLite: com.github.encryptsl.c
                 ModernText.miniModernText(creditLite.locale.getMessage("messages.broadcast.add_credit"),
                 TagResolver.resolver(
                     Placeholder.parsed("sender", sender.name),
-                    Placeholder.parsed("credit", creditLite.api.fullFormatting(money))
+                    Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
                 )
             ))
         }
