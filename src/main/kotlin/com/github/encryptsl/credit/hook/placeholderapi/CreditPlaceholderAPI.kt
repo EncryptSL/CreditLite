@@ -27,13 +27,13 @@ class CreditPlaceholderAPI(private val creditLite: com.github.encryptsl.credit.C
 
         return when (identifier) {
             "balance" -> creditLite.api.getBalance(player).toString()
-            "balance_formatted" -> creditLite.api.fullFormatting(creditLite.api.getBalance(player))
-            "balance_compacted" -> creditLite.api.compacted(creditLite.api.getBalance(player))
+            "balance_formatted" -> creditLite.creditEconomyFormatting.fullFormatting(creditLite.api.getBalance(player))
+            "balance_compacted" -> creditLite.creditEconomyFormatting.compacted(creditLite.api.getBalance(player))
             "top_rank_player" -> nameByRank(1)
             else -> rank?.let {
                 when {
-                    identifier.startsWith("top_formatted_") -> creditLite.api.fullFormatting(balanceByRank(rank))
-                    identifier.startsWith("top_compacted_") -> creditLite.api.compacted(balanceByRank(rank))
+                    identifier.startsWith("top_formatted_") -> creditLite.creditEconomyFormatting.fullFormatting(balanceByRank(rank))
+                    identifier.startsWith("top_compacted_") -> creditLite.creditEconomyFormatting.compacted(balanceByRank(rank))
                     identifier.startsWith("top_balance_") -> balanceByRank(rank).toString()
                     identifier.startsWith("top_player_") -> nameByRank(rank)
                     else -> null
