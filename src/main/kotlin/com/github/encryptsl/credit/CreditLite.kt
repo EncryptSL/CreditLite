@@ -1,7 +1,6 @@
 package com.github.encryptsl.credit
 
 import com.github.encryptsl.credit.api.ConfigAPI
-import com.github.encryptsl.credit.api.PlayerAccount
 import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.economy.CreditEconomyFormatting
 import com.github.encryptsl.credit.api.interfaces.CreditAPI
@@ -10,7 +9,10 @@ import com.github.encryptsl.credit.config.Locales
 import com.github.encryptsl.credit.database.DatabaseConnector
 import com.github.encryptsl.credit.database.models.CreditModel
 import com.github.encryptsl.credit.hook.HookManager
-import com.github.encryptsl.credit.listeners.*
+import com.github.encryptsl.credit.listeners.AccountManageListener
+import com.github.encryptsl.credit.listeners.PlayerCreditPayListener
+import com.github.encryptsl.credit.listeners.PlayerJoinListener
+import com.github.encryptsl.credit.listeners.PlayerQuitListener
 import com.github.encryptsl.credit.listeners.admin.*
 import org.bstats.bukkit.Metrics
 import org.bstats.charts.SingleLineChart
@@ -30,7 +32,6 @@ class CreditLite : JavaPlugin() {
 
     var countTransactions: LinkedHashMap<String, Int> = LinkedHashMap()
 
-    val api: CreditEconomy by lazy { CreditEconomy() }
     val creditEconomyFormatting by lazy { CreditEconomyFormatting(config) }
     val locale: Locales by lazy { Locales(this, LANG_VERSION) }
     val creditModel: CreditModel by lazy { CreditModel() }
@@ -62,11 +63,11 @@ class CreditLite : JavaPlugin() {
             registerListeners()
         }
         logger.info("Plugin enabled in time $timeTaken ms")
-        server.servicesManager.register(CreditAPI::class.java, api, this, ServicePriority.Highest)
+        server.servicesManager.register(CreditAPI::class.java, CreditEconomy, this, ServicePriority.Highest)
     }
 
     override fun onDisable() {
-        api.syncAccounts()
+        CreditEconomy.syncAccounts()
         logger.info("Plugin is disabled")
     }
 

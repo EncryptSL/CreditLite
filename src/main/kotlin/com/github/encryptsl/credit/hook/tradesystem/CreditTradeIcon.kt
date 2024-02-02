@@ -1,6 +1,6 @@
 package com.github.encryptsl.credit.hook.tradesystem
 
-import com.github.encryptsl.credit.CreditLite
+import com.github.encryptsl.credit.api.economy.CreditEconomy
 import de.codingair.tradesystem.spigot.extras.external.EconomySupportType
 import de.codingair.tradesystem.spigot.extras.external.TypeCap
 import de.codingair.tradesystem.spigot.trade.gui.layout.types.impl.economy.EconomyIcon
@@ -15,15 +15,15 @@ class CreditTradeIcon(itemStack: ItemStack) : EconomyIcon<ShowCreditTradeIcon>(i
     }
 
     override fun getBalance(player: Player): BigDecimal {
-        return CreditLite().api.getBalance(player).toBigDecimal()
+        return CreditEconomy.getBalance(player).toBigDecimal()
     }
 
     override fun withdraw(player: Player, value: BigDecimal) {
-        CreditLite().api.withdraw(player, value.toDouble())
+        CreditEconomy.withdraw(player, value.toDouble())
     }
 
     override fun deposit(player: Player, value: BigDecimal) {
-        CreditLite().api.deposit(player, value.toDouble())
+        CreditEconomy.deposit(player, value.toDouble())
     }
 
     override fun getMaxSupportedValue(): TypeCap {

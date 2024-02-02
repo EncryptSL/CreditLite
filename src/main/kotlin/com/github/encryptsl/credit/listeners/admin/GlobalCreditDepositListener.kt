@@ -1,5 +1,6 @@
 package com.github.encryptsl.credit.listeners.admin
 
+import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.events.GlobalCreditDepositEvent
 import com.github.encryptsl.credit.api.objects.ModernText
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
@@ -17,8 +18,8 @@ class GlobalCreditDepositListener(private val creditLite: com.github.encryptsl.c
         val money = event.money
         val offlinePlayers = Bukkit.getOfflinePlayers()
 
-        offlinePlayers.filter { p -> creditLite.api.hasAccount(p) }.forEach { a ->
-            creditLite.api.deposit(a, money)
+        offlinePlayers.filter { p -> CreditEconomy.hasAccount(p) }.forEach { a ->
+            CreditEconomy.deposit(a, money)
         }
 
         creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + offlinePlayers.size

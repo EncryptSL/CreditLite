@@ -1,5 +1,6 @@
 package com.github.encryptsl.credit.commands
 
+import com.github.encryptsl.credit.api.economy.CreditEconomy
 import org.incendo.cloud.annotation.specifier.Range
 import org.incendo.cloud.annotations.Argument
 import org.incendo.cloud.annotations.Command
@@ -189,7 +190,7 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
     @Permission("credit.admin.migration")
     fun onMigration(commandSender: CommandSender, @Argument(value = "argument", suggestions = "migrationKeys") migrationKey: MigrationKey) {
         val migrationTool = MigrationTool(creditLite)
-        val output = creditLite.api.getTopBalance().toList().positionIndexed { index, k -> MigrationData(index, k.first, k.second) }
+        val output = CreditEconomy.getTopBalance().toList().positionIndexed { index, k -> MigrationData(index, k.first, k.second) }
 
         val result = when(migrationKey) {
             MigrationKey.CSV -> migrationTool.migrateToCSV(output, "economy_migration")

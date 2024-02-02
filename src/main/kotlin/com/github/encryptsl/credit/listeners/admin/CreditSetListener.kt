@@ -1,5 +1,6 @@
 package com.github.encryptsl.credit.listeners.admin
 
+import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.events.CreditSetEvent
 import com.github.encryptsl.credit.api.objects.ModernText
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
@@ -17,7 +18,7 @@ class CreditSetListener(private val creditLite: com.github.encryptsl.credit.Cred
         val target: OfflinePlayer = event.offlinePlayer
         val money: Double = event.money
 
-        if (!creditLite.api.hasAccount(target)) {
+        if (!CreditEconomy.hasAccount(target)) {
             sender.sendMessage(
                 ModernText.miniModernText(creditLite.locale.getMessage("messages.error.account_not_exist"),
                 TagResolver.resolver(Placeholder.parsed("account", target.name.toString()))))
@@ -26,7 +27,7 @@ class CreditSetListener(private val creditLite: com.github.encryptsl.credit.Cred
 
         creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + 1
 
-        creditLite.api.set(target, money)
+        CreditEconomy.set(target, money)
         if (sender.name == target.name) {
             sender.sendMessage(
                 ModernText.miniModernText(

@@ -1,5 +1,6 @@
 package com.github.encryptsl.credit.hook.placeholderapi
 
+import com.github.encryptsl.credit.api.economy.CreditEconomy
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
@@ -17,7 +18,7 @@ class CreditPlaceholderAPI(private val creditLite: com.github.encryptsl.credit.C
     override fun persist(): Boolean = true
 
     override fun canRegister(): Boolean {
-        return creditLite.server.pluginManager.getPlugin(requiredPlugin)!!.isEnabled
+        return creditLite.pluginManager.getPlugin(requiredPlugin)!!.isEnabled
     }
 
     override fun onRequest(player: OfflinePlayer?, identifier: String): String? {
@@ -26,9 +27,9 @@ class CreditPlaceholderAPI(private val creditLite: com.github.encryptsl.credit.C
         val rank = args.getOrNull(2)?.toIntOrNull()
 
         return when (identifier) {
-            "balance" -> creditLite.api.getBalance(player).toString()
-            "balance_formatted" -> creditLite.creditEconomyFormatting.fullFormatting(creditLite.api.getBalance(player))
-            "balance_compacted" -> creditLite.creditEconomyFormatting.compacted(creditLite.api.getBalance(player))
+            "balance" -> CreditEconomy.getBalance(player).toString()
+            "balance_formatted" -> creditLite.creditEconomyFormatting.fullFormatting(CreditEconomy.getBalance(player))
+            "balance_compacted" -> creditLite.creditEconomyFormatting.compacted(CreditEconomy.getBalance(player))
             "top_rank_player" -> nameByRank(1)
             else -> rank?.let {
                 when {
@@ -62,7 +63,7 @@ class CreditPlaceholderAPI(private val creditLite: com.github.encryptsl.credit.C
     }
 
     private fun topBalance(): LinkedHashMap<String, Double> {
-        return creditLite.api.getTopBalance()
+        return CreditEconomy.getTopBalance()
             .filterKeys { uuid -> Bukkit.getOfflinePlayer(UUID.fromString(uuid)).hasPlayedBefore() }
             .toList()
             .sortedByDescending { (_, balance) -> balance }

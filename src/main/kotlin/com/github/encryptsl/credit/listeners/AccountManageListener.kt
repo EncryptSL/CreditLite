@@ -1,5 +1,6 @@
 package com.github.encryptsl.credit.listeners
 
+import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.enums.OperationType
 import com.github.encryptsl.credit.api.events.AccountManageEvent
 import org.bukkit.entity.Player
@@ -13,10 +14,10 @@ class AccountManageListener(private val creditLite: com.github.encryptsl.credit.
         val player: Player = event.player
 
         when (event.operationType) {
-            OperationType.CREATE_ACCOUNT -> { creditLite.api.createAccount(player, creditLite.config.getDouble("economy.starting_balance")) }
-            OperationType.CACHING_ACCOUNT -> { creditLite.api.cacheAccount(player, creditLite.creditModel.getBalance(player.uniqueId))}
-            OperationType.SYNC_ACCOUNT -> creditLite.api.syncAccount(player)
-            OperationType.REMOVE_ACCOUNT -> creditLite.api.deleteAccount(player)
+            OperationType.CREATE_ACCOUNT -> { CreditEconomy.createAccount(player, creditLite.config.getDouble("economy.starting_balance")) }
+            OperationType.CACHING_ACCOUNT -> { CreditEconomy.cacheAccount(player, creditLite.creditModel.getBalance(player.uniqueId))}
+            OperationType.SYNC_ACCOUNT -> CreditEconomy.syncAccount(player)
+            OperationType.REMOVE_ACCOUNT -> CreditEconomy.deleteAccount(player)
         }
     }
 }

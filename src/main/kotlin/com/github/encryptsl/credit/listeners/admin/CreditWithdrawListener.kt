@@ -1,5 +1,6 @@
 package com.github.encryptsl.credit.listeners.admin
 
+import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.events.CreditWithdrawEvent
 import com.github.encryptsl.credit.api.objects.ModernText
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
@@ -17,20 +18,20 @@ class CreditWithdrawListener(private val creditLite: com.github.encryptsl.credit
         val target: OfflinePlayer = event.offlinePlayer
         val money: Double = event.money
 
-        if (!creditLite.api.hasAccount(target)) {
+        if (!CreditEconomy.hasAccount(target)) {
             sender.sendMessage(
                 ModernText.miniModernText(creditLite.locale.getMessage("messages.error.account_not_exist"),
                 TagResolver.resolver(Placeholder.parsed("account", target.name.toString()))))
             return
         }
 
-        if (!creditLite.api.has(target, money)) {
+        if (!CreditEconomy.has(target, money)) {
             sender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.insufficient_funds")))
             return
         }
 
         creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + 1
-        creditLite.api.withdraw(target, money)
+        CreditEconomy.withdraw(target, money)
         if (sender.name == target.name) {
             sender.sendMessage(
                 ModernText.miniModernText(

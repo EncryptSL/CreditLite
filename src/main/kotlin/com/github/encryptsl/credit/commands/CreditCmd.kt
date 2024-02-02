@@ -3,6 +3,7 @@ package com.github.encryptsl.credit.commands
 import org.incendo.cloud.annotation.specifier.Range
 import org.incendo.cloud.annotations.*
 import com.github.encryptsl.credit.api.Paginator
+import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.events.PlayerCreditPayEvent
 import com.github.encryptsl.credit.api.objects.ModernText
 import com.github.encryptsl.credit.extensions.positionIndexed
@@ -45,7 +46,7 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
                         TagResolver.resolver(
                             Placeholder.parsed(
                                 "credit",
-                                creditLite.creditEconomyFormatting.fullFormatting(creditLite.api.getBalance(commandSender))
+                                creditLite.creditEconomyFormatting.fullFormatting(CreditEconomy.getBalance(commandSender))
                             )
                         )
                     )
@@ -59,7 +60,7 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
                         Placeholder.parsed("target", offlinePlayer.name.toString()),
                         Placeholder.parsed(
                             "credit",
-                            creditLite.creditEconomyFormatting.fullFormatting(creditLite.api.getBalance(offlinePlayer))
+                            creditLite.creditEconomyFormatting.fullFormatting(CreditEconomy.getBalance(offlinePlayer))
                         )
                     )
                 )
@@ -73,7 +74,7 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
                             Placeholder.parsed("target", offlinePlayer.name.toString()),
                             Placeholder.parsed(
                                 "credit",
-                                creditLite.creditEconomyFormatting.fullFormatting(creditLite.api.getBalance(offlinePlayer))
+                                creditLite.creditEconomyFormatting.fullFormatting(CreditEconomy.getBalance(offlinePlayer))
                             )
                         )
                     )
@@ -93,7 +94,7 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
         val p = page ?: 1
 
 
-        val topPlayers = creditLite.api.getTopBalance().toList()
+        val topPlayers = CreditEconomy.getTopBalance().toList()
             .sortedByDescending { e -> e.second }.positionIndexed { index, pair ->
                 creditLite.locale.getMessage("messages.balance.top_format")
                     .replace("<position>", index.toString())

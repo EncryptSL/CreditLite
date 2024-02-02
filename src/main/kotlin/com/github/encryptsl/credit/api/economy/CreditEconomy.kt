@@ -3,13 +3,9 @@ package com.github.encryptsl.credit.api.economy
 import com.github.encryptsl.credit.api.PlayerAccount
 import com.github.encryptsl.credit.api.interfaces.CreditAPI
 import com.github.encryptsl.credit.database.models.CreditModel
-import com.github.encryptsl.credit.extensions.compactFormat
-import com.github.encryptsl.credit.extensions.moneyFormat
 import org.bukkit.OfflinePlayer
-import org.bukkit.configuration.file.FileConfiguration
-import org.bukkit.plugin.Plugin
 
-class CreditEconomy : CreditAPI {
+object CreditEconomy : CreditAPI {
 
     private val playerAccount: PlayerAccount by lazy { PlayerAccount() }
     private val creditModel: CreditModel by lazy { CreditModel() }
