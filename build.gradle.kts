@@ -35,8 +35,8 @@ dependencies {
     compileOnly("com.github.CodingAir:CodingAPI:1.77")
 
     implementation("org.bstats:bstats-bukkit:3.0.1")
-    implementation("org.incendo:cloud-paper:2.0.0-beta.1")
-    implementation("org.incendo:cloud-annotations:2.0.0-beta.1")
+    implementation("org.incendo:cloud-paper:2.0.0-beta.2")
+    implementation("org.incendo:cloud-annotations:2.0.0-beta.2")
 
     testImplementation(kotlin("test", "1.9.22"))
     testImplementation("com.zaxxer:HikariCP:5.1.0")
