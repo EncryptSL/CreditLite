@@ -103,7 +103,8 @@ class CreditLite : JavaPlugin() {
                 PlayerJoinListener(this),
                 PlayerQuitListener(this)
             )
-            listeners.forEach { listener -> pluginManager.registerEvents(listener, this)
+            for (listener in listeners) {
+                pluginManager.registerEvents(listener, this)
                 logger.info("Bukkit Listener ${listener.javaClass.simpleName} registered () -> ok")
             }
             amount = listeners.size
