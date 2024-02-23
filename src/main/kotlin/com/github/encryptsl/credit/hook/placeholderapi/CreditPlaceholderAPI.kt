@@ -49,7 +49,7 @@ class CreditPlaceholderAPI(private val creditLite: com.github.encryptsl.credit.C
             val playerUuid = topBalance.keys.elementAt(rank - 1)
             Bukkit.getOfflinePlayer(UUID.fromString(playerUuid)).name ?: "UNKNOWN"
         } else {
-            "EMPTY"
+            "N/A"
         }
     }
 
