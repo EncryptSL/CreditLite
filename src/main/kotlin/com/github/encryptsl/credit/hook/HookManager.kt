@@ -30,29 +30,19 @@ class HookManager(private val creditLite: com.github.encryptsl.credit.CreditLite
      */
     fun hookPAPI() {
         if (isPluginInstalled("PlaceholderAPI")) {
-            creditLite.logger.info("###################################")
-            creditLite.logger.info("#       PlaceholderAPI Found      #")
-            creditLite.logger.info("#   You can now use placeholders  #")
-            creditLite.logger.info("###################################")
+            creditLite.logger.info("PlaceholderAPI found, hook successfully")
             CreditPlaceholderAPI(creditLite, com.github.encryptsl.credit.CreditLite.PAPI_VERSION).register()
         } else {
-            creditLite.logger.info("###################################")
-            creditLite.logger.info("#     PlaceholderAPI not Found    #")
-            creditLite.logger.info("###################################")
+            creditLite.logger.info("PlaceholderAPI not found, placeholders not working !")
         }
     }
 
     fun hookTradeSystem() {
         if (isPluginInstalled("TradeSystem")) {
-            creditLite.logger.info("###################################")
-            creditLite.logger.info("# TradeSystem Found Hook Success  #")
-            creditLite.logger.info("###################################")
+            creditLite.logger.info("TradeSystem found, hook successfully")
             creditLite.pluginManager.registerEvents(TradeSystemListener(creditLite), creditLite)
         } else {
-            creditLite.logger.info("###################################")
-            creditLite.logger.info("#      TradeSystem not Found      #")
-            creditLite.logger.info("# please download TradeSystem api #")
-            creditLite.logger.info("###################################")
+            creditLite.logger.info("TradeSystem not found, credit trading not working !")
         }
     }
 
