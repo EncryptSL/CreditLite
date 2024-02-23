@@ -29,8 +29,8 @@ dependencies {
     compileOnly(kotlin("stdlib", "1.9.22"))
     compileOnly("com.zaxxer:HikariCP:5.1.0")
     compileOnly("me.clip:placeholderapi:2.11.5")
-    compileOnly("org.jetbrains.exposed:exposed-core:0.46.0")
-    compileOnly("org.jetbrains.exposed:exposed-jdbc:0.46.0")
+    compileOnly("org.jetbrains.exposed:exposed-core:0.47.0")
+    compileOnly("org.jetbrains.exposed:exposed-jdbc:0.47.0")
     compileOnly("com.github.CodingAir:TradeSystem:v2.5.2")
     compileOnly("com.github.CodingAir:CodingAPI:1.77")
 
@@ -68,7 +68,7 @@ tasks {
         relocate("de.codingair.codingapi", "com.github.encryptsl.codingair")
 
         minimize {
-            relocate("cloud.commandframework", "com.github.encryptsl.credit.cloud")
+            relocate("org.incendo.cloud", "incendo-cloud")
             relocate("org.bstats", "com.github.encryptsl.credit.metrics")
         }
     }
