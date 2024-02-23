@@ -31,8 +31,8 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.5")
     compileOnly("org.jetbrains.exposed:exposed-core:0.47.0")
     compileOnly("org.jetbrains.exposed:exposed-jdbc:0.47.0")
-    compileOnly("com.github.CodingAir:TradeSystem:v2.5.2")
-    compileOnly("com.github.CodingAir:CodingAPI:1.77")
+    compileOnly("com.github.CodingAir:TradeSystem:v2.5.3")
+    compileOnly("com.github.CodingAir:CodingAPI:1.79")
 
     implementation("org.bstats:bstats-bukkit:3.0.1")
     implementation("org.incendo:cloud-paper:2.0.0-beta.2")
@@ -65,8 +65,8 @@ tasks {
     shadowJar {
         archiveFileName.set("${providers.gradleProperty("plugin_name").get()}-${providers.gradleProperty("plugin_version").get()}.jar")
 
-        relocate("de.codingair.codingapi", "com.github.encryptsl.codingair")
 
+        relocate("de.codingair.codingapi", "de.codingair.tradesystem.lib.codingapi")
         minimize {
             relocate("org.incendo.cloud", "incendo-cloud")
             relocate("org.bstats", "com.github.encryptsl.credit.metrics")

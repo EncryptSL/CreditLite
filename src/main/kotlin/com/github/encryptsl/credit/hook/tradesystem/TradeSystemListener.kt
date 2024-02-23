@@ -12,6 +12,7 @@ import de.codingair.tradesystem.spigot.trade.gui.layout.registration.exceptions.
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 
+
 class TradeSystemListener(private val creditLite: CreditLite) : PluginDependency, Listener {
 
     @EventHandler
@@ -19,11 +20,13 @@ class TradeSystemListener(private val creditLite: CreditLite) : PluginDependency
         try {
             event.registerIcon(
                 creditLite,
-                CreditTradeIcon::class.java,
-                EditorInfo("Credit icon",
-                    Type.ECONOMY,
-                    { ItemBuilder(XMaterial.EMERALD) },
-                    false,
+                CreditTradeIcon::class.java, EditorInfo(
+                    "Credit icon", Type.ECONOMY,
+                    {
+                        ItemBuilder(
+                            XMaterial.PAPER
+                        )
+                    }, false,
                     pluginName
                 )
             )
