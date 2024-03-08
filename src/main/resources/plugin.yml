@@ -13,9 +13,9 @@ softdepend: [PlaceholderAPI, Vault, Treasury, TradeSystem]
 loadbefore: [TradeSystem]
 libraries:
   - com.zaxxer:HikariCP:5.1.0
-  - org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.22
-  - org.jetbrains.exposed:exposed-core:0.47.0
-  - org.jetbrains.exposed:exposed-jdbc:0.47.0
+  - org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.23
+  - org.jetbrains.exposed:exposed-core:0.48.0
+  - org.jetbrains.exposed:exposed-jdbc:0.48.0
 
 description: ${description}
 

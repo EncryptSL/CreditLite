@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.22" apply true
+    kotlin("jvm") version "1.9.23" apply true
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("maven-publish")
 }
@@ -26,22 +26,22 @@ kotlin {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
-    compileOnly(kotlin("stdlib", "1.9.22"))
+    compileOnly(kotlin("stdlib", "1.9.23"))
     compileOnly("com.zaxxer:HikariCP:5.1.0")
     compileOnly("me.clip:placeholderapi:2.11.5")
-    compileOnly("org.jetbrains.exposed:exposed-core:0.47.0")
-    compileOnly("org.jetbrains.exposed:exposed-jdbc:0.47.0")
+    compileOnly("org.jetbrains.exposed:exposed-core:0.48.0")
+    compileOnly("org.jetbrains.exposed:exposed-jdbc:0.48.0")
     compileOnly("com.github.CodingAir:TradeSystem:v2.5.3")
     compileOnly("com.github.CodingAir:CodingAPI:1.79")
 
     implementation("org.incendo:cloud-paper:2.0.0-beta.2")
     implementation("org.incendo:cloud-annotations:2.0.0-beta.2")
 
-    testImplementation(kotlin("test", "1.9.22"))
+    testImplementation(kotlin("test", "1.9.23"))
     testImplementation("com.zaxxer:HikariCP:5.1.0")
     testImplementation("org.xerial:sqlite-jdbc:3.42.0.0")
-    testImplementation("org.jetbrains.exposed:exposed-core:0.46.0")
-    testImplementation("org.jetbrains.exposed:exposed-jdbc:0.46.0")
+    testImplementation("org.jetbrains.exposed:exposed-core:0.48.0")
+    testImplementation("org.jetbrains.exposed:exposed-jdbc:0.48.0")
     testImplementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
 
