@@ -4,8 +4,11 @@ import com.github.encryptsl.credit.api.enums.CheckLevel
 import com.github.encryptsl.credit.api.objects.ModernText
 import com.github.encryptsl.credit.extensions.isApproachingZero
 import com.github.encryptsl.credit.extensions.isNegative
+import com.github.encryptsl.credit.extensions.positionIndexed
 import com.github.encryptsl.credit.extensions.toValidDecimal
+import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
+import java.util.*
 
 class Helper(private val creditLite: com.github.encryptsl.credit.CreditLite) {
     fun validateAmount(amountStr: String, commandSender: CommandSender, checkLevel: CheckLevel = CheckLevel.FULL): Double? {
@@ -20,6 +23,12 @@ class Helper(private val creditLite: com.github.encryptsl.credit.CreditLite) {
                 null
             }
             else -> amount
+        }
+    }
+
+    fun getAccountsToMigrationData(): List<MigrationData?> {
+        return creditLite.creditModel.getTopBalance().toList().positionIndexed { index, k ->
+            Bukkit.getOfflinePlayer(UUID.fromString(k.first)).name?.let { MigrationData(index, k.first, it, k.second) }
         }
     }
 }

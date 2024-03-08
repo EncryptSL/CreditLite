@@ -1,6 +1,5 @@
 package com.github.encryptsl.credit.commands
 
-import com.github.encryptsl.credit.api.economy.CreditEconomy
 import org.incendo.cloud.annotation.specifier.Range
 import org.incendo.cloud.annotations.Argument
 import org.incendo.cloud.annotations.Command
@@ -13,9 +12,7 @@ import com.github.encryptsl.credit.api.enums.MigrationKey
 import com.github.encryptsl.credit.api.enums.PurgeKey
 import com.github.encryptsl.credit.api.events.*
 import com.github.encryptsl.credit.api.objects.ModernText
-import com.github.encryptsl.credit.extensions.positionIndexed
 import com.github.encryptsl.credit.utils.Helper
-import com.github.encryptsl.credit.utils.MigrationData
 import com.github.encryptsl.credit.utils.MigrationTool
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
@@ -190,11 +187,12 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
     @Permission("credit.admin.migration")
     fun onMigration(commandSender: CommandSender, @Argument(value = "argument", suggestions = "migrationKeys") migrationKey: MigrationKey) {
         val migrationTool = MigrationTool(creditLite)
-        val output = CreditEconomy.getTopBalance().toList().positionIndexed { index, k -> MigrationData(index, k.first, k.second) }
+
+        val output = helper.getAccountsToMigrationData()
 
         val result = when(migrationKey) {
-            MigrationKey.CSV -> migrationTool.migrateToCSV(output, "economy_migration")
-            MigrationKey.SQL -> migrationTool.migrateToSQL(output, "economy_migration")
+            MigrationKey.CSV -> output.let { migrationTool.migrateToCSV(it, "economy_migration") }
+            MigrationKey.SQL -> output.let { migrationTool.migrateToSQL(it, "economy_migration") }
         }
 
         val messageKey = if (result) {
