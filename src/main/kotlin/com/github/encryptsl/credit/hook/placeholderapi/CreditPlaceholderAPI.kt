@@ -7,7 +7,7 @@ import org.bukkit.OfflinePlayer
 import java.util.*
 class CreditPlaceholderAPI(private val creditLite: com.github.encryptsl.credit.CreditLite, private val extVersion: String) : PlaceholderExpansion() {
 
-    override fun getIdentifier(): String = "kredit"
+    override fun getIdentifier(): String = "credit"
 
     override fun getAuthor(): String = "EncryptSL"
 

@@ -18,11 +18,12 @@ class GlobalCreditDepositListener(private val creditLite: com.github.encryptsl.c
         val money = event.money
         val offlinePlayers = Bukkit.getOfflinePlayers()
 
-        offlinePlayers.filter { p -> CreditEconomy.hasAccount(p) }.forEach { a ->
-            CreditEconomy.deposit(a, money)
+        for (player in offlinePlayers) {
+            if (!CreditEconomy.hasAccount(player)) continue
+
+            CreditEconomy.deposit(player, money)
         }
 
-        creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + offlinePlayers.size
 
         sender.sendMessage(
             ModernText.miniModernText(creditLite.locale.getMessage("messages.global.add_credit"),

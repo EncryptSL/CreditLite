@@ -10,7 +10,7 @@ class CreditEconomyFormatting(private val configuration: FileConfiguration) {
         return amount.compactFormat(configuration.getString("formatting.currency_pattern").toString(), configuration.getString("formatting.compact_pattern").toString(), configuration.getString("formatting.currency_locale").toString())
     }
 
-    fun formatted(amount: Double): String {
+    private fun formatted(amount: Double): String {
         return amount.moneyFormat(configuration.getString("formatting.currency_pattern").toString(), configuration.getString("formatting.currency_locale").toString())
     }
 

@@ -17,15 +17,13 @@ class PlayerCreditPayListener(private val creditLite: com.github.encryptsl.credi
         val target: OfflinePlayer = event.target
         val money: Double = event.money
 
-        if (!CreditEconomy.hasAccount(target)) {
-            sender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.account_not_exist"),
+        if (!CreditEconomy.hasAccount(target))
+            return sender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.account_not_exist"),
                 TagResolver.resolver(Placeholder.parsed("account", target.name.toString()))))
-            return
-        }
-        if (!CreditEconomy.has(sender, money)) {
-            sender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.insufficient_funds")))
-            return
-        }
+
+        if (!CreditEconomy.has(sender, money))
+            return sender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.insufficient_funds")))
+
         CreditEconomy.withdraw(sender, money)
         CreditEconomy.deposit(target, money)
         creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + 1

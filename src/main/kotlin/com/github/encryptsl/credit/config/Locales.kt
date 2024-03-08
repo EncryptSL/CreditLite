@@ -27,7 +27,7 @@ class Locales(private val creditLite: com.github.encryptsl.credit.CreditLite, pr
     }
 
     fun setTranslationFile(langKey: LangKey) {
-        val fileName = "${langKey.name.lowercase()}.yml"
+        val fileName = "message_${langKey.name.lowercase()}.yml"
         val file = File("${creditLite.dataFolder}/locale/", fileName)
 
         try {

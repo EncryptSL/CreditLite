@@ -18,27 +18,26 @@ class CreditSetListener(private val creditLite: com.github.encryptsl.credit.Cred
         val target: OfflinePlayer = event.offlinePlayer
         val money: Double = event.money
 
-        if (!CreditEconomy.hasAccount(target)) {
-            sender.sendMessage(
-                ModernText.miniModernText(creditLite.locale.getMessage("messages.error.account_not_exist"),
-                TagResolver.resolver(Placeholder.parsed("account", target.name.toString()))))
-            return
-        }
+        if (!CreditEconomy.hasAccount(target))
+           return sender.sendMessage(ModernText.miniModernText(
+               creditLite.locale.getMessage("messages.error.account_not_exist"),
+                TagResolver.resolver(Placeholder.parsed("account", target.name.toString()))
+           ))
 
-        creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + 1
+        if (sender.name == target.name)
+           return sender.sendMessage(ModernText.miniModernText(
+               creditLite.locale.getMessage("messages.self.set_credit"),
+               TagResolver.resolver(
+                   Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
+               )))
+
 
         CreditEconomy.set(target, money)
-        if (sender.name == target.name) {
-            sender.sendMessage(
-                ModernText.miniModernText(
-                    creditLite.locale.getMessage("messages.self.set_credit"), TagResolver.resolver(Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money)))))
-            return
-        }
-
-        sender.sendMessage(
-            ModernText.miniModernText(
+        sender.sendMessage(ModernText.miniModernText(
             creditLite.locale.getMessage("messages.sender.set_credit"),
-            TagResolver.resolver(Placeholder.parsed("target", target.name.toString()), Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money)))))
+            TagResolver.resolver(Placeholder.parsed("target", target.name.toString()),
+                Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
+            )))
 
         if (target.isOnline && creditLite.config.getBoolean("messages.target.notify_set")) {
             target.player?.sendMessage(

@@ -17,11 +17,11 @@ class GlobalCreditWithdrawListener(private val creditLite: com.github.encryptsl.
         val money = event.money
         val offlinePlayers = Bukkit.getOfflinePlayers()
 
-        offlinePlayers.filter { p -> CreditEconomy.hasAccount(p) }.forEach { a ->
-            CreditEconomy.withdraw(a, money)
-        }
+        for (player in offlinePlayers) {
+            if (!CreditEconomy.hasAccount(player)) continue
 
-        creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + 1
+            CreditEconomy.withdraw(player, money)
+        }
 
         sender.sendMessage(
             ModernText.miniModernText(creditLite.locale.getMessage("messages.global.withdraw_credit"),

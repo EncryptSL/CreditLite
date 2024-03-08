@@ -1,13 +1,13 @@
 package com.github.encryptsl.credit.api.economy
 
-import com.github.encryptsl.credit.api.PlayerAccount
+import com.github.encryptsl.credit.api.PlayerWalletCache
 import com.github.encryptsl.credit.api.interfaces.CreditAPI
 import com.github.encryptsl.credit.database.models.CreditModel
 import org.bukkit.OfflinePlayer
 
 object CreditEconomy : CreditAPI {
 
-    private val playerAccount: PlayerAccount by lazy { PlayerAccount() }
+    private val walletCache: PlayerWalletCache by lazy { PlayerWalletCache() }
     private val creditModel: CreditModel by lazy { CreditModel() }
     override fun createAccount(player: OfflinePlayer, startAmount: Double): Boolean {
         if (hasAccount(player)) return false
@@ -19,15 +19,15 @@ object CreditEconomy : CreditAPI {
     override fun cacheAccount(player: OfflinePlayer, amount: Double): Boolean {
         if (!hasAccount(player)) return false
 
-        playerAccount.cacheAccount(player.uniqueId, amount)
+        walletCache.cacheAccount(player.uniqueId, amount)
         return true
     }
 
     override fun deleteAccount(player: OfflinePlayer): Boolean {
         if (!hasAccount(player)) return false
 
-        return if (playerAccount.isPlayerOnline(player.uniqueId)) {
-            playerAccount.removeAccount(player.uniqueId)
+        return if (walletCache.isPlayerOnline(player.uniqueId)) {
+            walletCache.removeAccount(player.uniqueId)
             true
         } else {
             creditModel.deletePlayerAccount(player.uniqueId)
@@ -44,14 +44,14 @@ object CreditEconomy : CreditAPI {
     }
 
     override fun getBalance(player: OfflinePlayer): Double {
-        return if (playerAccount.isPlayerOnline(player.uniqueId) || playerAccount.isAccountCached(player.uniqueId))
-            playerAccount.getBalance(player.uniqueId)
+        return if (walletCache.isPlayerOnline(player.uniqueId) || walletCache.isAccountCached(player.uniqueId))
+            walletCache.getBalance(player.uniqueId)
         else
             creditModel.getBalance(player.uniqueId)
     }
 
     override fun deposit(player: OfflinePlayer, amount: Double) {
-        if (playerAccount.isPlayerOnline(player.uniqueId)) {
+        if (walletCache.isPlayerOnline(player.uniqueId)) {
             cacheAccount(player, getBalance(player).plus(amount))
         } else {
             creditModel.depositCredit(player.uniqueId, amount)
@@ -59,7 +59,7 @@ object CreditEconomy : CreditAPI {
     }
 
     override fun withdraw(player: OfflinePlayer, amount: Double) {
-        if (playerAccount.isPlayerOnline(player.uniqueId)) {
+        if (walletCache.isPlayerOnline(player.uniqueId)) {
             cacheAccount(player, getBalance(player).minus(amount))
         } else {
             creditModel.withdrawCredit(player.uniqueId, amount)
@@ -67,7 +67,7 @@ object CreditEconomy : CreditAPI {
     }
 
     override fun set(player: OfflinePlayer, amount: Double) {
-        if (playerAccount.isPlayerOnline(player.uniqueId)) {
+        if (walletCache.isPlayerOnline(player.uniqueId)) {
             cacheAccount(player, amount)
         } else {
             creditModel.setCredit(player.uniqueId, amount)
@@ -75,11 +75,11 @@ object CreditEconomy : CreditAPI {
     }
 
     override fun syncAccount(offlinePlayer: OfflinePlayer) {
-        playerAccount.syncAccount(offlinePlayer.uniqueId)
+        walletCache.syncAccount(offlinePlayer.uniqueId)
     }
 
     override fun syncAccounts() {
-        playerAccount.syncAccounts()
+        walletCache.syncAccounts()
     }
 
     override fun getTopBalance(): MutableMap<String, Double> {

@@ -17,11 +17,11 @@ class GlobalCreditSetListener(private val creditLite: com.github.encryptsl.credi
         val money = event.money
         val offlinePlayers = Bukkit.getOfflinePlayers()
 
-        offlinePlayers.filter { a -> CreditEconomy.hasAccount(a) }.forEach { offlinePlayer ->
-            CreditEconomy.set(offlinePlayer, money)
-        }
+        for (player in offlinePlayers) {
+            if (!CreditEconomy.hasAccount(player)) continue
 
-        creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + offlinePlayers.size
+            CreditEconomy.set(player, money)
+        }
 
         sender.sendMessage(
             ModernText.miniModernText(creditLite.locale.getMessage("messages.global.set_credit"),

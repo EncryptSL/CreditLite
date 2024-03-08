@@ -58,7 +58,6 @@ class CreditLite : JavaPlugin() {
         val timeTaken = measureTimeMillis {
             blockPlugins()
             hookRegistration()
-            setupMetrics()
             commandManager.registerCommands()
             registerListeners()
         }
@@ -79,13 +78,6 @@ class CreditLite : JavaPlugin() {
     private fun hookRegistration() {
         hookManager.hookPAPI()
         hookManager.hookTradeSystem()
-    }
-
-    private fun setupMetrics() {
-        val metrics = Metrics(this, 15144)
-        metrics.addCustomChart(SingleLineChart("transactions") {
-            countTransactions["transactions"]
-        })
     }
 
     private fun registerListeners() {

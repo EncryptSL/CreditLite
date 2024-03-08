@@ -19,20 +19,15 @@ class CreditDepositListener(private val creditLite: com.github.encryptsl.credit.
         val money: Double = event.money
         val silent: Boolean = event.silent
 
-        if (!CreditEconomy.hasAccount(target)) {
-            sender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.account_not_exist"),
+        if (!CreditEconomy.hasAccount(target))
+            return sender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.account_not_exist"),
                 TagResolver.resolver(Placeholder.parsed("account", target.name.toString()))))
-            return
-        }
 
-        creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + 1
+        if (sender.name == target.name && !target.isOp)
+            return sender.sendMessage(
+                ModernText.miniModernText(creditLite.locale.getMessage("messages.error.self_pay"), TagResolver.resolver(Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money)))))
 
         CreditEconomy.deposit(target, money)
-        if (sender.name == target.name && !target.isOp) {
-            sender.sendMessage(
-                ModernText.miniModernText(creditLite.locale.getMessage("messages.error.self_pay"), TagResolver.resolver(Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money)))))
-            return
-        }
 
         sender.sendMessage(
             ModernText.miniModernText(

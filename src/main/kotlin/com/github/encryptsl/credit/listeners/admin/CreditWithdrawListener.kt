@@ -18,30 +18,22 @@ class CreditWithdrawListener(private val creditLite: com.github.encryptsl.credit
         val target: OfflinePlayer = event.offlinePlayer
         val money: Double = event.money
 
-        if (!CreditEconomy.hasAccount(target)) {
-            sender.sendMessage(
+        if (!CreditEconomy.hasAccount(target))
+            return sender.sendMessage(
                 ModernText.miniModernText(creditLite.locale.getMessage("messages.error.account_not_exist"),
                 TagResolver.resolver(Placeholder.parsed("account", target.name.toString()))))
-            return
-        }
 
-        if (!CreditEconomy.has(target, money)) {
-            sender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.insufficient_funds")))
-            return
-        }
+        if (!CreditEconomy.has(target, money))
+            return sender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.insufficient_funds")))
 
-        creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + 1
-        CreditEconomy.withdraw(target, money)
-        if (sender.name == target.name) {
-            sender.sendMessage(
-                ModernText.miniModernText(
+        if (sender.name == target.name)
+            return sender.sendMessage(ModernText.miniModernText(
                     creditLite.locale.getMessage("messages.self.withdraw_credit"),
                     TagResolver.resolver(Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money)))
                 )
             )
-            return
-        }
 
+        CreditEconomy.withdraw(target, money)
         sender.sendMessage(
             ModernText.miniModernText(
                 creditLite.locale.getMessage("messages.sender.withdraw_credit"),

@@ -6,7 +6,7 @@ import com.github.encryptsl.credit.api.objects.AccountCache
 import org.bukkit.Bukkit
 import java.util.*
 
-class PlayerAccount : AccountAPI {
+class PlayerWalletCache : AccountAPI {
 
     private val creditModel: CreditModel by lazy { CreditModel() }
 
