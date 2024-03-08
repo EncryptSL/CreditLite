@@ -34,7 +34,6 @@ dependencies {
     compileOnly("com.github.CodingAir:TradeSystem:v2.5.3")
     compileOnly("com.github.CodingAir:CodingAPI:1.79")
 
-    implementation("org.bstats:bstats-bukkit:3.0.1")
     implementation("org.incendo:cloud-paper:2.0.0-beta.2")
     implementation("org.incendo:cloud-annotations:2.0.0-beta.2")
 
@@ -69,7 +68,6 @@ tasks {
         relocate("de.codingair.codingapi", "de.codingair.tradesystem.lib.codingapi")
         minimize {
             relocate("org.incendo.cloud", "incendo-cloud")
-            relocate("org.bstats", "com.github.encryptsl.credit.metrics")
         }
     }
 }

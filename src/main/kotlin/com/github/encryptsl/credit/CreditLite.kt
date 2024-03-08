@@ -14,8 +14,6 @@ import com.github.encryptsl.credit.listeners.PlayerCreditPayListener
 import com.github.encryptsl.credit.listeners.PlayerJoinListener
 import com.github.encryptsl.credit.listeners.PlayerQuitListener
 import com.github.encryptsl.credit.listeners.admin.*
-import org.bstats.bukkit.Metrics
-import org.bstats.charts.SingleLineChart
 import org.bukkit.plugin.PluginManager
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
