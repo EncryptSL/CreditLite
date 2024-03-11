@@ -15,7 +15,7 @@ class CreditEconomyFormatting(private val configuration: FileConfiguration) {
     }
 
     fun fullFormatting(amount: Double): String {
-        val value = if (configuration.getBoolean("plugin.economy.compact_display")) {
+        val value = if (configuration.getBoolean("economy.compact_display")) {
             compacted(amount)
         }
         else {
