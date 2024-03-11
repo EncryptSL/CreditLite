@@ -7,7 +7,7 @@ import org.bukkit.configuration.file.FileConfiguration
 class CreditEconomyFormatting(private val configuration: FileConfiguration) {
 
     fun compacted(amount: Double): String {
-        return amount.compactFormat(configuration.getString("formatting.currency_pattern").toString(), configuration.getString("formatting.compact_pattern").toString(), configuration.getString("formatting.currency_locale").toString())
+        return amount.compactFormat(configuration.getString("formatting.currency_pattern").toString(), configuration.getString("formatting.compacted_pattern").toString(), configuration.getString("formatting.currency_locale").toString())
     }
 
     private fun formatted(amount: Double): String {
