@@ -26,7 +26,6 @@ class PlayerCreditPayListener(private val creditLite: com.github.encryptsl.credi
 
         CreditEconomy.withdraw(sender, money)
         CreditEconomy.deposit(target, money)
-        creditLite.countTransactions["transactions"] = creditLite.countTransactions.getOrDefault("transactions", 0) + 1
         sender.sendMessage(
             ModernText.miniModernText(
                 creditLite.locale.getMessage("messages.sender.add_credit"),

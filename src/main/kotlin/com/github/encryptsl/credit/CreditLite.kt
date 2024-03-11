@@ -21,14 +21,12 @@ import kotlin.system.measureTimeMillis
 
 class CreditLite : JavaPlugin() {
     companion object {
-        const val CONFIG_VERSION = "1.0.0"
+        const val CONFIG_VERSION = "1.0.1"
         const val LANG_VERSION = "1.0.0"
         const val PAPI_VERSION = "1.0.0"
     }
 
     val pluginManager: PluginManager = server.pluginManager
-
-    var countTransactions: LinkedHashMap<String, Int> = LinkedHashMap()
 
     val creditEconomyFormatting by lazy { CreditEconomyFormatting(config) }
     val locale: Locales by lazy { Locales(this, LANG_VERSION) }
@@ -68,10 +66,7 @@ class CreditLite : JavaPlugin() {
         logger.info("Plugin is disabled")
     }
 
-    private fun blockPlugins() {
-        hookManager.blockPlugin("Treasury")
-        hookManager.blockPlugin("Towny")
-    }
+    private fun blockPlugins() {}
 
     private fun hookRegistration() {
         hookManager.hookPAPI()

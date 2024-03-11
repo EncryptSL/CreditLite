@@ -7,10 +7,7 @@ plugin:
   prefix: "<#64646F>[<#F9AD47>Credits<#64646F>]</#64646F>"
 
 economy:
-  # Prefix of Currency
-  currency_prefix: ''
-  # Name of Currency
-  currency_name: ''
+  currency_format: '<credits>'
   # This amount is granted to players who don't have an existing account in the database.
   starting_balance: 30
   # Convert large currency values into a more compact format.
