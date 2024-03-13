@@ -39,39 +39,25 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
     @Permission("credit.balance")
     fun onBalance(commandSender: CommandSender, @Argument(value = "player", suggestions = "players") offlinePlayer: OfflinePlayer?) {
         if (commandSender is Player) {
-            if (offlinePlayer == null) {
-                return commandSender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.balance.format"),
-                    TagResolver.resolver(
-                        Placeholder.parsed(
-                            "credit",
-                            creditLite.creditEconomyFormatting.fullFormatting(CreditEconomy.getBalance(commandSender))
-                        )
-                    )
-                ))
+            val formatMessage = when(offlinePlayer) {
+                null -> creditLite.locale.getMessage("messages.balance.format")
+                else -> creditLite.locale.getMessage("messages.balance.format_target")
             }
-            commandSender.sendMessage(
-                ModernText.miniModernText(
-                    creditLite.locale.getMessage("messages.balance.format_target"),
-                    TagResolver.resolver(
-                        Placeholder.parsed("target", offlinePlayer.name.toString()),
-                        Placeholder.parsed(
-                            "credit",
-                            creditLite.creditEconomyFormatting.fullFormatting(CreditEconomy.getBalance(offlinePlayer))
-                        )
-                    )
-                )
-            )
+            val cSender = offlinePlayer ?: commandSender
+
+            if (!CreditEconomy.hasAccount(cSender))
+                return commandSender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.account_not_exist"),
+                    TagResolver.resolver(Placeholder.parsed("account", cSender.name.toString()))))
+
+            commandSender.sendMessage(ModernText.miniModernText(formatMessage, helper.getComponentBal(cSender)))
         } else {
-            if (offlinePlayer != null) {
+            offlinePlayer?.let {
+                if (!CreditEconomy.hasAccount(it))
+                    return commandSender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.account_not_exist"),
+                        TagResolver.resolver(Placeholder.parsed("account", it.name.toString()))))
+
                 return commandSender.sendMessage(ModernText.miniModernText(
-                    creditLite.locale.getMessage("messages.balance.format_target"),
-                    TagResolver.resolver(
-                        Placeholder.parsed("target", offlinePlayer.name.toString()),
-                        Placeholder.parsed("credit",
-                            creditLite.creditEconomyFormatting.fullFormatting(CreditEconomy.getBalance(offlinePlayer))
-                        )
-                    )
-                ))
+                    creditLite.locale.getMessage("messages.balance.format_target"), helper.getComponentBal(it)))
             }
             creditLite.locale.getList("messages.help")?.forEach { s ->
                 commandSender.sendMessage(ModernText.miniModernText(s.toString()))
@@ -84,7 +70,6 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
     @Permission("credit.top")
     fun onTopBalance(commandSender: CommandSender, @Argument(value = "page") @Range(min = "1", max="") page: Int?) {
         val p = page ?: 1
-
 
         val topPlayers = CreditEconomy.getTopBalance().toList()
             .sortedByDescending { e -> e.second }.positionIndexed { index, pair ->
@@ -124,18 +109,14 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
         @Argument(value = "player", suggestions = "players") offlinePlayer: OfflinePlayer,
         @Argument(value = "amount") @Range(min = "1.00", max = "") amountStr: String
     ) {
-        if (commandSender is Player) {
-            if (commandSender.name == offlinePlayer.name) {
-                return commandSender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.self_pay")))
-            }
+        if (commandSender !is Player)
+            return commandSender.sendMessage(ModernText.miniModernText("<red>Only a player can use this command."))
 
-            val amount = helper.validateAmount(amountStr, commandSender) ?: return
+        if (commandSender.name == offlinePlayer.name)
+            return commandSender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.self_pay")))
 
-            creditLite.server.scheduler.runTask(creditLite) { ->
-                creditLite.pluginManager.callEvent(PlayerCreditPayEvent(commandSender, offlinePlayer, amount))
-            }
-        } else {
-            commandSender.sendMessage(ModernText.miniModernText("<red>Only a player can use this command."))
-        }
+        val amount = helper.validateAmount(amountStr, commandSender) ?: return
+
+        creditLite.pluginManager.callEvent(PlayerCreditPayEvent(commandSender, offlinePlayer, amount))
     }
 }

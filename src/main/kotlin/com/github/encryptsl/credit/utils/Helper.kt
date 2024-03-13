@@ -1,12 +1,16 @@
 package com.github.encryptsl.credit.utils
 
+import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.enums.CheckLevel
 import com.github.encryptsl.credit.api.objects.ModernText
 import com.github.encryptsl.credit.extensions.isApproachingZero
 import com.github.encryptsl.credit.extensions.isNegative
 import com.github.encryptsl.credit.extensions.positionIndexed
 import com.github.encryptsl.credit.extensions.toValidDecimal
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.Bukkit
+import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
 import java.util.*
 
@@ -24,6 +28,16 @@ class Helper(private val creditLite: com.github.encryptsl.credit.CreditLite) {
             }
             else -> amount
         }
+    }
+
+    fun getComponentBal(offlinePlayer: OfflinePlayer): TagResolver {
+        return TagResolver.resolver(
+            Placeholder.parsed("target", offlinePlayer.name.toString()),
+            Placeholder.parsed(
+                "credit",
+                creditLite.creditEconomyFormatting.fullFormatting(CreditEconomy.getBalance(offlinePlayer))
+            )
+        )
     }
 
     fun getAccountsToMigrationData(): List<MigrationData?> {
