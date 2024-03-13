@@ -30,7 +30,8 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
     @Command("credits help")
     @Permission("credit.admin.help")
     fun adminHelp(commandSender: CommandSender) {
-        creditLite.locale.getList("messages.admin-help")?.forEach { s ->
+        val list = creditLite.locale.getList("messages.admin-help") ?: return
+        for (s in list) {
             commandSender.sendMessage(ModernText.miniModernText(s.toString()))
         }
     }
@@ -44,10 +45,7 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         @Flag(value = "silent", aliases = ["s"]) silent: Boolean,
     ) {
         val amount = helper.validateAmount(amountStr, commandSender) ?: return
-
-        creditLite.server.scheduler.runTask(creditLite) { ->
-            creditLite.pluginManager.callEvent(CreditDepositEvent(commandSender, offlinePlayer, amount, silent))
-        }
+        creditLite.pluginManager.callEvent(CreditDepositEvent(commandSender, offlinePlayer, amount, silent))
     }
 
     @Command("credits gadd <amount>")
@@ -57,12 +55,7 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         @Argument("amount") @Range(min = "1.0", max = "") amountStr: String
     ) {
         val amount = helper.validateAmount(amountStr, commandSender) ?: return
-
-        creditLite.server.scheduler.runTask(creditLite) { ->
-            creditLite.pluginManager.callEvent(
-                GlobalCreditDepositEvent(commandSender, amount)
-            )
-        }
+        creditLite.pluginManager.callEvent(GlobalCreditDepositEvent(commandSender, amount))
     }
 
     @Command("credits set <player> <amount>")
@@ -73,16 +66,7 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         @Argument(value = "amount") amountStr: String
     ) {
         val amount = helper.validateAmount(amountStr, commandSender, CheckLevel.ONLY_NEGATIVE) ?: return
-
-        creditLite.server.scheduler.runTask(creditLite) { ->
-            creditLite.pluginManager.callEvent(
-                CreditSetEvent(
-                    commandSender,
-                    offlinePlayer,
-                    amount
-                )
-            )
-        }
+        creditLite.pluginManager.callEvent(CreditSetEvent(commandSender, offlinePlayer, amount))
     }
 
     @Command("credits gset <amount>")
@@ -92,12 +76,7 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         @Argument("amount") @Range(min = "1.0", max = "") amountStr: String
     ) {
         val amount = helper.validateAmount(amountStr, commandSender, CheckLevel.ONLY_NEGATIVE) ?: return
-
-        creditLite.server.scheduler.runTask(creditLite) { ->
-            creditLite.pluginManager.callEvent(
-                GlobalCreditSetEvent(commandSender, amount)
-            )
-        }
+        creditLite.pluginManager.callEvent(GlobalCreditSetEvent(commandSender, amount))
     }
 
     @Command("credits remove <player> <amount>")
@@ -108,16 +87,7 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         @Argument(value = "amount") @Range(min = "1.00", max = "") amountStr: String
     ) {
         val amount = helper.validateAmount(amountStr, commandSender) ?: return
-
-        creditLite.server.scheduler.runTask(creditLite) { ->
-            creditLite.pluginManager.callEvent(
-                CreditWithdrawEvent(
-                    commandSender,
-                    offlinePlayer,
-                    amount
-                )
-            )
-        }
+        creditLite.pluginManager.callEvent(CreditWithdrawEvent(commandSender, offlinePlayer, amount))
     }
 
     @Command("credits gremove <amount>")
@@ -128,11 +98,7 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
     ) {
         val amount = helper.validateAmount(amountStr, commandSender) ?: return
 
-        creditLite.server.scheduler.runTask(creditLite) { ->
-            creditLite.pluginManager.callEvent(
-                GlobalCreditWithdrawEvent(commandSender, amount)
-            )
-        }
+        creditLite.pluginManager.callEvent(GlobalCreditWithdrawEvent(commandSender, amount))
     }
 
     @Command("credits lang <isoKey>")
@@ -151,11 +117,7 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
                 )
             )
         } catch (_: IllegalArgumentException) {
-            commandSender.sendMessage(
-                ModernText.miniModernText(
-                    "That translation doesn't exist."
-                )
-            )
+            commandSender.sendMessage(ModernText.miniModernText("That translation doesn't exist."))
         }
     }
 

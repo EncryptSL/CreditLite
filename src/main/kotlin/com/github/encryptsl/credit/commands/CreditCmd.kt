@@ -40,18 +40,14 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
     fun onBalance(commandSender: CommandSender, @Argument(value = "player", suggestions = "players") offlinePlayer: OfflinePlayer?) {
         if (commandSender is Player) {
             if (offlinePlayer == null) {
-                commandSender.sendMessage(
-                    ModernText.miniModernText(
-                        creditLite.locale.getMessage("messages.balance.format"),
-                        TagResolver.resolver(
-                            Placeholder.parsed(
-                                "credit",
-                                creditLite.creditEconomyFormatting.fullFormatting(CreditEconomy.getBalance(commandSender))
-                            )
+                return commandSender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.balance.format"),
+                    TagResolver.resolver(
+                        Placeholder.parsed(
+                            "credit",
+                            creditLite.creditEconomyFormatting.fullFormatting(CreditEconomy.getBalance(commandSender))
                         )
                     )
-                )
-                return
+                ))
             }
             commandSender.sendMessage(
                 ModernText.miniModernText(
@@ -67,19 +63,15 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
             )
         } else {
             if (offlinePlayer != null) {
-                commandSender.sendMessage(
-                    ModernText.miniModernText(
-                        creditLite.locale.getMessage("messages.balance.format_target"),
-                        TagResolver.resolver(
-                            Placeholder.parsed("target", offlinePlayer.name.toString()),
-                            Placeholder.parsed(
-                                "credit",
-                                creditLite.creditEconomyFormatting.fullFormatting(CreditEconomy.getBalance(offlinePlayer))
-                            )
+                return commandSender.sendMessage(ModernText.miniModernText(
+                    creditLite.locale.getMessage("messages.balance.format_target"),
+                    TagResolver.resolver(
+                        Placeholder.parsed("target", offlinePlayer.name.toString()),
+                        Placeholder.parsed("credit",
+                            creditLite.creditEconomyFormatting.fullFormatting(CreditEconomy.getBalance(offlinePlayer))
                         )
                     )
-                )
-                return
+                ))
             }
             creditLite.locale.getList("messages.help")?.forEach { s ->
                 commandSender.sendMessage(ModernText.miniModernText(s.toString()))
@@ -108,11 +100,9 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
         }
 
         if (p > pagination.maxPages) {
-            commandSender.sendMessage(
-                ModernText.miniModernText(creditLite.locale.getMessage("messages.error.maximum_page"),
-                    TagResolver.resolver(Placeholder.parsed("max_page", pagination.maxPages.toString())))
+            return commandSender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.maximum_page"), TagResolver
+                .resolver(Placeholder.parsed("max_page", pagination.maxPages.toString())))
             )
-            return
         }
 
         commandSender.sendMessage(
@@ -136,8 +126,7 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
     ) {
         if (commandSender is Player) {
             if (commandSender.name == offlinePlayer.name) {
-                commandSender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.self_pay")))
-                return
+                return commandSender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.self_pay")))
             }
 
             val amount = helper.validateAmount(amountStr, commandSender) ?: return
