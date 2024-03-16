@@ -2,19 +2,19 @@ package com.github.encryptsl.credit.common.database.models
 
 import com.github.encryptsl.credit.api.interfaces.DatabaseSQLProvider
 import com.github.encryptsl.credit.common.database.tables.Account
+import com.github.encryptsl.credit.common.extensions.loggedTransaction
 import org.bukkit.Bukkit
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.minus
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.notInList
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
 class CreditModel : DatabaseSQLProvider {
 
     override fun createPlayerAccount(username: String, uuid: UUID, credit: Double) {
-        transaction {
+        loggedTransaction {
             Account.insertIgnore {
                 it[Account.username] = username
                 it[Account.uuid] = uuid.toString()
@@ -24,47 +24,47 @@ class CreditModel : DatabaseSQLProvider {
     }
 
     override fun deletePlayerAccount(uuid: UUID) {
-        transaction {
+        loggedTransaction {
             Account.deleteWhere { Account.uuid eq uuid.toString() }
         }
     }
 
-    override fun getExistPlayerAccount(uuid: UUID): Boolean = transaction {
+    override fun getExistPlayerAccount(uuid: UUID): Boolean = loggedTransaction {
         !Account.select(Account.uuid).where(Account.uuid eq uuid.toString()).empty()
     }
 
-    override fun getTopBalance(top: Int): MutableMap<String, Double> = transaction {
+    override fun getTopBalance(top: Int): MutableMap<String, Double> = loggedTransaction {
         Account.selectAll().limit(top).associate {
             it[Account.uuid] to it[Account.credit]
         }.toMutableMap()
     }
 
-    override fun getTopBalance(): MutableMap<String, Double> = transaction {
+    override fun getTopBalance(): MutableMap<String, Double> = loggedTransaction {
         Account.selectAll().associate {
             it[Account.uuid] to it[Account.credit]
         }.toMutableMap()
     }
 
-    override fun getBalance(uuid: UUID): Double = transaction {
+    override fun getBalance(uuid: UUID): Double = loggedTransaction {
         Account.select(Account.uuid, Account.credit).where(Account.uuid eq uuid.toString()).first()[Account.credit]
     }
 
     override fun depositCredit(uuid: UUID, credit: Double) {
-        transaction {
+        loggedTransaction {
             Account.update({ Account.uuid eq uuid.toString() }) {
                 it[Account.credit] = Account.credit plus credit
             }
         }
     }
     override fun withdrawCredit(uuid: UUID, credit: Double) {
-        transaction {
+        loggedTransaction {
             Account.update({ Account.uuid eq uuid.toString() }) {
                 it[Account.credit] = Account.credit minus credit
             }
         }
     }
     override fun setCredit(uuid: UUID, credit: Double) {
-        transaction {
+        loggedTransaction {
             Account.update({ Account.uuid eq uuid.toString() }) {
                 it[Account.credit] = credit
             }
@@ -72,16 +72,16 @@ class CreditModel : DatabaseSQLProvider {
     }
 
     override fun purgeAccounts() {
-        transaction { Account.deleteAll() }
+        loggedTransaction { Account.deleteAll() }
     }
 
     override fun purgeDefaultAccounts(defaultCredit: Double) {
-        transaction { Account.deleteWhere { credit eq defaultCredit } }
+        loggedTransaction { Account.deleteWhere { credit eq defaultCredit } }
     }
 
     override fun purgeInvalidAccounts() {
         val validPlayerUUIDs = Bukkit.getOfflinePlayers().mapNotNull { runCatching { it.uniqueId }.getOrNull() }.map { it.toString() }
-        transaction {
+        loggedTransaction {
             Account.deleteWhere {
                 uuid notInList validPlayerUUIDs
             }
