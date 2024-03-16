@@ -1,4 +1,4 @@
-package com.github.encryptsl.credit.extensions
+package com.github.encryptsl.credit.common.extensions
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols

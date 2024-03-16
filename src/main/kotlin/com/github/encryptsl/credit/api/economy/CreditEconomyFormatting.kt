@@ -1,7 +1,7 @@
 package com.github.encryptsl.credit.api.economy
 
-import com.github.encryptsl.credit.extensions.compactFormat
-import com.github.encryptsl.credit.extensions.moneyFormat
+import com.github.encryptsl.credit.common.extensions.compactFormat
+import com.github.encryptsl.credit.common.extensions.moneyFormat
 import org.bukkit.configuration.file.FileConfiguration
 
 class CreditEconomyFormatting(private val configuration: FileConfiguration) {

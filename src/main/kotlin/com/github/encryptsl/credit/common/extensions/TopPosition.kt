@@ -1,4 +1,4 @@
-package com.github.encryptsl.credit.extensions
+package com.github.encryptsl.credit.common.extensions
 
 inline fun <T, R> Iterable<T>.positionIndexed(transform: (index: Int, T) -> R): List<R> {
     return mapIndexedTo(ArrayList(collectionSizeOrDefault(10)), transform)

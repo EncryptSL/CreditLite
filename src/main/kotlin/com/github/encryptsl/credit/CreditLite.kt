@@ -5,10 +5,10 @@ import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.economy.CreditEconomyFormatting
 import com.github.encryptsl.credit.api.interfaces.CreditAPI
 import com.github.encryptsl.credit.common.CommandManager
-import com.github.encryptsl.credit.config.Locales
-import com.github.encryptsl.credit.database.DatabaseConnector
-import com.github.encryptsl.credit.database.models.CreditModel
-import com.github.encryptsl.credit.hook.HookManager
+import com.github.encryptsl.credit.common.config.Locales
+import com.github.encryptsl.credit.common.database.DatabaseConnector
+import com.github.encryptsl.credit.common.database.models.CreditModel
+import com.github.encryptsl.credit.common.hook.HookManager
 import com.github.encryptsl.credit.listeners.AccountManageListener
 import com.github.encryptsl.credit.listeners.PlayerCreditPayListener
 import com.github.encryptsl.credit.listeners.PlayerJoinListener

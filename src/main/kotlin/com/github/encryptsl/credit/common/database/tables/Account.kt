@@ -1,4 +1,4 @@
-package com.github.encryptsl.credit.database.tables
+package com.github.encryptsl.credit.common.database.tables
 
 import org.jetbrains.exposed.sql.Table
 

@@ -1,4 +1,4 @@
-package com.github.encryptsl.credit.config
+package com.github.encryptsl.credit.common.config
 
 import com.github.encryptsl.credit.api.enums.LangKey
 import org.bukkit.configuration.file.FileConfiguration

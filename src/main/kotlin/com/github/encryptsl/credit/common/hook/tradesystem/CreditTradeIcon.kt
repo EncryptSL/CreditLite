@@ -1,4 +1,4 @@
-package com.github.encryptsl.credit.hook.tradesystem
+package com.github.encryptsl.credit.common.hook.tradesystem
 
 import com.github.encryptsl.credit.api.economy.CreditEconomy
 import de.codingair.tradesystem.spigot.extras.external.EconomySupportType

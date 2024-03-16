@@ -1,4 +1,4 @@
-package com.github.encryptsl.credit.hook.tradesystem
+package com.github.encryptsl.credit.common.hook.tradesystem
 
 import de.codingair.tradesystem.spigot.trade.gui.layout.types.TradeIcon
 import de.codingair.tradesystem.spigot.trade.gui.layout.types.impl.economy.ShowEconomyIcon

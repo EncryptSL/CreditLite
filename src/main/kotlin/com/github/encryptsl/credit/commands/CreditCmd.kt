@@ -6,7 +6,7 @@ import com.github.encryptsl.credit.api.Paginator
 import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.events.PlayerCreditPayEvent
 import com.github.encryptsl.credit.api.objects.ModernText
-import com.github.encryptsl.credit.extensions.positionIndexed
+import com.github.encryptsl.credit.common.extensions.positionIndexed
 import com.github.encryptsl.credit.utils.Helper
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver

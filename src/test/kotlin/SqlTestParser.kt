@@ -1,4 +1,4 @@
-import com.github.encryptsl.credit.extensions.positionIndexed
+import com.github.encryptsl.credit.common.extensions.positionIndexed
 import org.junit.jupiter.api.Test
 import java.util.*
 import kotlin.random.Random

@@ -1,4 +1,4 @@
-package com.github.encryptsl.credit.hook.placeholderapi
+package com.github.encryptsl.credit.common.hook.placeholderapi
 
 import com.github.encryptsl.credit.api.economy.CreditEconomy
 import me.clip.placeholderapi.expansion.PlaceholderExpansion

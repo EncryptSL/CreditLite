@@ -1,4 +1,4 @@
-package com.github.encryptsl.credit.extensions
+package com.github.encryptsl.credit.common.extensions
 
 fun Double.isNegative(): Boolean {
     return this < 0

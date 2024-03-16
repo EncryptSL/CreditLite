@@ -2,8 +2,10 @@ package com.github.encryptsl.credit.api.economy
 
 import com.github.encryptsl.credit.api.PlayerWalletCache
 import com.github.encryptsl.credit.api.interfaces.CreditAPI
-import com.github.encryptsl.credit.database.models.CreditModel
+import com.github.encryptsl.credit.common.database.models.CreditModel
+import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
+import java.util.*
 
 object CreditEconomy : CreditAPI {
 
@@ -83,6 +85,8 @@ object CreditEconomy : CreditAPI {
     }
 
     override fun getTopBalance(): MutableMap<String, Double> {
-        return creditModel.getTopBalance() // This must be same, because cache can be removed or cleared if player leave.
+        val databaseStoredData = creditModel.getTopBalance().filterNot { e -> Bukkit.getOfflinePlayer(e.key).name == null }
+
+        return databaseStoredData.mapValues { e -> getBalance(Bukkit.getOfflinePlayer(UUID.fromString(e.key))) }.toMutableMap()
     }
 }

@@ -1,7 +1,8 @@
-package com.github.encryptsl.credit.hook
+package com.github.encryptsl.credit.common.hook
 
-import com.github.encryptsl.credit.hook.placeholderapi.CreditPlaceholderAPI
-import com.github.encryptsl.credit.hook.tradesystem.TradeSystemListener
+import com.github.encryptsl.credit.CreditLite
+import com.github.encryptsl.credit.common.hook.placeholderapi.CreditPlaceholderAPI
+import com.github.encryptsl.credit.common.hook.tradesystem.TradeSystemListener
 
 class HookManager(private val creditLite: com.github.encryptsl.credit.CreditLite) {
 
@@ -31,7 +32,7 @@ class HookManager(private val creditLite: com.github.encryptsl.credit.CreditLite
     fun hookPAPI() {
         if (isPluginInstalled("PlaceholderAPI")) {
             creditLite.logger.info("PlaceholderAPI found, hook successfully")
-            CreditPlaceholderAPI(creditLite, com.github.encryptsl.credit.CreditLite.PAPI_VERSION).register()
+            CreditPlaceholderAPI(creditLite, CreditLite.PAPI_VERSION).register()
         } else {
             creditLite.logger.info("PlaceholderAPI not found, placeholders not working !")
         }

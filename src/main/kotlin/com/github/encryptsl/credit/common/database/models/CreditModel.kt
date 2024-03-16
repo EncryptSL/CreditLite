@@ -1,7 +1,7 @@
-package com.github.encryptsl.credit.database.models
+package com.github.encryptsl.credit.common.database.models
 
 import com.github.encryptsl.credit.api.interfaces.DatabaseSQLProvider
-import com.github.encryptsl.credit.database.tables.Account
+import com.github.encryptsl.credit.common.database.tables.Account
 import org.bukkit.Bukkit
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq

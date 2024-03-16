@@ -3,10 +3,10 @@ package com.github.encryptsl.credit.utils
 import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.enums.CheckLevel
 import com.github.encryptsl.credit.api.objects.ModernText
-import com.github.encryptsl.credit.extensions.isApproachingZero
-import com.github.encryptsl.credit.extensions.isNegative
-import com.github.encryptsl.credit.extensions.positionIndexed
-import com.github.encryptsl.credit.extensions.toValidDecimal
+import com.github.encryptsl.credit.common.extensions.isApproachingZero
+import com.github.encryptsl.credit.common.extensions.isNegative
+import com.github.encryptsl.credit.common.extensions.positionIndexed
+import com.github.encryptsl.credit.common.extensions.toValidDecimal
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.Bukkit

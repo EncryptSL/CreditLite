@@ -1,7 +1,7 @@
-package com.github.encryptsl.credit.database
+package com.github.encryptsl.credit.common.database
 
 import com.github.encryptsl.credit.api.interfaces.DatabaseConnectorProvider
-import com.github.encryptsl.credit.database.tables.Account
+import com.github.encryptsl.credit.common.database.tables.Account
 import com.zaxxer.hikari.HikariDataSource
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
