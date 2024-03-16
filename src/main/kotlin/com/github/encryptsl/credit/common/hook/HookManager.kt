@@ -5,7 +5,7 @@ import com.github.encryptsl.credit.common.hook.miniplaceholder.CreditMiniPlaceho
 import com.github.encryptsl.credit.common.hook.placeholderapi.CreditPlaceholderAPI
 import com.github.encryptsl.credit.common.hook.tradesystem.TradeSystemListener
 
-class HookManager(private val creditLite: com.github.encryptsl.credit.CreditLite) {
+class HookManager(private val creditLite: CreditLite) {
 
     /**
      * Method for disable plugin if is detected unsupported plugin.
