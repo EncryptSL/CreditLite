@@ -48,8 +48,8 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         creditLite.pluginManager.callEvent(CreditDepositEvent(commandSender, offlinePlayer, amount, silent))
     }
 
-    @Command("credits gadd <amount>")
-    @Permission("credit.admin.gadd")
+    @Command("credits global add <amount>")
+    @Permission("credit.admin.global.add")
     fun onGlobalAddCredits(
         commandSender: CommandSender,
         @Argument("amount") @Range(min = "1.0", max = "") amountStr: String
@@ -69,8 +69,8 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         creditLite.pluginManager.callEvent(CreditSetEvent(commandSender, offlinePlayer, amount))
     }
 
-    @Command("credits gset <amount>")
-    @Permission("credit.admin.gset")
+    @Command("credits global set <amount>")
+    @Permission("credit.admin.global.set")
     fun onGlobalSetCredits(
         commandSender: CommandSender,
         @Argument("amount") @Range(min = "1.0", max = "") amountStr: String
@@ -79,8 +79,8 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         creditLite.pluginManager.callEvent(GlobalCreditSetEvent(commandSender, amount))
     }
 
-    @Command("credits remove <player> <amount>")
-    @Permission("credit.admin.remove")
+    @Command("credits withdraw <player> <amount>")
+    @Permission("credit.admin.withdraw")
     fun onRemoveCredit(
         commandSender: CommandSender,
         @Argument(value = "player", suggestions = "players") offlinePlayer: OfflinePlayer,
@@ -90,8 +90,8 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         creditLite.pluginManager.callEvent(CreditWithdrawEvent(commandSender, offlinePlayer, amount))
     }
 
-    @Command("credits gremove <amount>")
-    @Permission("credit.admin.gremove")
+    @Command("credits global remove <amount>")
+    @Permission("credit.admin.global.remove")
     fun onGlobalRemoveCredit(
         commandSender: CommandSender,
         @Argument("amount") @Range(min = "1.0", max = "") amountStr: String
