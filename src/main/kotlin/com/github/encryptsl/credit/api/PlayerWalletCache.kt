@@ -31,8 +31,10 @@ class PlayerWalletCache : AccountAPI {
 
     override fun syncAccounts() {
         try {
-            AccountCache.cache.toList().forEach { k ->
-                creditModel.setCredit(k.first, k.second)
+            val cache = AccountCache.cache
+            if (cache.isEmpty()) return
+            for (p in cache) {
+                creditModel.setCredit(p.key, p.value)
             }
             AccountCache.cache.clear()
         } catch (_: Exception) {}
