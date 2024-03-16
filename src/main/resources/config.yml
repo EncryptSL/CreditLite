@@ -48,4 +48,4 @@ database:
   sql-plugin-logger: false
 
 # Please don't remove this version settings
-version: 1.0.0
+version: 1.0.1
