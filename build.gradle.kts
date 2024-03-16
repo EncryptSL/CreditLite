@@ -36,6 +36,7 @@ dependencies {
 
     implementation("org.incendo:cloud-paper:2.0.0-beta.2")
     implementation("org.incendo:cloud-annotations:2.0.0-beta.2")
+    implementation("io.github.miniplaceholders:miniplaceholders-kotlin-ext:2.2.3")
 
     testImplementation(kotlin("test", "1.9.23"))
     testImplementation("com.zaxxer:HikariCP:5.1.0")

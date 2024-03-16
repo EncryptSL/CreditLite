@@ -70,6 +70,7 @@ class CreditLite : JavaPlugin() {
 
     private fun hookRegistration() {
         hookManager.hookPAPI()
+        hookManager.hookMiniPlaceholders()
         hookManager.hookTradeSystem()
     }
 

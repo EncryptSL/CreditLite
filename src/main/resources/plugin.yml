@@ -9,7 +9,7 @@ prefix: CreditLite
 author: EncryptSL
 website: https://encryptsl.cekuj.net
 
-softdepend: [PlaceholderAPI, Vault, Treasury, TradeSystem]
+softdepend: [PlaceholderAPI, Vault, Treasury, TradeSystem, MiniPlaceholders]
 loadbefore: [TradeSystem]
 libraries:
   - com.zaxxer:HikariCP:5.1.0
