@@ -2,7 +2,6 @@ package com.github.encryptsl.credit.listeners.admin
 
 import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.events.GlobalCreditDepositEvent
-import com.github.encryptsl.credit.api.objects.ModernText
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.Bukkit
@@ -25,16 +24,12 @@ class GlobalCreditDepositListener(private val creditLite: com.github.encryptsl.c
         }
 
 
-        sender.sendMessage(
-            ModernText.miniModernText(creditLite.locale.getMessage("messages.global.add_credit"),
-            TagResolver.resolver(
-                Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
-            )
+        sender.sendMessage(creditLite.locale.translation("messages.global.add_credit",
+            Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
         ))
         if (!creditLite.config.getBoolean("messages.global.notify_add")) {
             Bukkit.broadcast(
-                ModernText.miniModernText(creditLite.locale.getMessage("messages.broadcast.add_credit"),
-                TagResolver.resolver(
+                creditLite.locale.translation("messages.broadcast.add_credit", TagResolver.resolver(
                     Placeholder.parsed("sender", sender.name),
                     Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
                 )

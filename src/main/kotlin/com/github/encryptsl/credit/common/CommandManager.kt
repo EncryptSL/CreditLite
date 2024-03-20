@@ -1,10 +1,5 @@
 package com.github.encryptsl.credit.common
 
-import org.incendo.cloud.SenderMapper
-import org.incendo.cloud.annotations.AnnotationParser
-import org.incendo.cloud.bukkit.CloudBukkitCapabilities
-import org.incendo.cloud.execution.ExecutionCoordinator
-import org.incendo.cloud.suggestion.Suggestion
 import com.github.encryptsl.credit.CreditLite
 import com.github.encryptsl.credit.api.enums.LangKey
 import com.github.encryptsl.credit.api.enums.MigrationKey
@@ -13,7 +8,12 @@ import com.github.encryptsl.credit.commands.CreditCmd
 import com.github.encryptsl.credit.commands.CreditsCmd
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
+import org.incendo.cloud.SenderMapper
+import org.incendo.cloud.annotations.AnnotationParser
+import org.incendo.cloud.bukkit.CloudBukkitCapabilities
+import org.incendo.cloud.execution.ExecutionCoordinator
 import org.incendo.cloud.paper.PaperCommandManager
+import org.incendo.cloud.suggestion.Suggestion
 import java.util.concurrent.CompletableFuture
 
 class CommandManager(private val creditLite: CreditLite) {

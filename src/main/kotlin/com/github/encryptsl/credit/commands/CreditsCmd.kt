@@ -1,11 +1,5 @@
 package com.github.encryptsl.credit.commands
 
-import org.incendo.cloud.annotation.specifier.Range
-import org.incendo.cloud.annotations.Argument
-import org.incendo.cloud.annotations.Command
-import org.incendo.cloud.annotations.CommandDescription
-import org.incendo.cloud.annotations.Flag
-import org.incendo.cloud.annotations.Permission
 import com.github.encryptsl.credit.api.enums.CheckLevel
 import com.github.encryptsl.credit.api.enums.LangKey
 import com.github.encryptsl.credit.api.enums.MigrationKey
@@ -15,9 +9,10 @@ import com.github.encryptsl.credit.api.objects.ModernText
 import com.github.encryptsl.credit.utils.Helper
 import com.github.encryptsl.credit.utils.MigrationTool
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
+import org.incendo.cloud.annotation.specifier.Range
+import org.incendo.cloud.annotations.*
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.system.measureTimeMillis
@@ -111,9 +106,8 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
             val langKey = LangKey.valueOf(isoKey.uppercase())
             creditLite.locale.setTranslationFile(langKey)
             commandSender.sendMessage(
-                ModernText.miniModernText(
-                    creditLite.locale.getMessage("messages.admin.translation_switch"),
-                    TagResolver.resolver(Placeholder.parsed("locale", langKey.name))
+                creditLite.locale.translation("messages.admin.translation_switch",
+                    Placeholder.parsed("locale", langKey.name)
                 )
             )
         } catch (_: IllegalArgumentException) {
@@ -129,18 +123,18 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         when (purgeKey) {
             PurgeKey.ACCOUNTS -> {
                 creditLite.creditModel.purgeAccounts()
-                commandSender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.admin.purge_accounts")))
+                commandSender.sendMessage(creditLite.locale.translation("messages.admin.purge_accounts"))
             }
             PurgeKey.NULL_ACCOUNTS -> {
                 creditLite.creditModel.purgeInvalidAccounts()
-                commandSender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.admin.purge_null_accounts")))
+                commandSender.sendMessage(creditLite.locale.translation("messages.admin.purge_null_accounts"))
             }
             PurgeKey.DEFAULT_ACCOUNTS -> {
                 creditLite.creditModel.purgeDefaultAccounts(creditLite.config.getDouble("economy.starting_balance"))
-                commandSender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.admin.purge_default_accounts")))
+                commandSender.sendMessage(creditLite.locale.translation("messages.admin.purge_default_accounts"))
             }
             else -> {
-                commandSender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.purge_argument")))
+                commandSender.sendMessage(creditLite.locale.translation("messages.error.purge_argument"))
             }
         }
     }
@@ -163,12 +157,7 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
             "messages.error.migration_failed"
         }
 
-        commandSender.sendMessage(ModernText.miniModernText(
-            creditLite.locale.getMessage(messageKey),
-            TagResolver.resolver(
-                Placeholder.parsed("type", migrationKey.name)
-            )
-        ))
+        commandSender.sendMessage(creditLite.locale.translation(messageKey, Placeholder.parsed("type", migrationKey.name)))
     }
 
     @Command("credits debug create accounts <amount>")
@@ -190,7 +179,7 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
     @Permission("credit.admin.reload")
     fun onReload(commandSender: CommandSender) {
         creditLite.reloadConfig()
-        commandSender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.admin.config_reload")))
+        commandSender.sendMessage(creditLite.locale.translation("messages.admin.config_reload"))
         creditLite.logger.info("Config.yml was reloaded [!]")
         creditLite.saveConfig()
         creditLite.locale.reloadTranslation()

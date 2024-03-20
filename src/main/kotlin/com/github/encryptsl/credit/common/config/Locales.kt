@@ -1,6 +1,8 @@
 package com.github.encryptsl.credit.common.config
 
 import com.github.encryptsl.credit.api.enums.LangKey
+import com.github.encryptsl.credit.api.objects.ModernText
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
@@ -10,18 +12,24 @@ class Locales(private val creditLite: com.github.encryptsl.credit.CreditLite, pr
 
     private var langYML: FileConfiguration? = null
 
+    fun translation(translationKey: String)
+        = ModernText.miniModernText(getMessage(translationKey))
+
+    fun translation(translationKey: String, tagResolver: TagResolver)
+        = ModernText.miniModernText(getMessage(translationKey), tagResolver)
+
     fun getMessage(value: String): String {
         val key = langYML?.getString(value) ?:
         langYML?.getString("messages.admin.translation_missing")?.replace("<key>", value)
-        val prefix = creditLite.config.getString("plugin.prefix")
+        val prefix = creditLite.config.getString("plugin.prefix", "").toString()
 
-        return key?.replace("<prefix>", prefix ?: "") ?: "Translation missing error: $value"
+        return key?.replace("<prefix>", prefix) ?: "Translation missing error: $value"
     }
 
     fun getList(value: String): MutableList<*>? {
         val list = langYML?.getList(value)?.toMutableList()
-        val prefix = creditLite.config.getString("plugin.prefix")
-        list?.replaceAll { it?.toString()?.replace("<prefix>", prefix ?: "") }
+        val prefix = creditLite.config.getString("plugin.prefix", "").toString()
+        list?.replaceAll { it?.toString()?.replace("<prefix>", prefix) }
 
         return list
     }

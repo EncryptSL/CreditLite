@@ -2,7 +2,6 @@ package com.github.encryptsl.credit.utils
 
 import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.enums.CheckLevel
-import com.github.encryptsl.credit.api.objects.ModernText
 import com.github.encryptsl.credit.common.extensions.isApproachingZero
 import com.github.encryptsl.credit.common.extensions.isNegative
 import com.github.encryptsl.credit.common.extensions.positionIndexed
@@ -19,16 +18,24 @@ class Helper(private val creditLite: com.github.encryptsl.credit.CreditLite) {
         val amount = amountStr.toValidDecimal()
         return when {
             amount == null -> {
-                commandSender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.format_amount")))
+                commandSender.sendMessage(creditLite.locale.translation("messages.error.format_amount"))
                 null
             }
             checkLevel == CheckLevel.ONLY_NEGATIVE && amount.isNegative() || checkLevel == CheckLevel.FULL && (amount.isApproachingZero()) -> {
-                commandSender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.negative_amount")))
+                commandSender.sendMessage(creditLite.locale.translation("messages.error.negative_amount"))
                 null
             }
             else -> amount
         }
     }
+
+    fun getTopBalances()
+        = CreditEconomy.getTopBalance().toList().sortedByDescending { e -> e.second }.positionIndexed { index, pair ->
+            creditLite.locale.getMessage("messages.balance.top_format")
+                .replace("<position>", index.toString())
+                .replace("<player>", Bukkit.getOfflinePlayer(UUID.fromString(pair.first)).name.toString())
+                .replace("<credit>", creditLite.creditEconomyFormatting.fullFormatting(pair.second))
+        }
 
     fun getComponentBal(offlinePlayer: OfflinePlayer): TagResolver {
         return TagResolver.resolver(

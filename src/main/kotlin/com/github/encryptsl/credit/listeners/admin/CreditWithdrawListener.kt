@@ -2,7 +2,6 @@ package com.github.encryptsl.credit.listeners.admin
 
 import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.events.CreditWithdrawEvent
-import com.github.encryptsl.credit.api.objects.ModernText
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.OfflinePlayer
@@ -20,28 +19,28 @@ class CreditWithdrawListener(private val creditLite: com.github.encryptsl.credit
 
         if (!CreditEconomy.hasAccount(target))
             return sender.sendMessage(
-                ModernText.miniModernText(creditLite.locale.getMessage("messages.error.account_not_exist"),
-                TagResolver.resolver(Placeholder.parsed("account", target.name.toString()))))
+                creditLite.locale.translation("messages.error.account_not_exist",
+                    Placeholder.parsed("account", target.name.toString())
+                ))
 
         if (!CreditEconomy.has(target, money))
-            return sender.sendMessage(ModernText.miniModernText(creditLite.locale.getMessage("messages.error.insufficient_funds")))
+            return sender.sendMessage(creditLite.locale.translation("messages.error.insufficient_funds"))
 
         if (sender.name == target.name)
-            return sender.sendMessage(ModernText.miniModernText(
-                    creditLite.locale.getMessage("messages.self.withdraw_credit"),
-                    TagResolver.resolver(Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money)))
+            return sender.sendMessage(
+                    creditLite.locale.translation("messages.self.withdraw_credit",
+                    Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
                 )
             )
 
         CreditEconomy.withdraw(target, money)
-        sender.sendMessage(
-            ModernText.miniModernText(
-                creditLite.locale.getMessage("messages.sender.withdraw_credit"),
-                TagResolver.resolver(Placeholder.parsed("target", target.name.toString()), Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money)))))
+        sender.sendMessage(creditLite.locale.translation("messages.sender.withdraw_credit", TagResolver.resolver(
+                    Placeholder.parsed("target", target.name.toString()),
+                    Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
+        )))
         if (target.isOnline && creditLite.config.getBoolean("messages.target.notify_withdraw")) {
             target.player?.sendMessage(
-                ModernText.miniModernText(creditLite.locale.getMessage("messages.target.withdraw_credit"),
-                TagResolver.resolver(
+                creditLite.locale.translation("messages.target.withdraw_credit", TagResolver.resolver(
                     Placeholder.parsed("sender", sender.name),
                     Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
                 )

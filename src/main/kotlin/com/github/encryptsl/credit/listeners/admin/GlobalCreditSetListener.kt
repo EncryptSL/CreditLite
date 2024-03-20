@@ -2,7 +2,6 @@ package com.github.encryptsl.credit.listeners.admin
 
 import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.events.GlobalCreditSetEvent
-import com.github.encryptsl.credit.api.objects.ModernText
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.Bukkit
@@ -23,19 +22,13 @@ class GlobalCreditSetListener(private val creditLite: com.github.encryptsl.credi
             CreditEconomy.set(player, money)
         }
 
-        sender.sendMessage(
-            ModernText.miniModernText(creditLite.locale.getMessage("messages.global.set_credit"),
-            TagResolver.resolver(
-                Placeholder.parsed("money", creditLite.creditEconomyFormatting.fullFormatting(money))
-            )
+        sender.sendMessage(creditLite.locale.translation("messages.global.set_credit",
+            Placeholder.parsed("money", creditLite.creditEconomyFormatting.fullFormatting(money))
         ))
         if (creditLite.config.getBoolean("messages.global.notify_set"))
-            Bukkit.broadcast(
-                ModernText.miniModernText(creditLite.locale.getMessage("messages.broadcast.set_credit"),
-                    TagResolver.resolver(
-                        Placeholder.parsed("sender", sender.name),
-                        Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
-                    )))
-            return
+            Bukkit.broadcast(creditLite.locale.translation("messages.broadcast.set_credit", TagResolver.resolver(
+                Placeholder.parsed("sender", sender.name),
+                Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
+            )))
     }
 }
