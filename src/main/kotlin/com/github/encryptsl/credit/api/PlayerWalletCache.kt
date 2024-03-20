@@ -1,8 +1,8 @@
 package com.github.encryptsl.credit.api
 
 import com.github.encryptsl.credit.api.interfaces.AccountAPI
-import com.github.encryptsl.credit.common.database.models.CreditModel
 import com.github.encryptsl.credit.api.objects.AccountCache
+import com.github.encryptsl.credit.common.database.models.CreditModel
 import org.bukkit.Bukkit
 import java.util.*
 
