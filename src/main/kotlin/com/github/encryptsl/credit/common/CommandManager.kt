@@ -4,6 +4,7 @@ import com.github.encryptsl.credit.CreditLite
 import com.github.encryptsl.credit.api.enums.LangKey
 import com.github.encryptsl.credit.api.enums.MigrationKey
 import com.github.encryptsl.credit.api.enums.PurgeKey
+import com.github.encryptsl.credit.api.objects.ModernText
 import com.github.encryptsl.credit.commands.CreditCmd
 import com.github.encryptsl.credit.commands.CreditsCmd
 import org.bukkit.Bukkit
@@ -12,6 +13,7 @@ import org.incendo.cloud.SenderMapper
 import org.incendo.cloud.annotations.AnnotationParser
 import org.incendo.cloud.bukkit.CloudBukkitCapabilities
 import org.incendo.cloud.execution.ExecutionCoordinator
+import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler
 import org.incendo.cloud.paper.PaperCommandManager
 import org.incendo.cloud.suggestion.Suggestion
 import java.util.concurrent.CompletableFuture
@@ -24,6 +26,7 @@ class CommandManager(private val creditLite: CreditLite) {
 
             val commandManager = createCommandManager()
 
+            registerMinecraftExceptionHandler(commandManager)
             registerSuggestionProviders(commandManager)
 
             val annotationParser = createAnnotationParser(commandManager)
@@ -48,6 +51,17 @@ class CommandManager(private val creditLite: CreditLite) {
             (commandManager as PaperCommandManager<*>).registerAsynchronousCompletions()
         }
         return commandManager
+    }
+
+    private fun registerMinecraftExceptionHandler(commandManager: PaperCommandManager<CommandSender>) {
+        MinecraftExceptionHandler.createNative<CommandSender>()
+            .defaultHandlers()
+            .decorator { component ->
+                ModernText.miniModernText(creditLite.config.getString("plugin.prefix", "<red>[!]").toString())
+                    .appendSpace()
+                    .append(component)
+            }
+            .registerTo(commandManager)
     }
 
     private fun registerSuggestionProviders(commandManager: PaperCommandManager<CommandSender>) {
