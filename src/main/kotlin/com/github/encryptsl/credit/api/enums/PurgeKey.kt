@@ -4,4 +4,5 @@ enum class PurgeKey {
     ACCOUNTS,
     NULL_ACCOUNTS,
     DEFAULT_ACCOUNTS,
+    MONO_LOG,
 }

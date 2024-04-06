@@ -8,6 +8,7 @@ import com.github.encryptsl.credit.common.CommandManager
 import com.github.encryptsl.credit.common.config.Locales
 import com.github.encryptsl.credit.common.database.DatabaseConnector
 import com.github.encryptsl.credit.common.database.models.CreditModel
+import com.github.encryptsl.credit.common.database.models.MonologModel
 import com.github.encryptsl.credit.common.hook.HookManager
 import com.github.encryptsl.credit.listeners.AccountManageListener
 import com.github.encryptsl.credit.listeners.PlayerCreditPayListener
@@ -22,7 +23,7 @@ import kotlin.system.measureTimeMillis
 class CreditLite : JavaPlugin() {
     companion object {
         const val CONFIG_VERSION = "1.0.1"
-        const val LANG_VERSION = "1.0.0"
+        const val LANG_VERSION = "2.0.1"
         const val PAPI_VERSION = "1.0.0"
     }
 
@@ -31,6 +32,7 @@ class CreditLite : JavaPlugin() {
     val creditEconomyFormatting by lazy { CreditEconomyFormatting(config) }
     val locale: Locales by lazy { Locales(this, LANG_VERSION) }
     val creditModel: CreditModel by lazy { CreditModel() }
+    val monologModel: MonologModel by lazy { MonologModel(this) }
 
     private val configAPI: ConfigAPI by lazy { ConfigAPI(this) }
     private val hookManager: HookManager by lazy { HookManager(this) }

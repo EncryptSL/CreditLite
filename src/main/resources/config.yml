@@ -12,6 +12,9 @@ economy:
   starting_balance: 30
   # Convert large currency values into a more compact format.
   compact_display: false
+  # Enable logging about economies activities add, set, withdraw, pay money.
+  # Command /eco monolog [player]
+  monolog_activity: true
 
 formatting:
   # Currency value format

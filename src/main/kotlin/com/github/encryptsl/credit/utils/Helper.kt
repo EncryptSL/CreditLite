@@ -2,6 +2,7 @@ package com.github.encryptsl.credit.utils
 
 import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.enums.CheckLevel
+import com.github.encryptsl.credit.common.database.entity.EconomyLog
 import com.github.encryptsl.credit.common.extensions.isApproachingZero
 import com.github.encryptsl.credit.common.extensions.isNegative
 import com.github.encryptsl.credit.common.extensions.positionIndexed
@@ -29,8 +30,17 @@ class Helper(private val creditLite: com.github.encryptsl.credit.CreditLite) {
         }
     }
 
+    fun validateLog(player: String?): List<EconomyLog> {
+        val log = creditLite.monologModel.getLog()
+
+        if (player != null) {
+            return log.filter { l -> l.log.contains(player, true) }
+        }
+        return log
+    }
+
     fun getTopBalances()
-        = CreditEconomy.getTopBalance().toList().sortedByDescending { e -> e.second }.positionIndexed { index, pair ->
+        = CreditEconomy.getTopBalance().toList().positionIndexed { index, pair ->
             creditLite.locale.getMessage("messages.balance.top_format")
                 .replace("<position>", index.toString())
                 .replace("<player>", Bukkit.getOfflinePlayer(UUID.fromString(pair.first)).name.toString())

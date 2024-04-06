@@ -23,6 +23,12 @@ class GlobalCreditDepositListener(private val creditLite: com.github.encryptsl.c
             CreditEconomy.deposit(player, money)
         }
 
+        creditLite.monologModel.info(creditLite.locale.getMessage("messages.monolog.admin.global.deposit")
+            .replace("<sender>", sender.name)
+            .replace("<accounts", offlinePlayers.size.toString())
+            .replace("<credit>", creditLite.creditEconomyFormatting.fullFormatting(money))
+        )
+
 
         sender.sendMessage(creditLite.locale.translation("messages.global.add_credit",
             Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))

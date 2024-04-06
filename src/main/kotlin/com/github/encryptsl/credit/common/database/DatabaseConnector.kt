@@ -2,6 +2,7 @@ package com.github.encryptsl.credit.common.database
 
 import com.github.encryptsl.credit.api.interfaces.DatabaseConnectorProvider
 import com.github.encryptsl.credit.common.database.tables.Account
+import com.github.encryptsl.credit.common.database.tables.MonologTable
 import com.github.encryptsl.credit.common.extensions.loggedTransaction
 import com.zaxxer.hikari.HikariDataSource
 import org.jetbrains.exposed.sql.Database
@@ -20,7 +21,7 @@ class DatabaseConnector : DatabaseConnectorProvider {
         Database.connect(config)
 
         loggedTransaction {
-            SchemaUtils.create(Account)
+            SchemaUtils.create(Account, MonologTable)
         }
     }
 }

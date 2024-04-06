@@ -44,5 +44,6 @@ permissions:
       credit.admin.global.withdraw: true
       credit.admin.lang: true
       credit.admin.purge: true
+      credit.admin.monolog: true
       credit.admin.migration: true
       credit.admin.reload: true

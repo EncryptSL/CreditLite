@@ -34,6 +34,12 @@ class CreditWithdrawListener(private val creditLite: com.github.encryptsl.credit
             )
 
         CreditEconomy.withdraw(target, money)
+        creditLite.monologModel.info(creditLite.locale.getMessage("messages.monolog.admin.normal.withdraw")
+            .replace("<sender>", sender.name)
+            .replace("<target>", target.name.toString())
+            .replace("<credit>", creditLite.creditEconomyFormatting.fullFormatting(money))
+        )
+
         sender.sendMessage(creditLite.locale.translation("messages.sender.withdraw_credit", TagResolver.resolver(
                     Placeholder.parsed("target", target.name.toString()),
                     Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))

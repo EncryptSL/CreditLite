@@ -1,11 +1,14 @@
 package com.github.encryptsl.credit.commands
 
+import com.github.encryptsl.credit.api.Paginator
 import com.github.encryptsl.credit.api.enums.CheckLevel
 import com.github.encryptsl.credit.api.enums.LangKey
 import com.github.encryptsl.credit.api.enums.MigrationKey
 import com.github.encryptsl.credit.api.enums.PurgeKey
 import com.github.encryptsl.credit.api.events.*
 import com.github.encryptsl.credit.api.objects.ModernText
+import com.github.encryptsl.credit.common.extensions.convertInstant
+import com.github.encryptsl.credit.common.extensions.getRandomString
 import com.github.encryptsl.credit.utils.Helper
 import com.github.encryptsl.credit.utils.MigrationTool
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
@@ -133,10 +136,40 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
                 creditLite.creditModel.purgeDefaultAccounts(creditLite.config.getDouble("economy.starting_balance"))
                 commandSender.sendMessage(creditLite.locale.translation("messages.admin.purge_default_accounts"))
             }
+            PurgeKey.MONO_LOG -> {
+                val logs = creditLite.monologModel.getLog()
+
+                if (logs.isEmpty())
+                    return commandSender.sendMessage(creditLite.locale.translation("messages.error.purge_monolog_fail"))
+
+                creditLite.monologModel.clearLogs()
+                commandSender.sendMessage(creditLite.locale.translation("messages.admin.purge_monolog_success", Placeholder.parsed("deleted", logs.size.toString())))
+            }
             else -> {
                 commandSender.sendMessage(creditLite.locale.translation("messages.error.purge_argument"))
             }
         }
+    }
+
+    @Command("eco monolog [page] [player]")
+    @Permission("credit.admin.monolog")
+    fun onLogView(commandSender: CommandSender, @Argument("page") @Default(value = "1") page: Int, @Argument("player") player: String?) {
+        val log = helper.validateLog(player).map {
+            creditLite.locale.getMessage("messages.admin.monolog_format")
+                .replace("<level>", it.level)
+                .replace("<timestamp>", convertInstant(it.timestamp))
+                .replace("<log>", it.log)
+        }
+        if (log.isEmpty()) return
+        val pagination = Paginator(log).apply { page(page) }
+        val isPageAboveMaxPages = page > pagination.maxPages
+
+        if (isPageAboveMaxPages)
+            return commandSender.sendMessage(creditLite.locale.translation("messages.error.maximum_page",
+                Placeholder.parsed("max_page", pagination.maxPages.toString()))
+            )
+
+        commandSender.sendMessage(ModernText.miniModernText(pagination.display()))
     }
 
     @Command("credits migration <argument>")
@@ -168,7 +201,7 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
 
         val time = measureTimeMillis {
             for (i in 1 .. amountStr) {
-                creditLite.creditModel.createPlayerAccount("", UUID.randomUUID(), random.nextDouble(1000.0, 500000.0))
+                creditLite.creditModel.createPlayerAccount(getRandomString(6), UUID.randomUUID(), random.nextDouble(1000.0, 500000.0))
             }
         }
 

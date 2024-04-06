@@ -22,6 +22,12 @@ class GlobalCreditSetListener(private val creditLite: com.github.encryptsl.credi
             CreditEconomy.set(player, money)
         }
 
+        creditLite.monologModel.info(creditLite.locale.getMessage("messages.monolog.admin.global.set")
+            .replace("<sender>", sender.name)
+            .replace("<accounts", offlinePlayers.size.toString())
+            .replace("<credit>", creditLite.creditEconomyFormatting.fullFormatting(money))
+        )
+
         sender.sendMessage(creditLite.locale.translation("messages.global.set_credit",
             Placeholder.parsed("money", creditLite.creditEconomyFormatting.fullFormatting(money))
         ))

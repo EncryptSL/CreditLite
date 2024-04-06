@@ -28,6 +28,11 @@ class CreditDepositListener(private val creditLite: com.github.encryptsl.credit.
                 ))
 
         CreditEconomy.deposit(target, money)
+        creditLite.monologModel.info(creditLite.locale.getMessage("messages.monolog.admin.normal.deposit")
+            .replace("<sender>", sender.name)
+            .replace("<target>", target.name.toString())
+            .replace("<credit>", creditLite.creditEconomyFormatting.fullFormatting(money))
+        )
 
         sender.sendMessage(
             creditLite.locale.translation("messages.sender.add_credit", TagResolver.resolver(

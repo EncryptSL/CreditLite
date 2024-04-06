@@ -22,6 +22,12 @@ class GlobalCreditWithdrawListener(private val creditLite: com.github.encryptsl.
             CreditEconomy.withdraw(player, money)
         }
 
+        creditLite.monologModel.info(creditLite.locale.getMessage("messages.monolog.admin.global.withdraw")
+            .replace("<sender>", sender.name)
+            .replace("<accounts", offlinePlayers.size.toString())
+            .replace("<credit>", creditLite.creditEconomyFormatting.fullFormatting(money))
+        )
+
         sender.sendMessage(creditLite.locale.translation("messages.global.withdraw_credit",
             Placeholder.parsed("money", creditLite.creditEconomyFormatting.fullFormatting(money))
         ))
