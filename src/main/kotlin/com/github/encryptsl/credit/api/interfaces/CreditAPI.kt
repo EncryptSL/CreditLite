@@ -20,7 +20,7 @@ interface CreditAPI {
      * @return Boolean
      * @see Boolean
      * @see OfflinePlayer
-     * @see CreditModel.getBalance(uuid: UUID)
+     * @see com.github.encryptsl.credit.api.economy.CreditEconomy.getBalance(uuid: UUID)
      */
     fun cacheAccount(player: OfflinePlayer, amount: Double): Boolean
 
@@ -96,6 +96,6 @@ interface CreditAPI {
      * Get top player accounts
      * @return MutableMap
      */
-    fun getTopBalance(): MutableMap<String, Double>
+    fun getTopBalance(): Map<String, Double>
 
 }

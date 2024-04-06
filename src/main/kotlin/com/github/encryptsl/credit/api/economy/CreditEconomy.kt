@@ -84,9 +84,13 @@ object CreditEconomy : CreditAPI {
         walletCache.syncAccounts()
     }
 
-    override fun getTopBalance(): MutableMap<String, Double> {
+    override fun getTopBalance(): Map<String, Double> {
         val databaseStoredData = creditModel.getTopBalance().filterNot { e -> Bukkit.getOfflinePlayer(e.key).name == null }
 
-        return databaseStoredData.mapValues { e -> getBalance(Bukkit.getOfflinePlayer(UUID.fromString(e.key))) }.toMutableMap()
+        return databaseStoredData
+            .mapValues { e -> getBalance(Bukkit.getOfflinePlayer(UUID.fromString(e.key))) }
+            .toList()
+            .sortedByDescending { (_,e) -> e }
+            .toMap()
     }
 }

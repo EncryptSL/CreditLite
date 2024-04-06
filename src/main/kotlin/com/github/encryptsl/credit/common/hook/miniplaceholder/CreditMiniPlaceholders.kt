@@ -79,10 +79,8 @@ class CreditMiniPlaceholders(private val creditLite: CreditLite) {
         }
     }
 
-    private fun topBalance(): LinkedHashMap<String, Double> {
+    private fun topBalance(): Map<String, Double> {
         return CreditEconomy.getTopBalance()
-            .filterKeys { uuid -> Bukkit.getOfflinePlayer(UUID.fromString(uuid)).hasPlayedBefore() }
-            .let { LinkedHashMap<String, Double>(it) }
     }
 
 }

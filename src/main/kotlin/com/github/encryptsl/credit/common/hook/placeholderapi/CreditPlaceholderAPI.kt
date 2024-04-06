@@ -62,9 +62,7 @@ class CreditPlaceholderAPI(private val creditLite: com.github.encryptsl.credit.C
         }
     }
 
-    private fun topBalance(): LinkedHashMap<String, Double> {
+    private fun topBalance(): Map<String, Double> {
         return CreditEconomy.getTopBalance()
-            .filterKeys { uuid -> Bukkit.getOfflinePlayer(UUID.fromString(uuid)).hasPlayedBefore() }
-            .let { LinkedHashMap<String, Double>(it) }
     }
 }
