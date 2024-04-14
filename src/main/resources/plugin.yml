@@ -16,6 +16,7 @@ libraries:
   - org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.23
   - org.jetbrains.exposed:exposed-core:0.48.0
   - org.jetbrains.exposed:exposed-jdbc:0.48.0
+  - org.jetbrains.exposed:exposed-kotlin-datetime:0.48.0
 
 description: ${description}
 
