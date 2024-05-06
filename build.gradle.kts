@@ -36,9 +36,16 @@ dependencies {
     compileOnly("com.github.CodingAir:TradeSystem:v2.5.3")
     compileOnly("com.github.CodingAir:CodingAPI:1.79")
 
-    implementation("org.incendo:cloud-paper:2.0.0-beta.5")
-    implementation("org.incendo:cloud-annotations:2.0.0-beta.5")
-    implementation("org.incendo:cloud-minecraft-extras:2.0.0-beta.5")
+    implementation("org.incendo:cloud-paper:2.0.0-SNAPSHOT")
+    implementation("org.incendo:cloud-annotations:2.0.0-SNAPSHOT") {
+        exclude(group = "org.incendo", module = "cloud-core")
+    }
+    implementation("org.incendo:cloud-minecraft-extras:2.0.0-SNAPSHOT") {
+        exclude(group = "org.incendo", module = "cloud-core")
+        exclude(group = "net.kyrio", module = "adventure-api")
+        exclude(group = "net.kyrio", module = "adventure-text-minimessage")
+        exclude(group = "net.kyrio", module = "adventure-text-serializer-plain")
+    }
     implementation("io.github.miniplaceholders:miniplaceholders-kotlin-ext:2.2.3")
 
     testImplementation(kotlin("test", "1.9.23"))
@@ -67,8 +74,9 @@ tasks {
 
     shadowJar {
         archiveFileName.set("${providers.gradleProperty("plugin_name").get()}-${providers.gradleProperty("plugin_version").get()}.jar")
-
-
+        manifest {
+            attributes["paperweight-mappings-namespace"] = "spigot"
+        }
         relocate("de.codingair.codingapi", "de.codingair.tradesystem.lib.codingapi")
         minimize {
             relocate("org.incendo.cloud", "incendo-cloud")
