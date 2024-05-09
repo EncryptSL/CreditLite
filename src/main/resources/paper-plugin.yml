@@ -1,0 +1,55 @@
+# noinspection YAMLSchemaValidation
+name: ${name}
+main: com.github.encryptsl.credit.CreditLite
+version: ${version}
+api-version: '1.19'
+loader: com.github.encryptsl.credit.CreditLoader
+has-open-classloader: false
+
+prefix: CreditLite
+author: EncryptSL
+website: https://encrypsl.github.io
+
+description: ${description}
+
+dependencies:
+  server:
+    TradeSystem:
+      load: BEFORE
+      required: false
+    PlaceholderAPI:
+      required: false
+    Vault:
+      required: false
+    MiniPlaceholders:
+      required: false
+
+
+permissions:
+  credit.player:
+    default: true
+    description: Gives access to all player commands
+    children:
+      credit.help: true
+      credit.money: true
+      credit.balance: true
+      credit.top: true
+      credit.pay: true
+
+  credit.admin:
+    default: op
+    description: Gives access to all admin commands
+    children:
+      credit.admin.help: true
+      credit.admin.eco: true
+      credit.admin.add: true
+      credit.admin.global.add: true
+      credit.admin.set: true
+      credit.admin.global.set: true
+      credit.admin.withdraw: true
+      credit.admin.global.withdraw: true
+      credit.admin.lang: true
+      credit.admin.purge: true
+      credit.admin.monolog: true
+      credit.admin.migration: true
+      credit.admin.reload: true

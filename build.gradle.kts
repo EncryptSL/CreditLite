@@ -56,6 +56,17 @@ dependencies {
     testImplementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
 
+sourceSets {
+    getByName("main") {
+        java {
+            srcDir("src/main/java")
+        }
+        kotlin {
+            srcDir("src/main/kotlin")
+        }
+    }
+}
+
 tasks {
 
     build {
@@ -70,6 +81,18 @@ tasks {
         filesMatching("plugin.yml") {
             expand(project.properties)
         }
+        filesMatching("paper-plugin.yml") {
+            expand(project.properties)
+        }
+    }
+
+    compileJava {
+        options.encoding = "UTF-8"
+        options.release.set(21)
+        options.compilerArgs.add("-Xlint:deprecation")
+    }
+    compileKotlin {
+        kotlinOptions.jvmTarget = "21"
     }
 
     shadowJar {
