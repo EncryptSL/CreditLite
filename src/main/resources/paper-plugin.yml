@@ -4,7 +4,6 @@ main: com.github.encryptsl.credit.CreditLite
 version: ${version}
 api-version: '1.19'
 loader: com.github.encryptsl.credit.CreditLoader
-has-open-classloader: false
 
 prefix: CreditLite
 author: EncryptSL
