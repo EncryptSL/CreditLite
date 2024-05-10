@@ -107,7 +107,7 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
     ) {
         try {
             val langKey = LangKey.valueOf(isoKey.uppercase())
-            creditLite.locale.setTranslationFile(langKey)
+            creditLite.locale.setLocale(langKey)
             commandSender.sendMessage(
                 creditLite.locale.translation("messages.admin.translation_switch",
                     Placeholder.parsed("locale", langKey.name)
@@ -215,6 +215,6 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         commandSender.sendMessage(creditLite.locale.translation("messages.admin.config_reload"))
         creditLite.logger.info("Config.yml was reloaded [!]")
         creditLite.saveConfig()
-        creditLite.locale.reloadTranslation()
+        creditLite.locale.loadCurrentTranslation()
     }
 }
