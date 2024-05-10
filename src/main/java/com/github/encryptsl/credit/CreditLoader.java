@@ -7,31 +7,27 @@ import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.aether.graph.Dependency;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.jetbrains.annotations.NotNull;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Map;
 
 @SuppressWarnings({"UnstableApiUsage", "unused"})
 public class CreditLoader implements PluginLoader {
 
     @Override
-    public void classloader(@NotNull PluginClasspathBuilder pluginClasspathBuilder) {
+    public void classloader(@NotNull PluginClasspathBuilder pluginClasspath) {
         MavenLibraryResolver resolver = new MavenLibraryResolver();
 
         resolveLibraries().stream()
                 .map(DefaultArtifact::new)
                 .forEach(artifact -> resolver.addDependency(new Dependency(artifact, null)));
-        resolver.addRepository(new RemoteRepository.Builder(
-                "maven", "default", "https://repo.maven.apache.org/maven2/"
-        ).build());
 
         resolver.addRepository(new RemoteRepository.Builder("paper", "default", "https://repo.papermc.io/repository/maven-public/").build());
-
-        pluginClasspathBuilder.addLibrary(resolver);
+        pluginClasspath.addLibrary(resolver);
     }
 
     private List<String> resolveLibraries() {
@@ -44,19 +40,16 @@ public class CreditLoader implements PluginLoader {
     }
 
     private List<String> readLibraryListFromYaml() throws IOException {
-        List<String> libraries = new ArrayList<>();
+        Yaml yaml = new Yaml();
         InputStream inputStream = CreditLoader.class.getClassLoader()
                 .getResourceAsStream("paper-libraries.yml");
 
-        if (inputStream != null) {
-            try (inputStream; Scanner scanner = new Scanner(inputStream, StandardCharsets.UTF_8)) {
-                while (scanner.hasNextLine()) {
-                    libraries.add(scanner.nextLine());
-                }
-            }
-        } else {
+        if (inputStream == null) {
             System.err.println("paper-libraries.yml not found in the classpath.");
         }
-        return libraries;
+
+        Map<String, List<String>> data = yaml.load(inputStream);
+
+        return data.get("libraries");
     }
 }
