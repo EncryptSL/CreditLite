@@ -11,73 +11,74 @@ object CreditEconomy : CreditAPI {
 
     private val walletCache: PlayerWalletCache by lazy { PlayerWalletCache() }
     private val creditModel: CreditModel by lazy { CreditModel() }
+
     override fun createAccount(player: OfflinePlayer, startAmount: Double): Boolean {
-        if (hasAccount(player)) return false
+        if (hasAccount(player.uniqueId)) return false
 
         creditModel.createPlayerAccount(player.name.toString(), player.uniqueId, startAmount)
         return true
     }
 
-    override fun cacheAccount(player: OfflinePlayer, amount: Double): Boolean {
-        if (!hasAccount(player)) return false
+    override fun cacheAccount(uuid: UUID, amount: Double): Boolean {
+        if (!hasAccount(uuid)) return false
 
-        walletCache.cacheAccount(player.uniqueId, amount)
+        walletCache.cacheAccount(uuid, amount)
         return true
     }
 
-    override fun deleteAccount(player: OfflinePlayer): Boolean {
-        if (!hasAccount(player)) return false
+    override fun deleteAccount(uuid: UUID): Boolean {
+        if (!hasAccount(uuid)) return false
 
-        return if (walletCache.isPlayerOnline(player.uniqueId)) {
-            walletCache.removeAccount(player.uniqueId)
+        return if (walletCache.isPlayerOnline(uuid)) {
+            walletCache.removeAccount(uuid)
             true
         } else {
-            creditModel.deletePlayerAccount(player.uniqueId)
+            creditModel.deletePlayerAccount(uuid)
             true
         }
     }
 
-    override fun hasAccount(player: OfflinePlayer): Boolean {
-        return creditModel.getExistPlayerAccount(player.uniqueId)
+    override fun hasAccount(uuid: UUID): Boolean {
+        return creditModel.getExistPlayerAccount(uuid)
     }
 
-    override fun has(player: OfflinePlayer, amount: Double): Boolean {
-        return amount <= getBalance(player)
+    override fun has(uuid: UUID, amount: Double): Boolean {
+        return amount <= getBalance(uuid)
     }
 
-    override fun getBalance(player: OfflinePlayer): Double {
-        return if (walletCache.isPlayerOnline(player.uniqueId) || walletCache.isAccountCached(player.uniqueId))
-            walletCache.getBalance(player.uniqueId)
+    override fun getBalance(uuid: UUID): Double {
+        return if (walletCache.isPlayerOnline(uuid) || walletCache.isAccountCached(uuid))
+            walletCache.getBalance(uuid)
         else
-            creditModel.getBalance(player.uniqueId)
+            creditModel.getBalance(uuid)
     }
 
-    override fun deposit(player: OfflinePlayer, amount: Double) {
-        if (walletCache.isPlayerOnline(player.uniqueId)) {
-            cacheAccount(player, getBalance(player).plus(amount))
+    override fun deposit(uuid: UUID, amount: Double) {
+        if (walletCache.isPlayerOnline(uuid)) {
+            cacheAccount(uuid, getBalance(uuid).plus(amount))
         } else {
-            creditModel.depositCredit(player.uniqueId, amount)
+            creditModel.depositCredit(uuid, amount)
         }
     }
 
-    override fun withdraw(player: OfflinePlayer, amount: Double) {
-        if (walletCache.isPlayerOnline(player.uniqueId)) {
-            cacheAccount(player, getBalance(player).minus(amount))
+    override fun withdraw(uuid: UUID, amount: Double) {
+        if (walletCache.isPlayerOnline(uuid)) {
+            cacheAccount(uuid, getBalance(uuid).minus(amount))
         } else {
-            creditModel.withdrawCredit(player.uniqueId, amount)
+            creditModel.withdrawCredit(uuid, amount)
         }
     }
 
-    override fun set(player: OfflinePlayer, amount: Double) {
-        if (walletCache.isPlayerOnline(player.uniqueId)) {
-            cacheAccount(player, amount)
+    override fun set(uuid: UUID, amount: Double) {
+        if (walletCache.isPlayerOnline(uuid)) {
+            cacheAccount(uuid, amount)
         } else {
-            creditModel.setCredit(player.uniqueId, amount)
+            creditModel.setCredit(uuid, amount)
         }
     }
 
-    override fun syncAccount(offlinePlayer: OfflinePlayer) {
-        walletCache.syncAccount(offlinePlayer.uniqueId)
+    override fun syncAccount(uuid: UUID) {
+        walletCache.syncAccount(uuid)
     }
 
     override fun syncAccounts() {
@@ -88,7 +89,7 @@ object CreditEconomy : CreditAPI {
         val databaseStoredData = creditModel.getTopBalance().filterNot { e -> Bukkit.getOfflinePlayer(e.key).name == null }
 
         return databaseStoredData
-            .mapValues { e -> getBalance(Bukkit.getOfflinePlayer(UUID.fromString(e.key))) }
+            .mapValues { e -> getBalance(UUID.fromString(e.key)) }
             .toList()
             .sortedByDescending { (_,e) -> e }
             .toMap()

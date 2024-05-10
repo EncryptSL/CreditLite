@@ -52,14 +52,14 @@ class Helper(private val creditLite: com.github.encryptsl.credit.CreditLite) {
             Placeholder.parsed("target", offlinePlayer.name.toString()),
             Placeholder.parsed(
                 "credit",
-                creditLite.creditEconomyFormatting.fullFormatting(CreditEconomy.getBalance(offlinePlayer))
+                creditLite.creditEconomyFormatting.fullFormatting(CreditEconomy.getBalance(offlinePlayer.uniqueId))
             )
         )
     }
 
-    fun getAccountsToMigrationData(): List<MigrationData?> {
+    fun getAccountsToMigrationData(): List<MigrationTool.MigrationData?> {
         return creditLite.creditModel.getTopBalance().toList().positionIndexed { index, k ->
-            Bukkit.getOfflinePlayer(UUID.fromString(k.first)).name?.let { MigrationData(index, k.first, it, k.second) }
+            Bukkit.getOfflinePlayer(UUID.fromString(k.first)).name?.let { MigrationTool.MigrationData(index, k.first, it, k.second) }
         }
     }
 }

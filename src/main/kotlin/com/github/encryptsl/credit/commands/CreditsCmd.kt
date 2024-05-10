@@ -2,15 +2,15 @@ package com.github.encryptsl.credit.commands
 
 import com.github.encryptsl.credit.api.Paginator
 import com.github.encryptsl.credit.api.enums.CheckLevel
-import com.github.encryptsl.credit.api.enums.LangKey
-import com.github.encryptsl.credit.api.enums.MigrationKey
 import com.github.encryptsl.credit.api.enums.PurgeKey
 import com.github.encryptsl.credit.api.events.*
 import com.github.encryptsl.credit.api.objects.ModernText
+import com.github.encryptsl.credit.common.config.Locales.LangKey
 import com.github.encryptsl.credit.common.extensions.convertInstant
 import com.github.encryptsl.credit.common.extensions.getRandomString
 import com.github.encryptsl.credit.utils.Helper
 import com.github.encryptsl.credit.utils.MigrationTool
+import com.github.encryptsl.credit.utils.MigrationTool.MigrationKey
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
@@ -103,14 +103,13 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
     @Permission("credit.admin.lang")
     fun onLangSwitch(
         commandSender: CommandSender,
-        @Argument(value = "isoKey", suggestions = "langKeys") isoKey: String
+        @Argument(value = "isoKey", suggestions = "langKeys") isoKey: LangKey
     ) {
         try {
-            val langKey = LangKey.valueOf(isoKey.uppercase())
-            creditLite.locale.setLocale(langKey)
+            creditLite.locale.setLocale(isoKey)
             commandSender.sendMessage(
                 creditLite.locale.translation("messages.admin.translation_switch",
-                    Placeholder.parsed("locale", langKey.name)
+                    Placeholder.parsed("locale", isoKey.name)
                 )
             )
         } catch (_: IllegalArgumentException) {

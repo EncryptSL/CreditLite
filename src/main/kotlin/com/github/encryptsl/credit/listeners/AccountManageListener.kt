@@ -15,9 +15,9 @@ class AccountManageListener(private val creditLite: com.github.encryptsl.credit.
 
         when (event.operationType) {
             OperationType.CREATE_ACCOUNT -> CreditEconomy.createAccount(player, creditLite.config.getDouble("economy.starting_balance"))
-            OperationType.CACHING_ACCOUNT -> CreditEconomy.cacheAccount(player, creditLite.creditModel.getBalance(player.uniqueId))
-            OperationType.SYNC_ACCOUNT -> CreditEconomy.syncAccount(player)
-            OperationType.REMOVE_ACCOUNT -> CreditEconomy.deleteAccount(player)
+            OperationType.CACHING_ACCOUNT -> CreditEconomy.cacheAccount(player.uniqueId, creditLite.creditModel.getBalance(player.uniqueId))
+            OperationType.SYNC_ACCOUNT -> CreditEconomy.syncAccount(player.uniqueId)
+            OperationType.REMOVE_ACCOUNT -> CreditEconomy.deleteAccount(player.uniqueId)
         }
     }
 }

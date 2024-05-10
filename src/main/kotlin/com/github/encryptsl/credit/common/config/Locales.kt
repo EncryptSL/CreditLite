@@ -1,13 +1,15 @@
 package com.github.encryptsl.credit.common.config
 
-import com.github.encryptsl.credit.api.enums.LangKey
 import com.github.encryptsl.credit.api.objects.ModernText
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
+import java.util.Optional
 
 class Locales(private val creditLite: com.github.encryptsl.credit.CreditLite, private val langVersion: String) {
+
+    enum class LangKey { CS }
 
     private var langYML: FileConfiguration? = null
 
@@ -18,11 +20,9 @@ class Locales(private val creditLite: com.github.encryptsl.credit.CreditLite, pr
         = ModernText.miniModernText(getMessage(translationKey), tagResolver)
 
     fun getMessage(value: String): String {
-        val key = langYML?.getString(value) ?:
-        langYML?.getString("messages.admin.translation_missing")?.replace("<key>", value)
+        val key = Optional.ofNullable(langYML?.getString(value)).orElse(langYML?.getString("messages.admin.translation_missing")?.replace("<key>", value))
         val prefix = creditLite.config.getString("plugin.prefix", "").toString()
-
-        return key?.replace("<prefix>", prefix) ?: "Translation missing error: $value"
+        return Optional.ofNullable(key?.replace("<prefix>", prefix)).orElse("Translation missing error: $value")
     }
 
     fun getList(value: String): MutableList<*>? {
@@ -36,15 +36,16 @@ class Locales(private val creditLite: com.github.encryptsl.credit.CreditLite, pr
     fun loadLocales() {
         for (lang in LangKey.entries) {
             val fileName = "message_${lang.name.lowercase()}"
-            val file = File("${creditLite.dataFolder}/locale/$fileName")
+            val file = File("${creditLite.dataFolder}/locale/", fileName)
             if (file.exists()) continue
             file.parentFile.mkdirs()
+            creditLite.logger.info("Locale file $fileName is created !")
             creditLite.saveResource("locale/$fileName", false)
         }
     }
 
     fun setLocale(langKey: LangKey) {
-        val currentLocale: String = creditLite.config.getString("plugin.translation") ?: return
+        val currentLocale: String = Optional.ofNullable(creditLite.config.getString("plugin.translation")).orElse("CS")
         val fileName = "message_${getRequiredLocaleOrFallback(langKey, currentLocale)}.yml"
         val file = File("${creditLite.dataFolder}/locale/", fileName)
         try {
@@ -52,7 +53,6 @@ class Locales(private val creditLite: com.github.encryptsl.credit.CreditLite, pr
                 file.parentFile.mkdirs()
                 creditLite.saveResource("locale/$fileName", false)
             }
-
             val existingVersion = YamlConfiguration.loadConfiguration(file).getString("version")
             if (existingVersion.isNullOrEmpty() || existingVersion != langVersion) {
                 val backupFile = File(creditLite.dataFolder, "locale/old_$fileName")
@@ -60,7 +60,7 @@ class Locales(private val creditLite: com.github.encryptsl.credit.CreditLite, pr
                 creditLite.saveResource("locale/$fileName", true)
             }
 
-            creditLite.config["plugin.translation"] = langKey.name
+            creditLite.config.set("plugin.translation", langKey.name)
             creditLite.saveConfig()
             creditLite.reloadConfig()
             creditLite.logger.info("Loaded translation $fileName [!]")
@@ -76,7 +76,7 @@ class Locales(private val creditLite: com.github.encryptsl.credit.CreditLite, pr
     }
 
     fun loadCurrentTranslation() {
-        val currentLocale: String = creditLite.config.getString("plugin.translation") ?: return
-        setLocale(LangKey.valueOf(currentLocale))
+        val optionalLocale: String = Optional.ofNullable(creditLite.config.getString("plugin.translation")).orElse("CS")
+        setLocale(LangKey.valueOf(optionalLocale))
     }
 }

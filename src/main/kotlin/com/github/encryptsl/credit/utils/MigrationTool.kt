@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter
 
 class MigrationTool(private val creditLite: com.github.encryptsl.credit.CreditLite) {
 
+    enum class MigrationKey { CSV, SQL, }
+
     fun migrateToCSV(data: List<MigrationData?>, fileName: String): Boolean {
         val file = File("${creditLite.dataFolder}/migration/", "${fileName}_${dateTime()}.csv")
 
@@ -55,6 +57,6 @@ class MigrationTool(private val creditLite: com.github.encryptsl.credit.CreditLi
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm")
         return LocalDateTime.now().format(formatter)
     }
-}
 
-data class MigrationData(val id: Int, val uuid: String, val username: String, val money: Double)
+    data class MigrationData(val id: Int, val uuid: String, val username: String, val money: Double)
+}

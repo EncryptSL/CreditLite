@@ -42,14 +42,14 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
             }
             val cSender = offlinePlayer ?: commandSender
 
-            if (!CreditEconomy.hasAccount(cSender))
+            if (!CreditEconomy.hasAccount(cSender.uniqueId))
                 return commandSender.sendMessage(creditLite.locale.translation("messages.error.account_not_exist",
                    Placeholder.parsed("account", cSender.name.toString())))
 
             commandSender.sendMessage(formatMessage)
         } else {
             offlinePlayer?.let {
-                if (!CreditEconomy.hasAccount(it))
+                if (!CreditEconomy.hasAccount(it.uniqueId))
                     return commandSender.sendMessage(creditLite.locale.translation("messages.error.account_not_exist",
                         Placeholder.parsed("account", it.name.toString())))
 

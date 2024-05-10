@@ -1,12 +1,12 @@
 package com.github.encryptsl.credit.common
 
 import com.github.encryptsl.credit.CreditLite
-import com.github.encryptsl.credit.api.enums.LangKey
-import com.github.encryptsl.credit.api.enums.MigrationKey
 import com.github.encryptsl.credit.api.enums.PurgeKey
 import com.github.encryptsl.credit.api.objects.ModernText
 import com.github.encryptsl.credit.commands.CreditCmd
 import com.github.encryptsl.credit.commands.CreditsCmd
+import com.github.encryptsl.credit.common.config.Locales
+import com.github.encryptsl.credit.utils.MigrationTool.MigrationKey
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.incendo.cloud.SenderMapper
@@ -71,7 +71,7 @@ class CommandManager(private val creditLite: CreditLite) {
             )
         }
         commandManager.parserRegistry().registerSuggestionProvider("langKeys") { _, _ ->
-            CompletableFuture.completedFuture(LangKey.entries.map { Suggestion.suggestion(it.name) })
+            CompletableFuture.completedFuture(Locales.LangKey.entries.map { Suggestion.suggestion(it.name) })
         }
         commandManager.parserRegistry().registerSuggestionProvider("purgeKeys") { _, _ ->
             CompletableFuture.completedFuture(PurgeKey.entries.map { Suggestion.suggestion(it.name) })

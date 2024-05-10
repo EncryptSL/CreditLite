@@ -1,6 +1,7 @@
 package com.github.encryptsl.credit.api.interfaces
 
 import org.bukkit.OfflinePlayer
+import java.util.UUID
 
 interface CreditAPI {
     /**
@@ -15,77 +16,77 @@ interface CreditAPI {
 
     /**
      * Cache player account during login
-     * @param player is OfflinePlayer
+     * @param uuid
      * @param amount is value of player account from database.
      * @return Boolean
      * @see Boolean
-     * @see OfflinePlayer
+     * @see UUID
      * @see com.github.encryptsl.credit.api.economy.CreditEconomy.getBalance(uuid: UUID)
      */
-    fun cacheAccount(player: OfflinePlayer, amount: Double): Boolean
+    fun cacheAccount(uuid: UUID, amount: Double): Boolean
 
     /**
      * Delete player account from database
-     * @param player is OfflinePlayer
+     * @param uuid
      * @return Boolean
-     * @see OfflinePlayer
+     * @see UUID
      */
-    fun deleteAccount(player: OfflinePlayer): Boolean
+    fun deleteAccount(uuid: UUID): Boolean
 
     /**
      * Boolean for check if player have account in database
-     * @param player is {@link OfflinePlayer}
+     * @param uuid
      * @return Boolean
-     * @see OfflinePlayer
+     * @see UUID
      */
-    fun hasAccount(player: OfflinePlayer): Boolean
+    fun hasAccount(uuid: UUID): Boolean
 
     /**
      * Boolean for check if player have enough money
-     * @param player is OfflinePlayer
+     * @param uuid
      * @return Boolean
-     * @see OfflinePlayer
+     * @see UUID
      */
-    fun has(player: OfflinePlayer, amount: Double): Boolean
+    fun has(uuid: UUID, amount: Double): Boolean
 
     /**
      * Get balance of player account
-     * @param player is OfflinePlayer
+     * @param uuid
      * @return Double
-     * @see OfflinePlayer
+     * @see UUID
      */
-    fun getBalance(player: OfflinePlayer): Double
+    fun getBalance(uuid: UUID): Double
 
     /**
      * Deposit credits to player account
-     * @param player is OfflinePlayer
+     * @param uuid
      * @param amount is amount added to player account
-     * @see OfflinePlayer
+     * @see UUID
      */
-    fun deposit(player: OfflinePlayer, amount: Double)
+    fun deposit(uuid: UUID, amount: Double)
 
     /**
      * Withdraw credits from player account
-     * @param player is OfflinePlayer
+     * @param uuid
      * @param amount is amount removed from player account
-     * @see OfflinePlayer
+     * @see UUID
      */
-    fun withdraw(player: OfflinePlayer, amount: Double)
+    fun withdraw(uuid: UUID, amount: Double)
 
     /**
      * Set fixed credits to player account
-     * @param player is OfflinePlayer
+     * @param uuid
      * @param amount is amount fixed value
-     * @see OfflinePlayer
+     * @see UUID
      */
-    fun set(player: OfflinePlayer, amount: Double)
+    fun set(uuid: UUID, amount: Double)
 
     /**
      * Synchronize cache with database
-     * @param offlinePlayer is OfflinePlayer
-     * @see OfflinePlayer
+     * @param uuid
+     * @see UUID
      */
-    fun syncAccount(offlinePlayer: OfflinePlayer)
+    fun syncAccount(uuid: UUID)
 
     /**
      * Synchronize all saved data in cache with database
