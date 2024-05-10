@@ -18,7 +18,7 @@ class CreditDepositListener(private val creditLite: com.github.encryptsl.credit.
         val money: Double = event.money
         val silent: Boolean = event.silent
 
-        if (!CreditEconomy.hasAccount(target))
+        if (!CreditEconomy.hasAccount(target.uniqueId))
             return sender.sendMessage(creditLite.locale.translation("messages.error.account_not_exist",
                 Placeholder.parsed("account", target.name.toString())))
 
@@ -27,7 +27,7 @@ class CreditDepositListener(private val creditLite: com.github.encryptsl.credit.
                     Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
                 ))
 
-        CreditEconomy.deposit(target, money)
+        CreditEconomy.deposit(target.uniqueId, money)
         creditLite.monologModel.info(creditLite.locale.getMessage("messages.monolog.admin.normal.deposit")
             .replace("<sender>", sender.name)
             .replace("<target>", target.name.toString())

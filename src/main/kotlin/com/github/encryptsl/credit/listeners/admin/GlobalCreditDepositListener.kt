@@ -18,9 +18,9 @@ class GlobalCreditDepositListener(private val creditLite: com.github.encryptsl.c
         val offlinePlayers = Bukkit.getOfflinePlayers()
 
         for (player in offlinePlayers) {
-            if (!CreditEconomy.hasAccount(player)) continue
+            if (!CreditEconomy.hasAccount(player.uniqueId)) continue
 
-            CreditEconomy.deposit(player, money)
+            CreditEconomy.deposit(player.uniqueId, money)
         }
 
         creditLite.monologModel.info(creditLite.locale.getMessage("messages.monolog.admin.global.deposit")

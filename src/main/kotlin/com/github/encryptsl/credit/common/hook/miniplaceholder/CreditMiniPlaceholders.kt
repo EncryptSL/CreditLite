@@ -15,27 +15,27 @@ class CreditMiniPlaceholders(private val creditLite: CreditLite) {
         val expansion = expansion("credits") {
             audiencePlaceholder("balance") { a, _, _ ->
                 val player: OfflinePlayer = a as OfflinePlayer
-                return@audiencePlaceholder Component.text(CreditEconomy.getBalance(player)).asInsertingTag()
+                return@audiencePlaceholder Component.text(CreditEconomy.getBalance(player.uniqueId)).asInsertingTag()
             }
             audiencePlaceholder("balance_formatted") { a, _, _ ->
                 val player: OfflinePlayer = a as OfflinePlayer
                 return@audiencePlaceholder Component
                     .text(creditLite.creditEconomyFormatting
-                        .formatted(CreditEconomy.getBalance(player))
+                        .formatted(CreditEconomy.getBalance(player.uniqueId))
                     ).asInsertingTag()
             }
             audiencePlaceholder("balance_full_formatted") { a, _, _ ->
                 val player: OfflinePlayer = a as OfflinePlayer
                 return@audiencePlaceholder Component
                     .text(creditLite.creditEconomyFormatting
-                        .fullFormatting(CreditEconomy.getBalance(player))
+                        .fullFormatting(CreditEconomy.getBalance(player.uniqueId))
                     ).asInsertingTag()
             }
             audiencePlaceholder("balance_compacted") { a, _, _ ->
                 val player: OfflinePlayer = a as OfflinePlayer
                 return@audiencePlaceholder Component
                     .text(creditLite.creditEconomyFormatting
-                        .compacted(CreditEconomy.getBalance(player))
+                        .compacted(CreditEconomy.getBalance(player.uniqueId))
                     ).asInsertingTag()
             }
             globalPlaceholder("top_rank_player") { _, _ ->

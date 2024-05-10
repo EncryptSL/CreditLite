@@ -17,13 +17,13 @@ class CreditWithdrawListener(private val creditLite: com.github.encryptsl.credit
         val target: OfflinePlayer = event.offlinePlayer
         val money: Double = event.money
 
-        if (!CreditEconomy.hasAccount(target))
+        if (!CreditEconomy.hasAccount(target.uniqueId))
             return sender.sendMessage(
                 creditLite.locale.translation("messages.error.account_not_exist",
                     Placeholder.parsed("account", target.name.toString())
                 ))
 
-        if (!CreditEconomy.has(target, money))
+        if (!CreditEconomy.has(target.uniqueId, money))
             return sender.sendMessage(creditLite.locale.translation("messages.error.insufficient_funds"))
 
         if (sender.name == target.name)
@@ -33,7 +33,7 @@ class CreditWithdrawListener(private val creditLite: com.github.encryptsl.credit
                 )
             )
 
-        CreditEconomy.withdraw(target, money)
+        CreditEconomy.withdraw(target.uniqueId, money)
         creditLite.monologModel.info(creditLite.locale.getMessage("messages.monolog.admin.normal.withdraw")
             .replace("<sender>", sender.name)
             .replace("<target>", target.name.toString())
