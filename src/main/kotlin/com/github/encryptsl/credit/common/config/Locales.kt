@@ -35,7 +35,7 @@ class Locales(private val creditLite: com.github.encryptsl.credit.CreditLite, pr
 
     fun loadLocales() {
         for (lang in LangKey.entries) {
-            val fileName = "message_${lang.name.lowercase()}"
+            val fileName = "message_${lang.name.lowercase()}.yml"
             val file = File("${creditLite.dataFolder}/locale/", fileName)
             if (file.exists()) continue
             file.parentFile.mkdirs()
