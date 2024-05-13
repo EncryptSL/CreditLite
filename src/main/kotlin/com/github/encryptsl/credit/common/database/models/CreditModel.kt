@@ -54,12 +54,10 @@ class CreditModel : DatabaseSQLProvider {
 
     override fun getBalance(uuid: UUID): CompletableFuture<Double> {
         val future = CompletableFuture<Double>()
-        loggedTransaction {
-            future.completeAsync {
-                Account.select(Account.uuid, Account.credit).where(Account.uuid eq uuid.toString()).first()[Account.credit]
-            }
+        val balance = loggedTransaction {
+            Account.select(Account.uuid, Account.credit).where(Account.uuid eq uuid.toString()).first()[Account.credit]
         }
-
+        future.completeAsync { balance }
         return future
     }
 
