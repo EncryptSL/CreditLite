@@ -22,7 +22,7 @@ object CreditEconomy : CreditAPI {
     override fun cacheAccount(uuid: UUID, amount: Double): Boolean {
         if (!hasAccount(uuid)) return false
 
-        walletCache.cacheAccount(uuid, getBalance(uuid))
+        walletCache.cacheAccount(uuid, amount)
         return true
     }
 
