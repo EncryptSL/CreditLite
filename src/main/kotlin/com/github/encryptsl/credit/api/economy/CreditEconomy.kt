@@ -39,7 +39,7 @@ object CreditEconomy : CreditAPI {
     }
 
     override fun hasAccount(uuid: UUID): Boolean {
-        return creditModel.getExistPlayerAccount(uuid)
+        return creditModel.getExistPlayerAccount(uuid).join()
     }
 
     override fun has(uuid: UUID, amount: Double): Boolean {
@@ -50,7 +50,7 @@ object CreditEconomy : CreditAPI {
         return if (walletCache.isPlayerOnline(uuid) || walletCache.isAccountCached(uuid))
             walletCache.getBalance(uuid)
         else
-            creditModel.getBalance(uuid)
+            creditModel.getBalance(uuid).join()
     }
 
     override fun deposit(uuid: UUID, amount: Double) {

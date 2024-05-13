@@ -36,6 +36,7 @@ dependencies {
     compileOnly("com.github.CodingAir:TradeSystem:v2.5.3")
     compileOnly("com.github.CodingAir:CodingAPI:1.79")
 
+    implementation("com.github.encryptsl:KMonoLib:1.0.0")
     implementation("org.incendo:cloud-paper:2.0.0-SNAPSHOT")
     implementation("org.incendo:cloud-annotations:2.0.0-SNAPSHOT") {
         exclude(group = "org.incendo", module = "cloud-core")
@@ -102,6 +103,7 @@ tasks {
         }
         relocate("de.codingair.codingapi", "de.codingair.tradesystem.lib.codingapi")
         minimize {
+            relocate("com.github.encryptsl.kmono.lib", "kmono-lib")
             relocate("org.incendo.cloud", "incendo-cloud")
         }
     }
