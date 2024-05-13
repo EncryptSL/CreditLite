@@ -33,12 +33,10 @@ class CreditModel : DatabaseSQLProvider {
     override fun getExistPlayerAccount(uuid: UUID): CompletableFuture<Boolean> {
         val future = CompletableFuture<Boolean>()
 
-        loggedTransaction {
-            future.completeAsync {
-                !Account.select(Account.uuid).where(Account.uuid eq uuid.toString()).empty()
-            }
+        val boolean = loggedTransaction {
+            !Account.select(Account.uuid).where(Account.uuid eq uuid.toString()).empty()
         }
-
+        future.completeAsync { boolean }
         return future
     }
 
