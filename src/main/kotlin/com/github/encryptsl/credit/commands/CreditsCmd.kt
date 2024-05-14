@@ -139,13 +139,14 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
             PurgeKey.MONO_LOG -> {
                 creditLite.monologModel.getLog().thenApply { el ->
                     if (el.isEmpty())
-                        throw Exception("messages.error.purge_monolog_fail")
+                        throw Exception("You can't delete monolog because is empty !")
                     return@thenApply el
                 }.thenApply { el ->
                     creditLite.monologModel.clearLogs()
                     commandSender.sendMessage(creditLite.locale.translation("messages.admin.purge_monolog_success", Placeholder.parsed("deleted", el.size.toString())))
                 }.exceptionally { el ->
-                    commandSender.sendMessage(creditLite.locale.translation(el.message ?: el.localizedMessage))
+                    commandSender.sendMessage(creditLite.locale.translation("messages.error.purge_monolog_fail"))
+                    creditLite.logger.severe(el.message ?: el.localizedMessage)
                 }
             }
             else -> {
