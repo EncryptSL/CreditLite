@@ -14,7 +14,7 @@ import org.incendo.cloud.annotations.AnnotationParser
 import org.incendo.cloud.bukkit.CloudBukkitCapabilities
 import org.incendo.cloud.execution.ExecutionCoordinator
 import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler
-import org.incendo.cloud.paper.PaperCommandManager
+import org.incendo.cloud.paper.LegacyPaperCommandManager
 import org.incendo.cloud.suggestion.Suggestion
 import java.util.concurrent.CompletableFuture
 
@@ -37,23 +37,22 @@ class CommandManager(private val creditLite: CreditLite) {
         }
     }
 
-    private fun createCommandManager(): PaperCommandManager<CommandSender> {
-        val mapperFunction = SenderMapper.identity<CommandSender>()
-        val commandManager = PaperCommandManager(
+    private fun createCommandManager(): LegacyPaperCommandManager<CommandSender> {
+        val commandManager = LegacyPaperCommandManager<CommandSender>(
             creditLite,
             ExecutionCoordinator.simpleCoordinator(),
-            mapperFunction
+            SenderMapper.identity<CommandSender>()
         )
         if (commandManager.hasCapability(CloudBukkitCapabilities.NATIVE_BRIGADIER)) {
             commandManager.registerBrigadier()
             commandManager.brigadierManager().setNativeNumberSuggestions(false)
         } else if (commandManager.hasCapability(CloudBukkitCapabilities.ASYNCHRONOUS_COMPLETION)) {
-            (commandManager as PaperCommandManager<*>).registerAsynchronousCompletions()
+            (commandManager as LegacyPaperCommandManager<*>).registerAsynchronousCompletions()
         }
         return commandManager
     }
 
-    private fun registerMinecraftExceptionHandler(commandManager: PaperCommandManager<CommandSender>) {
+    private fun registerMinecraftExceptionHandler(commandManager: LegacyPaperCommandManager<CommandSender>) {
         MinecraftExceptionHandler.createNative<CommandSender>()
             .defaultHandlers()
             .decorator { component ->
@@ -64,7 +63,7 @@ class CommandManager(private val creditLite: CreditLite) {
             .registerTo(commandManager)
     }
 
-    private fun registerSuggestionProviders(commandManager: PaperCommandManager<CommandSender>) {
+    private fun registerSuggestionProviders(commandManager: LegacyPaperCommandManager<CommandSender>) {
         commandManager.parserRegistry().registerSuggestionProvider("players") { _, _ ->
             CompletableFuture.completedFuture(Bukkit.getOfflinePlayers()
                 .map { Suggestion.suggestion(it.name.toString()) }
@@ -81,8 +80,7 @@ class CommandManager(private val creditLite: CreditLite) {
         }
     }
 
-    private fun createAnnotationParser(commandManager: PaperCommandManager<CommandSender>): AnnotationParser<CommandSender> {
+    private fun createAnnotationParser(commandManager: LegacyPaperCommandManager<CommandSender>): AnnotationParser<CommandSender> {
         return AnnotationParser<CommandSender>(commandManager, CommandSender::class.java)
     }
-
 }
