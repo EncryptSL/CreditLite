@@ -1,6 +1,5 @@
 package com.github.encryptsl.credit.commands
 
-import com.github.encryptsl.credit.api.Paginator
 import com.github.encryptsl.credit.api.enums.CheckLevel
 import com.github.encryptsl.credit.api.enums.PurgeKey
 import com.github.encryptsl.credit.api.events.*
@@ -14,6 +13,7 @@ import com.github.encryptsl.credit.utils.MigrationTool.MigrationKey
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
+import org.bukkit.util.ChatPaginator
 import org.incendo.cloud.annotation.specifier.Range
 import org.incendo.cloud.annotations.*
 import java.lang.Exception
@@ -154,7 +154,7 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
         }
     }
 
-    @Command("eco monolog [page] [player]")
+    @Command("credits monolog [page] [player]")
     @Permission("credit.admin.monolog")
     fun onLogView(commandSender: CommandSender, @Argument("page") @Default(value = "1") page: Int, @Argument("player") player: String?) {
         val log = helper.validateLog(player).map {
@@ -164,15 +164,17 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
                 .replace("<log>", it.log)
         }
         if (log.isEmpty()) return
-        val pagination = Paginator(log).apply { page(page) }
-        val isPageAboveMaxPages = page > pagination.maxPages
+        val pagination = ChatPaginator.paginate("\n$log", page)
+        val isPageAboveMaxPages = page > pagination.totalPages
 
         if (isPageAboveMaxPages)
             return commandSender.sendMessage(creditLite.locale.translation("messages.error.maximum_page",
-                Placeholder.parsed("max_page", pagination.maxPages.toString()))
+                Placeholder.parsed("max_page", pagination.totalPages.toString()))
             )
 
-        commandSender.sendMessage(ModernText.miniModernText(pagination.display()))
+        for (line in pagination.lines) {
+            commandSender.sendMessage(ModernText.miniModernText(line))
+        }
     }
 
     @Command("credits migration <argument>")
