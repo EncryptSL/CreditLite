@@ -26,19 +26,19 @@ class CreditWithdrawListener(private val creditLite: com.github.encryptsl.credit
         if (!CreditEconomy.has(target.uniqueId, money))
             return sender.sendMessage(creditLite.locale.translation("messages.error.insufficient_funds"))
 
-        if (sender.name == target.name)
-            return sender.sendMessage(
-                    creditLite.locale.translation("messages.self.withdraw_credit",
-                    Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
-                )
-            )
-
         CreditEconomy.withdraw(target.uniqueId, money)
         creditLite.monologModel.info(creditLite.locale.getMessage("messages.monolog.admin.normal.withdraw")
             .replace("<sender>", sender.name)
             .replace("<target>", target.name.toString())
             .replace("<credit>", creditLite.creditEconomyFormatting.fullFormatting(money))
         )
+
+        if (sender.name == target.name)
+            return sender.sendMessage(
+                creditLite.locale.translation("messages.self.withdraw_credit",
+                    Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
+                )
+            )
 
         sender.sendMessage(creditLite.locale.translation("messages.sender.withdraw_credit", TagResolver.resolver(
                     Placeholder.parsed("target", target.name.toString()),

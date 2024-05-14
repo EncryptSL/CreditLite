@@ -22,10 +22,6 @@ class CreditDepositListener(private val creditLite: com.github.encryptsl.credit.
             return sender.sendMessage(creditLite.locale.translation("messages.error.account_not_exist",
                 Placeholder.parsed("account", target.name.toString())))
 
-        if (sender.name == target.name && !target.isOp)
-            return sender.sendMessage(creditLite.locale.translation("messages.error.self_pay",
-                    Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
-                ))
 
         CreditEconomy.deposit(target.uniqueId, money)
         creditLite.monologModel.info(creditLite.locale.getMessage("messages.monolog.admin.normal.deposit")
@@ -33,6 +29,11 @@ class CreditDepositListener(private val creditLite: com.github.encryptsl.credit.
             .replace("<target>", target.name.toString())
             .replace("<credit>", creditLite.creditEconomyFormatting.fullFormatting(money))
         )
+
+        if (sender.name == target.name && !target.isOp)
+            return sender.sendMessage(creditLite.locale.translation("messages.error.self_pay",
+                Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
+            ))
 
         sender.sendMessage(
             creditLite.locale.translation("messages.sender.add_credit", TagResolver.resolver(

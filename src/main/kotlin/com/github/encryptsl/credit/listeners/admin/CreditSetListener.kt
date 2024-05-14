@@ -23,13 +23,6 @@ class CreditSetListener(private val creditLite: com.github.encryptsl.credit.Cred
                 Placeholder.parsed("account", target.name.toString())
            ))
 
-        if (sender.name == target.name)
-           return sender.sendMessage(
-               creditLite.locale.translation("messages.self.set_credit",
-                    Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
-               ))
-
-
         CreditEconomy.set(target.uniqueId, money)
 
         creditLite.monologModel.info(creditLite.locale.getMessage("messages.monolog.admin.normal.set")
@@ -37,6 +30,12 @@ class CreditSetListener(private val creditLite: com.github.encryptsl.credit.Cred
             .replace("<target>", target.name.toString())
             .replace("<credit>", creditLite.creditEconomyFormatting.fullFormatting(money))
         )
+
+        if (sender.name == target.name)
+            return sender.sendMessage(
+                creditLite.locale.translation("messages.self.set_credit",
+                    Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
+                ))
 
         sender.sendMessage(
             creditLite.locale.translation("messages.sender.set_credit", TagResolver.resolver(

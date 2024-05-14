@@ -38,6 +38,5 @@ class GlobalCreditWithdrawListener(private val creditLite: com.github.encryptsl.
                     Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
                 )
             ))
-        return
     }
 }
