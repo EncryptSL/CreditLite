@@ -31,12 +31,13 @@ class Helper(private val creditLite: com.github.encryptsl.credit.CreditLite) {
     }
 
     fun validateLog(player: String?): List<EconomyLog> {
-        val log = creditLite.monologModel.getLog()
-
-        if (player != null) {
-            return log.filter { l -> l.log.contains(player, true) }
+        val log = creditLite.monologModel.getLog().thenApply { el ->
+            if (player != null) {
+                return@thenApply el.filter { l -> l.log.contains(player, true) }
+            }
+            return@thenApply el
         }
-        return log
+        return log.join()
     }
 
     fun getTopBalances()

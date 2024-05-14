@@ -16,6 +16,7 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
 import org.incendo.cloud.annotation.specifier.Range
 import org.incendo.cloud.annotations.*
+import java.lang.Exception
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.system.measureTimeMillis
@@ -136,13 +137,16 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
                 commandSender.sendMessage(creditLite.locale.translation("messages.admin.purge_default_accounts"))
             }
             PurgeKey.MONO_LOG -> {
-                val logs = creditLite.monologModel.getLog()
-
-                if (logs.isEmpty())
-                    return commandSender.sendMessage(creditLite.locale.translation("messages.error.purge_monolog_fail"))
-
-                creditLite.monologModel.clearLogs()
-                commandSender.sendMessage(creditLite.locale.translation("messages.admin.purge_monolog_success", Placeholder.parsed("deleted", logs.size.toString())))
+                creditLite.monologModel.getLog().thenApply { el ->
+                    if (el.isEmpty())
+                        throw Exception("messages.error.purge_monolog_fail")
+                    return@thenApply el
+                }.thenApply { el ->
+                    creditLite.monologModel.clearLogs()
+                    commandSender.sendMessage(creditLite.locale.translation("messages.admin.purge_monolog_success", Placeholder.parsed("deleted", el.size.toString())))
+                }.exceptionally { el ->
+                    commandSender.sendMessage(creditLite.locale.translation(el.message ?: el.localizedMessage))
+                }
             }
             else -> {
                 commandSender.sendMessage(creditLite.locale.translation("messages.error.purge_argument"))

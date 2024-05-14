@@ -3,7 +3,7 @@ package com.github.encryptsl.credit.api.interfaces
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
-interface DatabaseSQLProvider {
+interface CreditDataSourceSQL {
     fun createPlayerAccount(username: String, uuid: UUID, credit: Double)
     fun deletePlayerAccount(uuid: UUID)
     fun getExistPlayerAccount(uuid: UUID): CompletableFuture<Boolean>

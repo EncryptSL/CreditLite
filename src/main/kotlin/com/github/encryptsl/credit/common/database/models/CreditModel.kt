@@ -1,6 +1,6 @@
 package com.github.encryptsl.credit.common.database.models
 
-import com.github.encryptsl.credit.api.interfaces.DatabaseSQLProvider
+import com.github.encryptsl.credit.api.interfaces.CreditDataSourceSQL
 import com.github.encryptsl.credit.common.database.tables.Account
 import com.github.encryptsl.credit.common.extensions.loggedTransaction
 import org.bukkit.Bukkit
@@ -12,7 +12,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
-class CreditModel : DatabaseSQLProvider {
+class CreditModel : CreditDataSourceSQL {
 
     override fun createPlayerAccount(username: String, uuid: UUID, credit: Double) {
         loggedTransaction {

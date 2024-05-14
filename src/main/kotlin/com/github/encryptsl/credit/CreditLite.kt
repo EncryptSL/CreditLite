@@ -8,7 +8,7 @@ import com.github.encryptsl.credit.common.CommandManager
 import com.github.encryptsl.credit.common.config.Locales
 import com.github.encryptsl.credit.common.database.DatabaseConnector
 import com.github.encryptsl.credit.common.database.models.CreditModel
-import com.github.encryptsl.credit.common.database.models.MonologModel
+import com.github.encryptsl.credit.common.database.models.monolog.MonologModel
 import com.github.encryptsl.credit.common.hook.HookManager
 import com.github.encryptsl.credit.listeners.AccountManageListener
 import com.github.encryptsl.credit.listeners.PlayerCreditPayListener
