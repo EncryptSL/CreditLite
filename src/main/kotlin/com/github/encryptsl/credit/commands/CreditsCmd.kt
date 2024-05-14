@@ -165,7 +165,7 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
                 .replace("<log>", it.log)
         }
         if (log.isEmpty()) return
-        val pagination = ChatPaginator.paginate("\n$log", page)
+        val pagination = ChatPaginator.paginate(log.joinToString("\n"), page)
         val isPageAboveMaxPages = page > pagination.totalPages
 
         if (isPageAboveMaxPages)
