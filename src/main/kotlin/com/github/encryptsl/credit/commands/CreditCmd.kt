@@ -1,6 +1,5 @@
 package com.github.encryptsl.credit.commands
 
-import com.github.encryptsl.credit.api.Paginator
 import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.events.PlayerCreditPayEvent
 import com.github.encryptsl.credit.api.objects.ModernText
@@ -10,6 +9,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.bukkit.util.ChatPaginator
 import org.incendo.cloud.annotation.specifier.Range
 import org.incendo.cloud.annotations.*
 
@@ -65,30 +65,28 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
     @ProxiedBy("cbaltop")
     @Command("credit top [page]")
     @Permission("credit.top")
-    fun onTopBalance(commandSender: CommandSender, @Argument(value = "page") @Range(min = "1", max="") page: Int?) {
-        val p = page ?: 1
-
+    fun onTopBalance(commandSender: CommandSender, @Argument(value = "page") @Default("1") page: Int) {
         val topPlayers = helper.getTopBalances()
 
         if (topPlayers.isEmpty()) return
 
-        val pagination = Paginator(topPlayers).apply {
-            page(p)
-        }
+        val paginator = ChatPaginator.paginate(topPlayers.joinToString("\n"), page)
 
-        if (p > pagination.maxPages)
+        if (page > paginator.totalPages)
             return commandSender.sendMessage(creditLite.locale.translation("messages.error.maximum_page",
-                Placeholder.parsed("max_page", pagination.maxPages.toString()))
+                Placeholder.parsed("max_page", paginator.totalPages.toString()))
             )
 
-        commandSender.sendMessage(
+        for (p in paginator.lines) {
+            commandSender.sendMessage(
                 creditLite.locale.translation("messages.balance.top_header",
-                TagResolver.resolver(
-                    Placeholder.parsed("page", pagination.page().toString()), Placeholder.parsed("max_page", pagination.maxPages.toString())
-                ))
-                .appendNewline().append(ModernText.miniModernText(pagination.display()))
-                .appendNewline().append(creditLite.locale.translation("messages.balance.top_footer"))
-        )
+                    TagResolver.resolver(
+                        Placeholder.parsed("page", paginator.pageNumber.toString()), Placeholder.parsed("max_page", paginator.totalPages.toString())
+                    ))
+                    .appendNewline().append(ModernText.miniModernText(p))
+                    .appendNewline().append(creditLite.locale.translation("messages.balance.top_footer"))
+            )
+        }
     }
 
     @ProxiedBy("cpay")

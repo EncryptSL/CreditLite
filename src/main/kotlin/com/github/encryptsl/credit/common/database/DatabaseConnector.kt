@@ -1,24 +1,29 @@
 package com.github.encryptsl.credit.common.database
 
-import com.github.encryptsl.credit.api.interfaces.DatabaseConnectorProvider
+import com.github.encryptsl.credit.CreditLite
 import com.github.encryptsl.credit.common.database.tables.Account
 import com.github.encryptsl.credit.common.database.tables.MonologTable
 import com.github.encryptsl.credit.common.extensions.loggedTransaction
+import com.github.encryptsl.kmono.lib.api.database.DatabaseBuilder
+import com.github.encryptsl.kmono.lib.api.database.DatabaseConnectorProvider
 import com.zaxxer.hikari.HikariDataSource
-import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 
-class DatabaseConnector : DatabaseConnectorProvider {
+class DatabaseConnector(private val creditLite: CreditLite) : DatabaseConnectorProvider {
+
+    override fun dataSource(): HikariDataSource {
+        return HikariDataSource()
+    }
 
     override fun initConnect(jdbcHost: String, user: String, pass: String) {
-        val config = HikariDataSource().apply {
-            maximumPoolSize = 10
-            jdbcUrl = jdbcHost
-            username = user
-            password = pass
-        }
-
-        Database.connect(config)
+        DatabaseBuilder.Builder()
+            .setJdbc(jdbcHost)
+            .setUser(user)
+            .setPassword(pass)
+            .setLogger(creditLite.slF4JLogger)
+            .setConnectionPool(10)
+            .setDatasource(dataSource())
+            .connect()
 
         loggedTransaction {
             SchemaUtils.create(Account, MonologTable)
