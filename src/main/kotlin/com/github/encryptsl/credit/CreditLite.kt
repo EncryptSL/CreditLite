@@ -37,6 +37,7 @@ class CreditLite : JavaPlugin() {
     private val configAPI: ConfigAPI by lazy { ConfigAPI(this) }
     private val hookManager: HookManager by lazy { HookManager(this) }
     private val commandManager: CommandManager by lazy { CommandManager(this) }
+    private val database: DatabaseConnector by lazy { DatabaseConnector(this) }
 
     override fun onLoad() {
         configAPI
@@ -44,12 +45,11 @@ class CreditLite : JavaPlugin() {
             .createConfig("config.yml", CONFIG_VERSION)
         locale.loadLocales()
         locale.loadCurrentTranslation()
-        DatabaseConnector()
-            .initConnect(
-                config.getString("database.connection.jdbc_url") ?: "jdbc:sqlite:plugins/LiteEco/database.db",
-                config.getString("database.connection.username") ?: "root",
-                config.getString("database.connection.password") ?: "admin"
-            )
+        database.initConnect(
+            config.getString("database.connection.jdbc_url") ?: "jdbc:sqlite:plugins/LiteEco/database.db",
+            config.getString("database.connection.username") ?: "root",
+            config.getString("database.connection.password") ?: "admin"
+        )
     }
 
     override fun onEnable() {
