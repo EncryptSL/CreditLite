@@ -10,21 +10,41 @@ import com.github.encryptsl.credit.common.extensions.getRandomString
 import com.github.encryptsl.credit.utils.Helper
 import com.github.encryptsl.credit.utils.MigrationTool
 import com.github.encryptsl.credit.utils.MigrationTool.MigrationKey
+import com.github.encryptsl.kmono.lib.api.commands.AnnotationFeatures
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
 import org.bukkit.util.ChatPaginator
 import org.incendo.cloud.annotation.specifier.Range
 import org.incendo.cloud.annotations.*
+import org.incendo.cloud.paper.LegacyPaperCommandManager
+import org.incendo.cloud.suggestion.Suggestion
 import java.lang.Exception
 import java.util.*
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.system.measureTimeMillis
 
 @Suppress("UNUSED")
 @CommandDescription("Provided plugin by CreditLite")
-class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) {
+class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) : AnnotationFeatures {
     private val helper: Helper = Helper(creditLite)
+
+    override fun registerFeatures(
+        annotationParser: AnnotationParser<CommandSender>,
+        commandManager: LegacyPaperCommandManager<CommandSender>
+    ) {
+        commandManager.parserRegistry().registerSuggestionProvider("langKeys") { _, _ ->
+            CompletableFuture.completedFuture(LangKey.entries.map { Suggestion.suggestion(it.name) })
+        }
+        commandManager.parserRegistry().registerSuggestionProvider("purgeKeys") { _, _ ->
+            CompletableFuture.completedFuture(PurgeKey.entries.map { Suggestion.suggestion(it.name) })
+        }
+        commandManager.parserRegistry().registerSuggestionProvider("migrationKeys") { _, _ ->
+            CompletableFuture.completedFuture(MigrationKey.entries.map { Suggestion.suggestion(it.name) })
+        }
+        annotationParser.parse(this)
+    }
 
     @Command("credits help")
     @Permission("credit.admin.help")

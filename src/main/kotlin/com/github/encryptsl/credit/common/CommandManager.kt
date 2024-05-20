@@ -1,12 +1,10 @@
 package com.github.encryptsl.credit.common
 
 import com.github.encryptsl.credit.CreditLite
-import com.github.encryptsl.credit.api.enums.PurgeKey
 import com.github.encryptsl.credit.api.objects.ModernText
 import com.github.encryptsl.credit.commands.CreditCmd
 import com.github.encryptsl.credit.commands.CreditsCmd
-import com.github.encryptsl.credit.common.config.Locales
-import com.github.encryptsl.credit.utils.MigrationTool.MigrationKey
+import com.github.encryptsl.kmono.lib.api.commands.AnnotationCommandRegister
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.incendo.cloud.SenderMapper
@@ -30,8 +28,8 @@ class CommandManager(private val creditLite: CreditLite) {
             registerSuggestionProviders(commandManager)
 
             val annotationParser = createAnnotationParser(commandManager)
-            annotationParser.parse(CreditCmd(creditLite))
-            annotationParser.parse(CreditsCmd(creditLite))
+            val register = AnnotationCommandRegister(creditLite, annotationParser, commandManager)
+            register.registerCommand(CreditCmd(creditLite), CreditsCmd(creditLite))
         } catch (e : NoClassDefFoundError) {
             creditLite.logger.severe(e.message ?: e.localizedMessage)
         }
@@ -68,15 +66,6 @@ class CommandManager(private val creditLite: CreditLite) {
             CompletableFuture.completedFuture(Bukkit.getOfflinePlayers()
                 .map { Suggestion.suggestion(it.name.toString()) }
             )
-        }
-        commandManager.parserRegistry().registerSuggestionProvider("langKeys") { _, _ ->
-            CompletableFuture.completedFuture(Locales.LangKey.entries.map { Suggestion.suggestion(it.name) })
-        }
-        commandManager.parserRegistry().registerSuggestionProvider("purgeKeys") { _, _ ->
-            CompletableFuture.completedFuture(PurgeKey.entries.map { Suggestion.suggestion(it.name) })
-        }
-        commandManager.parserRegistry().registerSuggestionProvider("migrationKeys") { _, _ ->
-            CompletableFuture.completedFuture(MigrationKey.entries.map { Suggestion.suggestion(it.name) })
         }
     }
 

@@ -11,18 +11,14 @@ import org.jetbrains.exposed.sql.SchemaUtils
 
 class DatabaseConnector(private val creditLite: CreditLite) : DatabaseConnectorProvider {
 
-    override fun dataSource(): HikariDataSource {
-        return HikariDataSource()
-    }
-
-    override fun initConnect(jdbcHost: String, user: String, pass: String) {
+    override fun createConnection(jdbcHost: String, user: String, pass: String) {
         DatabaseBuilder.Builder()
             .setJdbc(jdbcHost)
             .setUser(user)
             .setPassword(pass)
             .setLogger(creditLite.slF4JLogger)
             .setConnectionPool(10)
-            .setDatasource(dataSource())
+            .setDatasource(HikariDataSource())
             .connect()
 
         loggedTransaction {

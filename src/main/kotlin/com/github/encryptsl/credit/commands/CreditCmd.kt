@@ -4,6 +4,7 @@ import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.events.PlayerCreditPayEvent
 import com.github.encryptsl.credit.api.objects.ModernText
 import com.github.encryptsl.credit.utils.Helper
+import com.github.encryptsl.kmono.lib.api.commands.AnnotationFeatures
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.OfflinePlayer
@@ -12,11 +13,20 @@ import org.bukkit.entity.Player
 import org.bukkit.util.ChatPaginator
 import org.incendo.cloud.annotation.specifier.Range
 import org.incendo.cloud.annotations.*
+import org.incendo.cloud.paper.LegacyPaperCommandManager
 
 @Suppress("UNUSED")
 @CommandDescription("Provided plugin by CreditLite")
-class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) {
+class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) : AnnotationFeatures {
+
     private val helper: Helper = Helper(creditLite)
+
+    override fun registerFeatures(
+        annotationParser: AnnotationParser<CommandSender>,
+        commandManager: LegacyPaperCommandManager<CommandSender>
+    ) {
+        annotationParser.parse(this)
+    }
 
     @Command("credit help")
     @Permission("credit.help")
