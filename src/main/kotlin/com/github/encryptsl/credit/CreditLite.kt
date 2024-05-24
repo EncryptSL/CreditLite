@@ -43,7 +43,6 @@ class CreditLite : JavaPlugin() {
         configAPI
             .create("database.db")
             .createConfig("config.yml", CONFIG_VERSION)
-        locale.loadLocales()
         locale.loadCurrentTranslation()
         database.createConnection(
             config.getString("database.connection.jdbc_url") ?: "jdbc:sqlite:plugins/LiteEco/database.db",
