@@ -1,5 +1,6 @@
 package com.github.encryptsl.credit.commands
 
+import com.github.encryptsl.credit.api.Paginator
 import com.github.encryptsl.credit.api.enums.CheckLevel
 import com.github.encryptsl.credit.api.enums.PurgeKey
 import com.github.encryptsl.credit.api.events.*
@@ -14,7 +15,6 @@ import com.github.encryptsl.kmono.lib.api.commands.AnnotationFeatures
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
-import org.bukkit.util.ChatPaginator
 import org.incendo.cloud.annotation.specifier.Range
 import org.incendo.cloud.annotations.*
 import org.incendo.cloud.paper.LegacyPaperCommandManager
@@ -185,17 +185,15 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
                 .replace("<log>", it.log)
         }
         if (log.isEmpty()) return
-        val pagination = ChatPaginator.paginate(log.joinToString("\n"), page)
-        val isPageAboveMaxPages = page > pagination.totalPages
+        val pagination = Paginator(log).apply { page(1) }
+        val isPageAboveMaxPages = page > pagination.maxPages
 
         if (isPageAboveMaxPages)
             return commandSender.sendMessage(creditLite.locale.translation("messages.error.maximum_page",
-                Placeholder.parsed("max_page", pagination.totalPages.toString()))
+                Placeholder.parsed("max_page", pagination.maxPages.toString()))
             )
 
-        for (line in pagination.lines) {
-            commandSender.sendMessage(ModernText.miniModernText(line))
-        }
+        commandSender.sendMessage(ModernText.miniModernText(pagination.display()))
     }
 
     @Command("credits migration <argument>")
