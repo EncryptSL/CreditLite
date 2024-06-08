@@ -5,12 +5,12 @@ import com.github.encryptsl.credit.api.events.PlayerCreditPayEvent
 import com.github.encryptsl.credit.api.objects.ModernText
 import com.github.encryptsl.credit.utils.Helper
 import com.github.encryptsl.kmono.lib.api.commands.AnnotationFeatures
+import com.github.encryptsl.kmono.lib.utils.ComponentPaginator
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import org.bukkit.util.ChatPaginator
 import org.incendo.cloud.annotation.specifier.Range
 import org.incendo.cloud.annotations.*
 import org.incendo.cloud.paper.LegacyPaperCommandManager
@@ -80,21 +80,23 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
 
         if (topPlayers.isEmpty()) return
 
-        val paginator = ChatPaginator.paginate(topPlayers.joinToString("\n"), page)
+        val paginator = ComponentPaginator(topPlayers).apply { page(page) }
 
-        if (page > paginator.totalPages)
+        if (!paginator.hasNextPage())
             return commandSender.sendMessage(creditLite.locale.translation("messages.error.maximum_page",
-                Placeholder.parsed("max_page", paginator.totalPages.toString()))
+                Placeholder.parsed("max_page", paginator.maxPages.toString()))
             )
 
-        for (p in paginator.lines) {
+        for (component in paginator.display()) {
             commandSender.sendMessage(
                 creditLite.locale.translation("messages.balance.top_header",
                     TagResolver.resolver(
-                        Placeholder.parsed("page", paginator.pageNumber.toString()), Placeholder.parsed("max_page", paginator.totalPages.toString())
+                        Placeholder.parsed("page", paginator.currentPage().toString()), Placeholder.parsed("max_page", paginator.maxPages.toString())
                     ))
-                    .appendNewline().append(ModernText.miniModernText(p))
-                    .appendNewline().append(creditLite.locale.translation("messages.balance.top_footer"))
+                    .appendNewline()
+                    .append(component)
+                    .appendNewline()
+                    .append(creditLite.locale.translation("messages.balance.top_footer"))
             )
         }
     }

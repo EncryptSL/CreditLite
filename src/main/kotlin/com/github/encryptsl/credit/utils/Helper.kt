@@ -42,10 +42,11 @@ class Helper(private val creditLite: com.github.encryptsl.credit.CreditLite) {
 
     fun getTopBalances()
         = CreditEconomy.getTopBalance().toList().positionIndexed { index, pair ->
-            creditLite.locale.getMessage("messages.balance.top_format")
-                .replace("<position>", index.toString())
-                .replace("<player>", Bukkit.getOfflinePlayer(UUID.fromString(pair.first)).name.toString())
-                .replace("<credit>", creditLite.creditEconomyFormatting.fullFormatting(pair.second))
+            creditLite.locale.translation("messages.balance.top_format", TagResolver.resolver(
+                Placeholder.parsed("position", index.toString()),
+                Placeholder.parsed("player", Bukkit.getOfflinePlayer(UUID.fromString(pair.first)).name.toString()),
+                Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(pair.second))
+            ))
         }
 
     fun getComponentBal(offlinePlayer: OfflinePlayer): TagResolver {
