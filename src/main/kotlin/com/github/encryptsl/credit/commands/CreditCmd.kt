@@ -82,7 +82,7 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
 
         val paginator = ComponentPaginator(topPlayers).apply { page(page) }
 
-        if (!paginator.hasNextPage())
+        if (paginator.isAboveMaxPage(page))
             return commandSender.sendMessage(creditLite.locale.translation("messages.error.maximum_page",
                 Placeholder.parsed("max_page", paginator.maxPages.toString()))
             )
