@@ -46,25 +46,29 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
     @Permission("credit.balance")
     fun onBalance(commandSender: CommandSender, @Argument(value = "player", suggestions = "players") offlinePlayer: OfflinePlayer?) {
         if (commandSender is Player) {
-            val formatMessage = when(offlinePlayer) {
-                null -> creditLite.locale.translation("messages.balance.format", helper.getComponentBal(commandSender))
-                else -> creditLite.locale.translation("messages.balance.format_target", helper.getComponentBal(offlinePlayer))
-            }
             val cSender = offlinePlayer ?: commandSender
 
-            if (!CreditEconomy.hasAccount(cSender.uniqueId))
-                return commandSender.sendMessage(creditLite.locale.translation("messages.error.account_not_exist",
+           CreditEconomy.getUserByUUID(cSender).thenApply { user ->
+               val formatMessage = when(offlinePlayer) {
+                   null -> creditLite.locale.translation("messages.balance.format", helper.getComponentBal(user))
+                   else -> creditLite.locale.translation("messages.balance.format_target", helper.getComponentBal(user))
+               }
+               commandSender.sendMessage(formatMessage)
+           }.exceptionally {
+               commandSender.sendMessage(creditLite.locale.translation("messages.error.account_not_exist",
                    Placeholder.parsed("account", cSender.name.toString())))
-
-            commandSender.sendMessage(formatMessage)
+           }
         } else {
-            offlinePlayer?.let {
-                if (!CreditEconomy.hasAccount(it.uniqueId))
-                    return commandSender.sendMessage(creditLite.locale.translation("messages.error.account_not_exist",
-                        Placeholder.parsed("account", it.name.toString())))
-
-                return commandSender.sendMessage(
-                    creditLite.locale.translation("messages.balance.format_target", helper.getComponentBal(it)))
+            if (offlinePlayer != null) {
+                CreditEconomy.getUserByUUID(offlinePlayer).thenApply { user ->
+                    commandSender.sendMessage(
+                        creditLite.locale.translation("messages.balance.format_target", helper.getComponentBal(user))
+                    )
+                }.exceptionally {
+                    commandSender.sendMessage(creditLite.locale.translation("messages.error.account_not_exist",
+                        Placeholder.parsed("account", offlinePlayer.name.toString())))
+                }
+                return
             }
             creditLite.locale.getList("messages.help")?.forEach { s ->
                 commandSender.sendMessage(ModernText.miniModernText(s.toString()))

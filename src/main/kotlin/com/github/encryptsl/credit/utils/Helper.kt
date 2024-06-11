@@ -3,6 +3,7 @@ package com.github.encryptsl.credit.utils
 import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.enums.CheckLevel
 import com.github.encryptsl.credit.common.database.entity.EconomyLog
+import com.github.encryptsl.credit.common.database.entity.User
 import com.github.encryptsl.credit.common.extensions.isApproachingZero
 import com.github.encryptsl.credit.common.extensions.isNegative
 import com.github.encryptsl.credit.common.extensions.positionIndexed
@@ -10,7 +11,6 @@ import com.github.encryptsl.credit.common.extensions.toValidDecimal
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.Bukkit
-import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
 import java.util.*
 
@@ -49,12 +49,11 @@ class Helper(private val creditLite: com.github.encryptsl.credit.CreditLite) {
             ))
         }
 
-    fun getComponentBal(offlinePlayer: OfflinePlayer): TagResolver {
+    fun getComponentBal(user: User): TagResolver {
         return TagResolver.resolver(
-            Placeholder.parsed("target", offlinePlayer.name.toString()),
+            Placeholder.parsed("target", user.userName),
             Placeholder.parsed(
-                "credit",
-                creditLite.creditEconomyFormatting.fullFormatting(CreditEconomy.getBalance(offlinePlayer.uniqueId))
+                "credit", creditLite.creditEconomyFormatting.fullFormatting(user.money)
             )
         )
     }
