@@ -1,6 +1,7 @@
 package com.github.encryptsl.credit.common.database.models
 
 import com.github.encryptsl.credit.api.interfaces.CreditDataSourceSQL
+import com.github.encryptsl.credit.common.database.entity.User
 import com.github.encryptsl.credit.common.database.tables.Account
 import com.github.encryptsl.credit.common.extensions.loggedTransaction
 import org.bukkit.Bukkit
@@ -30,6 +31,20 @@ class CreditModel : CreditDataSourceSQL {
         }
     }
 
+    override fun getUserByUUID(uuid: UUID): CompletableFuture<User> {
+        val future = CompletableFuture<User>()
+        loggedTransaction {
+            val row = Account.select(Account.uuid, Account.username, Account.credit).where(Account.uuid eq uuid.toString()).singleOrNull()
+            if (row == null) {
+                future.completeExceptionally(RuntimeException("User not found !"))
+            } else {
+                future.completeAsync { User(row[Account.username], UUID.fromString(row[Account.uuid]), row[Account.credit]) }
+            }
+        }
+
+        return future
+    }
+
     override fun getExistPlayerAccount(uuid: UUID): CompletableFuture<Boolean> {
         val future = CompletableFuture<Boolean>()
 
@@ -40,25 +55,10 @@ class CreditModel : CreditDataSourceSQL {
         return future
     }
 
-    override fun getTopBalance(top: Int): MutableMap<String, Double> = loggedTransaction {
-        Account.selectAll().limit(top).orderBy(Account.credit, SortOrder.DESC).associate {
-            it[Account.uuid] to it[Account.credit]
-        }.toMutableMap()
-    }
-
     override fun getTopBalance(): MutableMap<String, Double> = loggedTransaction {
         Account.selectAll().orderBy(Account.credit, SortOrder.DESC).associate {
             it[Account.uuid] to it[Account.credit]
         }.toMutableMap()
-    }
-
-    override fun getBalance(uuid: UUID): CompletableFuture<Double> {
-        val future = CompletableFuture<Double>()
-        val balance = loggedTransaction {
-            Account.select(Account.uuid, Account.credit).where(Account.uuid eq uuid.toString()).first()[Account.credit]
-        }
-        future.completeAsync { balance }
-        return future
     }
 
     override fun depositCredit(uuid: UUID, credit: Double) {

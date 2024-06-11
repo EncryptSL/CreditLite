@@ -1,7 +1,9 @@
 package com.github.encryptsl.credit.api.interfaces
 
+import com.github.encryptsl.credit.common.database.entity.User
 import org.bukkit.OfflinePlayer
 import java.util.UUID
+import java.util.concurrent.CompletableFuture
 
 interface CreditAPI {
     /**
@@ -16,77 +18,83 @@ interface CreditAPI {
 
     /**
      * Cache player account during login
-     * @param uuid
+     * @param player
      * @param amount is value of player account from database.
-     * @return Boolean
-     * @see Boolean
-     * @see UUID
+     * @see OfflinePlayer
      * @see com.github.encryptsl.credit.api.economy.CreditEconomy.getBalance(uuid: UUID)
      */
-    fun cacheAccount(uuid: UUID, amount: Double): Boolean
+    fun cacheAccount(player: OfflinePlayer, amount: Double)
 
     /**
      * Delete player account from database
-     * @param uuid
+     * @param player
      * @return Boolean
-     * @see UUID
+     * @see OfflinePlayer
      */
-    fun deleteAccount(uuid: UUID): Boolean
+    fun deleteAccount(player: OfflinePlayer): Boolean
 
     /**
      * Boolean for check if player have account in database
-     * @param uuid
+     * @param uuid is {@link UUID}
      * @return Boolean
      * @see UUID
      */
-    fun hasAccount(uuid: UUID): Boolean
+    fun hasAccount(uuid: UUID): CompletableFuture<Boolean>
 
     /**
      * Boolean for check if player have enough money
-     * @param uuid
+     * @param player
      * @return Boolean
-     * @see UUID
+     * @see player
      */
-    fun has(uuid: UUID, amount: Double): Boolean
+    fun has(player: OfflinePlayer, amount: Double): Boolean
+
+    /**
+     * Get user account
+     * @param player is OfflinePlayer
+     * @return CompletableFuture<User>
+     * @see OfflinePlayer
+     */
+    fun getUserByUUID(player: OfflinePlayer): CompletableFuture<User>
 
     /**
      * Get balance of player account
-     * @param uuid
+     * @param player
      * @return Double
-     * @see UUID
+     * @see OfflinePlayer
      */
-    fun getBalance(uuid: UUID): Double
+    fun getBalance(player: OfflinePlayer): Double
 
     /**
      * Deposit credits to player account
-     * @param uuid
+     * @param player
      * @param amount is amount added to player account
-     * @see UUID
+     * @see OfflinePlayer
      */
-    fun deposit(uuid: UUID, amount: Double)
+    fun deposit(player: OfflinePlayer, amount: Double)
 
     /**
      * Withdraw credits from player account
-     * @param uuid
+     * @param player
      * @param amount is amount removed from player account
-     * @see UUID
+     * @see OfflinePlayer
      */
-    fun withdraw(uuid: UUID, amount: Double)
+    fun withdraw(player: OfflinePlayer, amount: Double)
 
     /**
      * Set fixed credits to player account
-     * @param uuid
+     * @param player
      * @param amount is amount fixed value
-     * @see UUID
+     * @see OfflinePlayer
      */
-    fun set(uuid: UUID, amount: Double)
+    fun set(player: OfflinePlayer, amount: Double)
 
     /**
      * Synchronize cache with database
-     * @param uuid
-     * @see UUID
+     * @param player
+     * @see OfflinePlayer
      */
-    fun syncAccount(uuid: UUID)
+    fun syncAccount(player: OfflinePlayer)
 
     /**
      * Synchronize all saved data in cache with database

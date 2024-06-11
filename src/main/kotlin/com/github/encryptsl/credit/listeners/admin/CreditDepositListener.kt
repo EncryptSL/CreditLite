@@ -18,20 +18,21 @@ class CreditDepositListener(private val creditLite: com.github.encryptsl.credit.
         val money: Double = event.money
         val silent: Boolean = event.silent
 
-        if (!CreditEconomy.hasAccount(target.uniqueId))
-            return sender.sendMessage(creditLite.locale.translation("messages.error.account_not_exist",
+
+        CreditEconomy.getUserByUUID(target).thenApply {
+            CreditEconomy.deposit(target, money)
+            creditLite.monologModel.info(creditLite.locale.getMessage("messages.monolog.admin.normal.deposit")
+                .replace("<sender>", sender.name)
+                .replace("<target>", target.name.toString())
+                .replace("<credit>", creditLite.creditEconomyFormatting.fullFormatting(money))
+            )
+        }.exceptionally {
+            sender.sendMessage(creditLite.locale.translation("messages.error.account_not_exist",
                 Placeholder.parsed("account", target.name.toString())))
+        }
 
-
-        CreditEconomy.deposit(target.uniqueId, money)
-        creditLite.monologModel.info(creditLite.locale.getMessage("messages.monolog.admin.normal.deposit")
-            .replace("<sender>", sender.name)
-            .replace("<target>", target.name.toString())
-            .replace("<credit>", creditLite.creditEconomyFormatting.fullFormatting(money))
-        )
-
-        if (sender.name == target.name && !target.isOp)
-            return sender.sendMessage(creditLite.locale.translation("messages.error.self_pay",
+        if (sender.name == target.name)
+            return sender.sendMessage(creditLite.locale.translation("messages.message.self.add_credit",
                 Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
             ))
 

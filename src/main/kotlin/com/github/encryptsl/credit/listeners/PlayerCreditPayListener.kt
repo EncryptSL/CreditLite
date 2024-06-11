@@ -16,25 +16,27 @@ class PlayerCreditPayListener(private val creditLite: com.github.encryptsl.credi
         val target: OfflinePlayer = event.target
         val money: Double = event.money
 
-        if (!CreditEconomy.hasAccount(target.uniqueId))
-            return sender.sendMessage(creditLite.locale.translation("messages.error.account_not_exist",
-                Placeholder.parsed("account", target.name.toString())))
-
-        if (!CreditEconomy.has(sender.uniqueId, money))
+        if (!CreditEconomy.has(sender, money))
             return sender.sendMessage(creditLite.locale.translation("messages.error.insufficient_funds"))
 
-        CreditEconomy.withdraw(sender.uniqueId, money)
-        CreditEconomy.deposit(target.uniqueId, money)
-        creditLite.monologModel.info(creditLite.locale.getMessage("messages.monolog.player.pay")
-            .replace("<sender>", sender.name)
-            .replace("<target>", target.name.toString())
-            .replace("<credit>", creditLite.creditEconomyFormatting.fullFormatting(money))
-        )
+        CreditEconomy.getUserByUUID(target).thenAccept {
+            sender.sendMessage(creditLite.locale.translation("messages.sender.add_credit", TagResolver.resolver(
+                Placeholder.parsed("target", target.name.toString()),
+                Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
+            )))
+        }.thenApply {
+            CreditEconomy.withdraw(sender, money)
+            CreditEconomy.deposit(target, money)
+            creditLite.monologModel.info(creditLite.locale.getMessage("messages.monolog.player.pay")
+                .replace("<sender>", sender.name)
+                .replace("<target>", target.name.toString())
+                .replace("<credit>", creditLite.creditEconomyFormatting.fullFormatting(money))
+            )
+        }.exceptionally {
+            sender.sendMessage(creditLite.locale.translation("messages.error.account_not_exist",
+                Placeholder.parsed("account", target.name.toString())))
+        }
 
-        sender.sendMessage(creditLite.locale.translation("messages.sender.add_credit", TagResolver.resolver(
-            Placeholder.parsed("target", target.name.toString()),
-            Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
-        )))
         if (target.isOnline) {
             target.player?.sendMessage(creditLite.locale.translation("messages.target.add_credit",
                 TagResolver.resolver(

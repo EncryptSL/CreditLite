@@ -17,9 +17,9 @@ class GlobalCreditWithdrawListener(private val creditLite: com.github.encryptsl.
         val offlinePlayers = Bukkit.getOfflinePlayers()
 
         for (player in offlinePlayers) {
-            if (!CreditEconomy.hasAccount(player.uniqueId)) continue
-
-            CreditEconomy.withdraw(player.uniqueId, money)
+            CreditEconomy.hasAccount(player.uniqueId).thenAccept {
+                CreditEconomy.withdraw(player, money)
+            }
         }
 
         creditLite.monologModel.info(creditLite.locale.getMessage("messages.monolog.admin.global.withdraw")
