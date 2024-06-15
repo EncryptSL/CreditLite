@@ -15,12 +15,10 @@ object CreditEconomy : CreditAPI {
     private val creditModel: CreditModel by lazy { CreditModel() }
 
     override fun createAccount(player: OfflinePlayer, startAmount: Double): Boolean {
-        return getUserByUUID(player).thenApply {
-            return@thenApply false
-        }.exceptionally {
+        return getUserByUUID(player).thenApply { false }.exceptionally {
             creditModel.createPlayerAccount(player.name.toString(), player.uniqueId, startAmount)
             return@exceptionally true
-        }.join()
+        }.get()
     }
 
     override fun cacheAccount(player: OfflinePlayer, amount: Double) {

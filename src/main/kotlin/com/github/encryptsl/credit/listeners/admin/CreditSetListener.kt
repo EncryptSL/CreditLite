@@ -17,6 +17,12 @@ class CreditSetListener(private val creditLite: com.github.encryptsl.credit.Cred
         val target: OfflinePlayer = event.offlinePlayer
         val money: Double = event.money
 
+        if (sender.name == target.name || !sender.hasPermission("credit.admin.set.self.exempt"))
+            return sender.sendMessage(
+                creditLite.locale.translation("messages.self.set_credit",
+                    Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
+                ))
+
         CreditEconomy.getUserByUUID(target).thenApply {
             CreditEconomy.set(target, money)
             creditLite.monologModel.info(creditLite.locale.getMessage("messages.monolog.admin.normal.set")
@@ -25,12 +31,6 @@ class CreditSetListener(private val creditLite: com.github.encryptsl.credit.Cred
                 .replace("<credit>", creditLite.creditEconomyFormatting.fullFormatting(money))
             )
         }
-
-        if (sender.name == target.name)
-            return sender.sendMessage(
-                creditLite.locale.translation("messages.self.set_credit",
-                    Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
-                ))
 
         sender.sendMessage(
             creditLite.locale.translation("messages.sender.set_credit", TagResolver.resolver(

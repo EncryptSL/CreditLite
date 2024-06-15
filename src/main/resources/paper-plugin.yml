@@ -42,8 +42,10 @@ permissions:
       credit.admin.help: true
       credit.admin.eco: true
       credit.admin.add: true
+      credit.admin.add.self.exempt: true
       credit.admin.global.add: true
       credit.admin.set: true
+      credit.admin.set.self.exempt: true
       credit.admin.global.set: true
       credit.admin.withdraw: true
       credit.admin.global.withdraw: true

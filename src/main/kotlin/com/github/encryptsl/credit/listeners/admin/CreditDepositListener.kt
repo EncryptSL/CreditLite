@@ -18,6 +18,10 @@ class CreditDepositListener(private val creditLite: com.github.encryptsl.credit.
         val money: Double = event.money
         val silent: Boolean = event.silent
 
+        if (sender.name == target.name || !sender.hasPermission("credit.admin.add.self.exempt"))
+            return sender.sendMessage(creditLite.locale.translation("messages.message.self.add_credit",
+                Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
+            ))
 
         CreditEconomy.getUserByUUID(target).thenApply {
             CreditEconomy.deposit(target, money)
@@ -30,11 +34,6 @@ class CreditDepositListener(private val creditLite: com.github.encryptsl.credit.
             sender.sendMessage(creditLite.locale.translation("messages.error.account_not_exist",
                 Placeholder.parsed("account", target.name.toString())))
         }
-
-        if (sender.name == target.name)
-            return sender.sendMessage(creditLite.locale.translation("messages.message.self.add_credit",
-                Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
-            ))
 
         sender.sendMessage(
             creditLite.locale.translation("messages.sender.add_credit", TagResolver.resolver(
