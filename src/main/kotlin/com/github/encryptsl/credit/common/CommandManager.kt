@@ -3,6 +3,7 @@ package com.github.encryptsl.credit.common
 import com.github.encryptsl.credit.CreditLite
 import com.github.encryptsl.credit.commands.CreditCmd
 import com.github.encryptsl.credit.commands.CreditsCmd
+import com.github.encryptsl.kmono.lib.api.ModernText
 import com.github.encryptsl.kmono.lib.api.commands.AnnotationCommandRegister
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
@@ -35,10 +36,10 @@ class CommandManager(private val creditLite: CreditLite) {
     }
 
     private fun createCommandManager(): LegacyPaperCommandManager<CommandSender> {
-        val commandManager = LegacyPaperCommandManager<CommandSender>(
+        val commandManager = LegacyPaperCommandManager(
             creditLite,
             ExecutionCoordinator.simpleCoordinator(),
-            SenderMapper.identity<CommandSender>()
+            SenderMapper.identity()
         )
         if (commandManager.hasCapability(CloudBukkitCapabilities.NATIVE_BRIGADIER)) {
             commandManager.registerBrigadier()

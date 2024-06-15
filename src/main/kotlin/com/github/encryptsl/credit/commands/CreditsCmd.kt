@@ -1,6 +1,5 @@
 package com.github.encryptsl.credit.commands
 
-import com.github.encryptsl.credit.api.Paginator
 import com.github.encryptsl.credit.api.enums.CheckLevel
 import com.github.encryptsl.credit.api.enums.PurgeKey
 import com.github.encryptsl.credit.api.events.*
@@ -10,9 +9,9 @@ import com.github.encryptsl.credit.common.extensions.getRandomString
 import com.github.encryptsl.credit.utils.Helper
 import com.github.encryptsl.credit.utils.MigrationTool
 import com.github.encryptsl.credit.utils.MigrationTool.MigrationKey
+import com.github.encryptsl.kmono.lib.api.ModernText
 import com.github.encryptsl.kmono.lib.api.commands.AnnotationFeatures
 import com.github.encryptsl.kmono.lib.utils.ComponentPaginator
-import com.github.encryptsl.kmono.lib.utils.StringPaginator
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.OfflinePlayer
@@ -21,7 +20,6 @@ import org.incendo.cloud.annotation.specifier.Range
 import org.incendo.cloud.annotations.*
 import org.incendo.cloud.paper.LegacyPaperCommandManager
 import org.incendo.cloud.suggestion.Suggestion
-import java.lang.Exception
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ThreadLocalRandom
