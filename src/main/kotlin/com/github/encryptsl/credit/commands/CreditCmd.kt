@@ -2,8 +2,8 @@ package com.github.encryptsl.credit.commands
 
 import com.github.encryptsl.credit.api.economy.CreditEconomy
 import com.github.encryptsl.credit.api.events.PlayerCreditPayEvent
-import com.github.encryptsl.credit.api.objects.ModernText
 import com.github.encryptsl.credit.utils.Helper
+import com.github.encryptsl.kmono.lib.api.ModernText
 import com.github.encryptsl.kmono.lib.api.commands.AnnotationFeatures
 import com.github.encryptsl.kmono.lib.utils.ComponentPaginator
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
@@ -58,22 +58,21 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
                commandSender.sendMessage(creditLite.locale.translation("messages.error.account_not_exist",
                    Placeholder.parsed("account", cSender.name.toString())))
            }
-        } else {
-            if (offlinePlayer != null) {
-                CreditEconomy.getUserByUUID(offlinePlayer).thenApply { user ->
-                    commandSender.sendMessage(
-                        creditLite.locale.translation("messages.balance.format_target", helper.getComponentBal(user))
-                    )
-                }.exceptionally {
-                    commandSender.sendMessage(creditLite.locale.translation("messages.error.account_not_exist",
-                        Placeholder.parsed("account", offlinePlayer.name.toString())))
-                }
-                return
-            }
-            creditLite.locale.getList("messages.help")?.forEach { s ->
-                commandSender.sendMessage(ModernText.miniModernText(s.toString()))
-            }
+            return
         }
+        if (offlinePlayer != null) {
+            CreditEconomy.getUserByUUID(offlinePlayer).thenApply { user ->
+                commandSender.sendMessage(
+                    creditLite.locale.translation("messages.balance.format_target", helper.getComponentBal(user))
+                )
+            }.exceptionally {
+                commandSender.sendMessage(creditLite.locale.translation("messages.error.account_not_exist",
+                    Placeholder.parsed("account", offlinePlayer.name.toString())))
+            }
+            return
+        }
+        creditLite.locale.getList("messages.help")
+            ?.forEach { s -> commandSender.sendMessage(ModernText.miniModernText(s.toString())) }
     }
 
     @ProxiedBy("cbaltop")
@@ -81,8 +80,6 @@ class CreditCmd(private val creditLite: com.github.encryptsl.credit.CreditLite) 
     @Permission("credit.top")
     fun onTopBalance(commandSender: CommandSender, @Argument(value = "page") @Default("1") page: Int) {
         val topPlayers = helper.getTopBalances()
-
-        if (topPlayers.isEmpty()) return
 
         val paginator = ComponentPaginator(topPlayers).apply { page(page) }
 

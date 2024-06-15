@@ -1,6 +1,6 @@
 package com.github.encryptsl.credit.common.config
 
-import com.github.encryptsl.credit.api.objects.ModernText
+import com.github.encryptsl.kmono.lib.api.ModernText
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
@@ -43,20 +43,27 @@ class Locales(private val creditLite: com.github.encryptsl.credit.CreditLite, pr
                 creditLite.saveResource("locale/$fileName", false)
             }
             val existingVersion = YamlConfiguration.loadConfiguration(file).getString("version")
-            if (existingVersion.isNullOrEmpty() || existingVersion != langVersion) {
-                val backupFile = File(creditLite.dataFolder, "locale/old_$fileName")
-                file.copyTo(backupFile, true)
-                creditLite.saveResource("locale/$fileName", true)
-            }
-
-            creditLite.config.set("plugin.translation", langKey.name)
-            creditLite.saveConfig()
-            creditLite.reloadConfig()
-            creditLite.logger.info("Loaded translation $fileName [!]")
+            copyOutDateLocale(file, fileName, existingVersion)
+            reloadLangFile(langKey, fileName)
 
             langYML = YamlConfiguration.loadConfiguration(file)
         } catch (_: Exception) {
             creditLite.logger.warning("Unsupported language, lang file for $langKey doesn't exist [!]")
+        }
+    }
+
+    private fun reloadLangFile(langKey: LangKey, fileName: String) {
+        creditLite.config.set("plugin.translation", langKey.name)
+        creditLite.saveConfig()
+        creditLite.reloadConfig()
+        creditLite.logger.info("Loaded translation $fileName [!]")
+    }
+
+    private fun copyOutDateLocale(file: File, fileName: String, version: String?) {
+        if (version.isNullOrEmpty() || version != langVersion) {
+            val backupFile = File(creditLite.dataFolder, "locale/old_$fileName")
+            file.copyTo(backupFile, true)
+            creditLite.saveResource("locale/$fileName", true)
         }
     }
 

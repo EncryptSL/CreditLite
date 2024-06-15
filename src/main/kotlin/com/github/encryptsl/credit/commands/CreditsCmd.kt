@@ -4,7 +4,6 @@ import com.github.encryptsl.credit.api.Paginator
 import com.github.encryptsl.credit.api.enums.CheckLevel
 import com.github.encryptsl.credit.api.enums.PurgeKey
 import com.github.encryptsl.credit.api.events.*
-import com.github.encryptsl.credit.api.objects.ModernText
 import com.github.encryptsl.credit.common.config.Locales.LangKey
 import com.github.encryptsl.credit.common.extensions.convertInstant
 import com.github.encryptsl.credit.common.extensions.getRandomString
@@ -12,7 +11,10 @@ import com.github.encryptsl.credit.utils.Helper
 import com.github.encryptsl.credit.utils.MigrationTool
 import com.github.encryptsl.credit.utils.MigrationTool.MigrationKey
 import com.github.encryptsl.kmono.lib.api.commands.AnnotationFeatures
+import com.github.encryptsl.kmono.lib.utils.ComponentPaginator
+import com.github.encryptsl.kmono.lib.utils.StringPaginator
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
 import org.incendo.cloud.annotation.specifier.Range
@@ -179,21 +181,20 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
     @Permission("credit.admin.monolog")
     fun onLogView(commandSender: CommandSender, @Argument("page") @Default(value = "1") page: Int, @Argument("player") player: String?) {
         val log = helper.validateLog(player).map {
-            creditLite.locale.getMessage("messages.admin.monolog_format")
-                .replace("<level>", it.level)
-                .replace("<timestamp>", convertInstant(it.timestamp))
-                .replace("<log>", it.log)
+            creditLite.locale.translation("messages.admin.monolog_format", TagResolver.resolver(
+                Placeholder.parsed("level", it.level),
+                Placeholder.parsed("timestamp", convertInstant(it.timestamp)),
+                Placeholder.parsed("log", it.log)
+            ))
         }
-        if (log.isEmpty()) return
-        val pagination = Paginator(log).apply { page(1) }
-        val isPageAboveMaxPages = page > pagination.maxPages
+        val pagination = ComponentPaginator(log).apply { page(1) }
 
-        if (isPageAboveMaxPages)
+        if (pagination.isAboveMaxPage(page))
             return commandSender.sendMessage(creditLite.locale.translation("messages.error.maximum_page",
                 Placeholder.parsed("max_page", pagination.maxPages.toString()))
             )
 
-        commandSender.sendMessage(ModernText.miniModernText(pagination.display()))
+        for (content in pagination.display()) { commandSender.sendMessage(content) }
     }
 
     @Command("credits migration <argument>")

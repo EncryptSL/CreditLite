@@ -1,7 +1,6 @@
 package com.github.encryptsl.credit.common
 
 import com.github.encryptsl.credit.CreditLite
-import com.github.encryptsl.credit.api.objects.ModernText
 import com.github.encryptsl.credit.commands.CreditCmd
 import com.github.encryptsl.credit.commands.CreditsCmd
 import com.github.encryptsl.kmono.lib.api.commands.AnnotationCommandRegister
