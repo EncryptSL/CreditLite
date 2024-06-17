@@ -11,7 +11,7 @@ import com.github.encryptsl.credit.utils.MigrationTool
 import com.github.encryptsl.credit.utils.MigrationTool.MigrationKey
 import com.github.encryptsl.kmono.lib.api.ModernText
 import com.github.encryptsl.kmono.lib.api.commands.AnnotationFeatures
-import com.github.encryptsl.kmono.lib.utils.ComponentPaginator
+import com.github.encryptsl.kmono.lib.utils.pagination.ComponentPaginator
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.OfflinePlayer

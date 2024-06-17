@@ -5,7 +5,7 @@ import com.github.encryptsl.credit.api.events.PlayerCreditPayEvent
 import com.github.encryptsl.credit.utils.Helper
 import com.github.encryptsl.kmono.lib.api.ModernText
 import com.github.encryptsl.kmono.lib.api.commands.AnnotationFeatures
-import com.github.encryptsl.kmono.lib.utils.ComponentPaginator
+import com.github.encryptsl.kmono.lib.utils.pagination.ComponentPaginator
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.OfflinePlayer
