@@ -42,11 +42,11 @@ class Locales(private val creditLite: com.github.encryptsl.credit.CreditLite, pr
                 file.parentFile.mkdirs()
                 creditLite.saveResource("locale/$fileName", false)
             }
-            val existingVersion = YamlConfiguration.loadConfiguration(file).getString("version")
+            langYML = YamlConfiguration.loadConfiguration(file)
+
+            val existingVersion = langYML?.getString("version")
             copyOutDateLocale(file, fileName, existingVersion)
             reloadLangFile(langKey, fileName)
-
-            langYML = YamlConfiguration.loadConfiguration(file)
         } catch (_: Exception) {
             creditLite.logger.warning("Unsupported language, lang file for $langKey doesn't exist [!]")
         }
@@ -68,7 +68,7 @@ class Locales(private val creditLite: com.github.encryptsl.credit.CreditLite, pr
     }
 
     private fun getRequiredLocaleOrFallback(langKey: LangKey, currentLocale: String): String {
-        return LangKey.entries.stream().map<String>(LangKey::name).filter {el -> el.equals(langKey.name, true)}.findFirst().orElse(currentLocale).lowercase()
+        return LangKey.entries.stream().map(LangKey::name).filter { el -> el.equals(langKey.name, true)}.findFirst().orElse(currentLocale).lowercase()
     }
 
     fun loadCurrentTranslation() {
