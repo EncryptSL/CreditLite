@@ -30,8 +30,7 @@ class ConfigAPI(private val creditLite: com.github.encryptsl.credit.CreditLite) 
 
             if (fileVersion.isNullOrEmpty() || fileVersion != version) {
                 file.copyTo(File(creditLite.dataFolder, "old_$configName"), true)
-                creditLite.saveResource(configName, true)
-                creditLite.config["version"] = version
+                creditLite.config.options().copyDefaults(true)
                 creditLite.saveConfig()
                 creditLite.logger.info("Configuration config.yml was outdated [!]")
             } else {
