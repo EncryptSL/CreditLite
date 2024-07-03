@@ -4,6 +4,7 @@ import java.io.File
 import java.io.FileWriter
 import java.io.IOException
 import java.io.PrintWriter
+import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -39,7 +40,7 @@ class MigrationTool(private val creditLite: com.github.encryptsl.credit.CreditLi
             file.parentFile.mkdirs()
             PrintWriter(FileWriter(file)).use { writer ->
                 writer.println("DROP TABLE IF EXISTS credits;")
-                writer.println("CREATE TABLE credits (id INT, uuid VARCHAR(36), username VARCHAR(16), credit DOUBLE);")
+                writer.println("CREATE TABLE credits (id INT, uuid VARCHAR(36), username VARCHAR(16), credit BigDecimal);")
                 val insertStatements = data.joinToString {
                     "\n(${it?.id}, '${it?.uuid}', '${it?.username}', ${it?.money})"
                 }
@@ -58,5 +59,5 @@ class MigrationTool(private val creditLite: com.github.encryptsl.credit.CreditLi
         return LocalDateTime.now().format(formatter)
     }
 
-    data class MigrationData(val id: Int, val uuid: String, val username: String, val money: Double)
+    data class MigrationData(val id: Int, val uuid: String, val username: String, val money: BigDecimal)
 }

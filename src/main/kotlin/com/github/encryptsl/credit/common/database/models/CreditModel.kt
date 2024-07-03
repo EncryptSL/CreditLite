@@ -10,12 +10,13 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.minus
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.notInList
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
+import java.math.BigDecimal
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
 class CreditModel : CreditDataSourceSQL {
 
-    override fun createPlayerAccount(username: String, uuid: UUID, credit: Double) {
+    override fun createPlayerAccount(username: String, uuid: UUID, credit: BigDecimal) {
         loggedTransaction {
             Account.insertIgnore {
                 it[Account.username] = username
@@ -55,27 +56,27 @@ class CreditModel : CreditDataSourceSQL {
         return future
     }
 
-    override fun getTopBalance(): MutableMap<String, Double> = loggedTransaction {
+    override fun getTopBalance(): MutableMap<String, BigDecimal> = loggedTransaction {
         Account.selectAll().orderBy(Account.credit, SortOrder.DESC).associate {
             it[Account.uuid] to it[Account.credit]
         }.toMutableMap()
     }
 
-    override fun depositCredit(uuid: UUID, credit: Double) {
+    override fun depositCredit(uuid: UUID, credit: BigDecimal) {
         loggedTransaction {
             Account.update({ Account.uuid eq uuid.toString() }) {
                 it[Account.credit] = Account.credit plus credit
             }
         }
     }
-    override fun withdrawCredit(uuid: UUID, credit: Double) {
+    override fun withdrawCredit(uuid: UUID, credit: BigDecimal) {
         loggedTransaction {
             Account.update({ Account.uuid eq uuid.toString() }) {
                 it[Account.credit] = Account.credit minus credit
             }
         }
     }
-    override fun setCredit(uuid: UUID, credit: Double) {
+    override fun setCredit(uuid: UUID, credit: BigDecimal) {
         loggedTransaction {
             Account.update({ Account.uuid eq uuid.toString() }) {
                 it[Account.credit] = credit
@@ -87,7 +88,7 @@ class CreditModel : CreditDataSourceSQL {
         loggedTransaction { Account.deleteAll() }
     }
 
-    override fun purgeDefaultAccounts(defaultCredit: Double) {
+    override fun purgeDefaultAccounts(defaultCredit: BigDecimal) {
         loggedTransaction { Account.deleteWhere { credit eq defaultCredit } }
     }
 

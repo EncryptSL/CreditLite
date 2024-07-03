@@ -14,7 +14,7 @@ class AccountManageListener(private val creditLite: com.github.encryptsl.credit.
         val player: Player = event.player
 
         when (event.operationType) {
-            OperationType.CREATE_ACCOUNT -> CreditEconomy.createAccount(player, creditLite.config.getDouble("economy.starting_balance"))
+            OperationType.CREATE_ACCOUNT -> CreditEconomy.createAccount(player, creditLite.config.getInt("economy.starting_balance").toBigDecimal())
             OperationType.CACHING_ACCOUNT -> { CreditEconomy.getUserByUUID(player)
                 .thenAccept { CreditEconomy.cacheAccount(player, it.money) }
             }

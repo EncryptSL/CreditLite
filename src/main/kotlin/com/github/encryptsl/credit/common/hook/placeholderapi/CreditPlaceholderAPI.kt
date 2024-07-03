@@ -4,6 +4,7 @@ import com.github.encryptsl.credit.api.economy.CreditEconomy
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
+import java.math.BigDecimal
 import java.util.*
 class CreditPlaceholderAPI(private val creditLite: com.github.encryptsl.credit.CreditLite, private val extVersion: String) : PlaceholderExpansion() {
 
@@ -53,16 +54,16 @@ class CreditPlaceholderAPI(private val creditLite: com.github.encryptsl.credit.C
         }
     }
 
-    private fun balanceByRank(rank: Int): Double {
+    private fun balanceByRank(rank: Int): BigDecimal {
         val topBalance = topBalance()
         return if (rank in 1..topBalance.size) {
             topBalance.values.elementAt(rank - 1)
         } else {
-            0.0
+            BigDecimal.ZERO
         }
     }
 
-    private fun topBalance(): Map<String, Double> {
+    private fun topBalance(): Map<String, BigDecimal> {
         return CreditEconomy.getTopBalance()
     }
 }

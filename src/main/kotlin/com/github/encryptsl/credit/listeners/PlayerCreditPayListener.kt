@@ -8,13 +8,14 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import java.math.BigDecimal
 
 class PlayerCreditPayListener(private val creditLite: com.github.encryptsl.credit.CreditLite) : Listener {
     @EventHandler
     fun onEconomyPay(event: PlayerCreditPayEvent) {
         val sender: Player = event.sender
         val target: OfflinePlayer = event.target
-        val money: Double = event.money
+        val money: BigDecimal = event.money
 
         if (!CreditEconomy.has(sender, money))
             return sender.sendMessage(creditLite.locale.translation("messages.error.insufficient_funds"))

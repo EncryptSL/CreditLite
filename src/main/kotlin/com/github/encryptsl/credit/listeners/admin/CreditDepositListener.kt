@@ -8,6 +8,7 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import java.math.BigDecimal
 
 class CreditDepositListener(private val creditLite: com.github.encryptsl.credit.CreditLite) : Listener {
 
@@ -15,13 +16,8 @@ class CreditDepositListener(private val creditLite: com.github.encryptsl.credit.
     fun onCreditDeposit(event: CreditDepositEvent) {
         val sender: CommandSender = event.commandSender
         val target: OfflinePlayer = event.offlinePlayer
-        val money: Double = event.money
+        val money: BigDecimal = event.money
         val silent: Boolean = event.silent
-
-        if (sender.name == target.name || !sender.hasPermission("credit.admin.add.self.exempt"))
-            return sender.sendMessage(creditLite.locale.translation("messages.message.self.add_credit",
-                Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
-            ))
 
         CreditEconomy.getUserByUUID(target).thenApply {
             CreditEconomy.deposit(target, money)
@@ -34,6 +30,11 @@ class CreditDepositListener(private val creditLite: com.github.encryptsl.credit.
             sender.sendMessage(creditLite.locale.translation("messages.error.account_not_exist",
                 Placeholder.parsed("account", target.name.toString())))
         }
+
+        if (sender.name == target.name || sender.hasPermission("credit.admin.add.self.exempt"))
+            return sender.sendMessage(creditLite.locale.translation("messages.message.self.add_credit",
+                Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
+            ))
 
         sender.sendMessage(
             creditLite.locale.translation("messages.sender.add_credit", TagResolver.resolver(

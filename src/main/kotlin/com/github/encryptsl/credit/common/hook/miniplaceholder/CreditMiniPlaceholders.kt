@@ -7,6 +7,7 @@ import io.github.miniplaceholders.kotlin.expansion
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
+import java.math.BigDecimal
 import java.util.*
 
 class CreditMiniPlaceholders(private val creditLite: CreditLite) {
@@ -15,7 +16,7 @@ class CreditMiniPlaceholders(private val creditLite: CreditLite) {
         val expansion = expansion("credits") {
             audiencePlaceholder("balance") { a, _, _ ->
                 val player: OfflinePlayer = a as OfflinePlayer
-                return@audiencePlaceholder Component.text(CreditEconomy.getBalance(player)).asInsertingTag()
+                return@audiencePlaceholder Component.text(CreditEconomy.getBalance(player).toPlainString()).asInsertingTag()
             }
             audiencePlaceholder("balance_formatted") { a, _, _ ->
                 val player: OfflinePlayer = a as OfflinePlayer
@@ -51,7 +52,7 @@ class CreditMiniPlaceholders(private val creditLite: CreditLite) {
                 return@globalPlaceholder Component.text(creditLite.creditEconomyFormatting.compacted(balanceByRank(i.popOr("You need provide position.").value().toInt()))).asInsertingTag()
             }
             globalPlaceholder("top_balance") { i, _ ->
-                return@globalPlaceholder Component.text(balanceByRank(i.popOr("You need provide position.").value().toInt())).asInsertingTag()
+                return@globalPlaceholder Component.text(balanceByRank(i.popOr("You need provide position.").value().toInt()).toPlainString()).asInsertingTag()
             }
             globalPlaceholder("top_player") { i, _ ->
                 return@globalPlaceholder Component.text(nameByRank(i.popOr("You need provide position.").value().toInt())).asInsertingTag()
@@ -70,16 +71,16 @@ class CreditMiniPlaceholders(private val creditLite: CreditLite) {
         }
     }
 
-    private fun balanceByRank(rank: Int): Double {
+    private fun balanceByRank(rank: Int): BigDecimal {
         val topBalance = topBalance()
         return if (rank in 1..topBalance.size) {
             topBalance.values.elementAt(rank - 1)
         } else {
-            0.0
+            BigDecimal.ZERO
         }
     }
 
-    private fun topBalance(): Map<String, Double> {
+    private fun topBalance(): Map<String, BigDecimal> {
         return CreditEconomy.getTopBalance()
     }
 

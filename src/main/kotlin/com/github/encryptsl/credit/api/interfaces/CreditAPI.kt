@@ -2,6 +2,7 @@ package com.github.encryptsl.credit.api.interfaces
 
 import com.github.encryptsl.credit.common.database.entity.User
 import org.bukkit.OfflinePlayer
+import java.math.BigDecimal
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
@@ -14,7 +15,7 @@ interface CreditAPI {
      * @see Boolean
      * @see OfflinePlayer
      */
-    fun createAccount(player: OfflinePlayer, startAmount: Double): Boolean
+    fun createAccount(player: OfflinePlayer, startAmount: BigDecimal): Boolean
 
     /**
      * Cache player account during login
@@ -23,7 +24,7 @@ interface CreditAPI {
      * @see OfflinePlayer
      * @see com.github.encryptsl.credit.api.economy.CreditEconomy.getBalance(uuid: UUID)
      */
-    fun cacheAccount(player: OfflinePlayer, amount: Double)
+    fun cacheAccount(player: OfflinePlayer, amount: BigDecimal)
 
     /**
      * Delete player account from database
@@ -44,10 +45,11 @@ interface CreditAPI {
     /**
      * Boolean for check if player have enough money
      * @param player
+     * @param amount
      * @return Boolean
      * @see player
      */
-    fun has(player: OfflinePlayer, amount: Double): Boolean
+    fun has(player: OfflinePlayer, amount: BigDecimal): Boolean
 
     /**
      * Get user account
@@ -60,10 +62,10 @@ interface CreditAPI {
     /**
      * Get balance of player account
      * @param player
-     * @return Double
+     * @return BigDecimal
      * @see OfflinePlayer
      */
-    fun getBalance(player: OfflinePlayer): Double
+    fun getBalance(player: OfflinePlayer): BigDecimal
 
     /**
      * Deposit credits to player account
@@ -71,7 +73,7 @@ interface CreditAPI {
      * @param amount is amount added to player account
      * @see OfflinePlayer
      */
-    fun deposit(player: OfflinePlayer, amount: Double)
+    fun deposit(player: OfflinePlayer, amount: BigDecimal)
 
     /**
      * Withdraw credits from player account
@@ -79,7 +81,7 @@ interface CreditAPI {
      * @param amount is amount removed from player account
      * @see OfflinePlayer
      */
-    fun withdraw(player: OfflinePlayer, amount: Double)
+    fun withdraw(player: OfflinePlayer, amount: BigDecimal)
 
     /**
      * Set fixed credits to player account
@@ -87,7 +89,7 @@ interface CreditAPI {
      * @param amount is amount fixed value
      * @see OfflinePlayer
      */
-    fun set(player: OfflinePlayer, amount: Double)
+    fun set(player: OfflinePlayer, amount: BigDecimal)
 
     /**
      * Synchronize cache with database
@@ -105,6 +107,6 @@ interface CreditAPI {
      * Get top player accounts
      * @return MutableMap
      */
-    fun getTopBalance(): Map<String, Double>
+    fun getTopBalance(): Map<String, BigDecimal>
 
 }

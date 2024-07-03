@@ -3,18 +3,19 @@ package com.github.encryptsl.credit.api.economy
 import com.github.encryptsl.credit.common.extensions.compactFormat
 import com.github.encryptsl.credit.common.extensions.moneyFormat
 import org.bukkit.configuration.file.FileConfiguration
+import java.math.BigDecimal
 
 class CreditEconomyFormatting(private val configuration: FileConfiguration) {
 
-    fun compacted(amount: Double): String {
+    fun compacted(amount: BigDecimal): String {
         return amount.compactFormat(configuration.getString("formatting.currency_pattern").toString(), configuration.getString("formatting.compacted_pattern").toString(), configuration.getString("formatting.currency_locale").toString())
     }
 
-    fun formatted(amount: Double): String {
+    fun formatted(amount: BigDecimal): String {
         return amount.moneyFormat(configuration.getString("formatting.currency_pattern").toString(), configuration.getString("formatting.currency_locale").toString())
     }
 
-    fun fullFormatting(amount: Double): String {
+    fun fullFormatting(amount: BigDecimal): String {
         val value = if (configuration.getBoolean("economy.compact_display")) {
             compacted(amount)
         }

@@ -153,7 +153,7 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
                 commandSender.sendMessage(creditLite.locale.translation("messages.admin.purge_null_accounts"))
             }
             PurgeKey.DEFAULT_ACCOUNTS -> {
-                creditLite.creditModel.purgeDefaultAccounts(creditLite.config.getDouble("economy.starting_balance"))
+                creditLite.creditModel.purgeDefaultAccounts(creditLite.config.getInt("economy.starting_balance").toBigDecimal())
                 commandSender.sendMessage(creditLite.locale.translation("messages.admin.purge_default_accounts"))
             }
             PurgeKey.MONO_LOG -> {
@@ -224,7 +224,7 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
 
         val time = measureTimeMillis {
             for (i in 1 .. amountStr) {
-                creditLite.creditModel.createPlayerAccount(getRandomString(6), UUID.randomUUID(), random.nextDouble(1000.0, 500000.0))
+                creditLite.creditModel.createPlayerAccount(getRandomString(6), UUID.randomUUID(), random.nextDouble(1000.0, 500000.0).toBigDecimal())
             }
         }
 

@@ -4,9 +4,10 @@ import org.bukkit.command.CommandSender
 import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
+import java.math.BigDecimal
 
 @Suppress("UNUSED")
-class GlobalCreditWithdrawEvent(val commandSender: CommandSender, val money: Double): Event(), Cancellable {
+class GlobalCreditWithdrawEvent(val commandSender: CommandSender, val money: BigDecimal): Event(), Cancellable {
 
     private var isCancelled: Boolean = false
 

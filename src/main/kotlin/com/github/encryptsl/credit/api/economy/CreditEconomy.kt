@@ -6,6 +6,7 @@ import com.github.encryptsl.credit.common.database.entity.User
 import com.github.encryptsl.credit.common.database.models.CreditModel
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
+import java.math.BigDecimal
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
@@ -14,14 +15,14 @@ object CreditEconomy : CreditAPI {
     private val walletCache: PlayerWalletCache by lazy { PlayerWalletCache() }
     private val creditModel: CreditModel by lazy { CreditModel() }
 
-    override fun createAccount(player: OfflinePlayer, startAmount: Double): Boolean {
+    override fun createAccount(player: OfflinePlayer, startAmount: BigDecimal): Boolean {
         return getUserByUUID(player).thenApply { false }.exceptionally {
             creditModel.createPlayerAccount(player.name.toString(), player.uniqueId, startAmount)
             return@exceptionally true
         }.get()
     }
 
-    override fun cacheAccount(player: OfflinePlayer, amount: Double) {
+    override fun cacheAccount(player: OfflinePlayer, amount: BigDecimal) {
         getUserByUUID(player).thenAccept { walletCache.cacheAccount(player.uniqueId, amount) }
     }
 
@@ -39,7 +40,7 @@ object CreditEconomy : CreditAPI {
         return creditModel.getExistPlayerAccount(uuid)
     }
 
-    override fun has(player: OfflinePlayer, amount: Double): Boolean {
+    override fun has(player: OfflinePlayer, amount: BigDecimal): Boolean {
         return amount <= getBalance(player)
     }
 
@@ -55,11 +56,11 @@ object CreditEconomy : CreditAPI {
         return future
     }
 
-    override fun getBalance(player: OfflinePlayer): Double {
+    override fun getBalance(player: OfflinePlayer): BigDecimal {
         return getUserByUUID(player).join().money
     }
 
-    override fun deposit(player: OfflinePlayer, amount: Double) {
+    override fun deposit(player: OfflinePlayer, amount: BigDecimal) {
         if (walletCache.isPlayerOnline(player.uniqueId)) {
             cacheAccount(player, getBalance(player).plus(amount))
         } else {
@@ -67,7 +68,7 @@ object CreditEconomy : CreditAPI {
         }
     }
 
-    override fun withdraw(player: OfflinePlayer, amount: Double) {
+    override fun withdraw(player: OfflinePlayer, amount: BigDecimal) {
         if (walletCache.isPlayerOnline(player.uniqueId)) {
             cacheAccount(player, getBalance(player).minus(amount))
         } else {
@@ -75,7 +76,7 @@ object CreditEconomy : CreditAPI {
         }
     }
 
-    override fun set(player: OfflinePlayer, amount: Double) {
+    override fun set(player: OfflinePlayer, amount: BigDecimal) {
         if (walletCache.isPlayerOnline(player.uniqueId)) {
             cacheAccount(player, amount)
         } else {
@@ -91,7 +92,7 @@ object CreditEconomy : CreditAPI {
         walletCache.syncAccounts()
     }
 
-    override fun getTopBalance(): Map<String, Double> {
+    override fun getTopBalance(): Map<String, BigDecimal> {
         val databaseStoredData = creditModel.getTopBalance().filterNot { e -> Bukkit.getOfflinePlayer(e.key).name == null }
 
         return databaseStoredData

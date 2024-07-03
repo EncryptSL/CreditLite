@@ -1,20 +1,22 @@
 package com.github.encryptsl.credit.common.extensions
 
-fun Double.isNegative(): Boolean {
-    return this < 0
+import java.math.BigDecimal
+
+fun BigDecimal.isNegative(): Boolean {
+    return this < BigDecimal.ZERO
 }
 
-fun Double.isZero(): Boolean {
-    return this == 0.0
+fun BigDecimal.isZero(): Boolean {
+    return this == BigDecimal.ZERO
 }
 
-fun Double.isApproachingZero(): Boolean {
-    return this < 0.01
+fun BigDecimal.isApproachingZero(): Boolean {
+    return this < BigDecimal.valueOf(0.001)
 }
 
 fun String.isDecimal(): Boolean {
     return toDoubleOrNull()?.takeIf { it.isFinite() } != null
 }
-fun String.toDecimal(): Double? {
-    return toDoubleOrNull()?.takeIf { it.isFinite() }
+fun String.toDecimal(): BigDecimal? {
+    return toDoubleOrNull()?.takeIf { it.isFinite() }?.toBigDecimal()
 }

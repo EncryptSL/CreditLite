@@ -1,9 +1,10 @@
 package com.github.encryptsl.credit.api.interfaces
 
+import java.math.BigDecimal
 import java.util.*
 
 interface AccountAPI {
-    fun cacheAccount(uuid: UUID, value: Double)
+    fun cacheAccount(uuid: UUID, value: BigDecimal)
 
     fun syncAccount(uuid: UUID)
 
@@ -11,7 +12,7 @@ interface AccountAPI {
 
     fun removeAccount(uuid: UUID)
 
-    fun getBalance(uuid: UUID): Double
+    fun getBalance(uuid: UUID): BigDecimal
 
     fun isAccountCached(uuid: UUID): Boolean
 

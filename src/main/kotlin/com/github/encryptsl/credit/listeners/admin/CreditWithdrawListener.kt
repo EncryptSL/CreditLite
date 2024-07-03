@@ -8,6 +8,7 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import java.math.BigDecimal
 
 class CreditWithdrawListener(private val creditLite: com.github.encryptsl.credit.CreditLite) : Listener {
 
@@ -15,7 +16,7 @@ class CreditWithdrawListener(private val creditLite: com.github.encryptsl.credit
     fun onAdminEconomyMoneyWithdraw(event: CreditWithdrawEvent) {
         val sender: CommandSender = event.commandSender
         val target: OfflinePlayer = event.offlinePlayer
-        val money: Double = event.money
+        val money: BigDecimal = event.money
 
         if (!CreditEconomy.has(target, money))
             return sender.sendMessage(creditLite.locale.translation("messages.error.insufficient_funds"))

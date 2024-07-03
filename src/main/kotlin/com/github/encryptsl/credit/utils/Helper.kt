@@ -12,10 +12,11 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
+import java.math.BigDecimal
 import java.util.*
 
 class Helper(private val creditLite: com.github.encryptsl.credit.CreditLite) {
-    fun validateAmount(amountStr: String, commandSender: CommandSender, checkLevel: CheckLevel = CheckLevel.FULL): Double? {
+    fun validateAmount(amountStr: String, commandSender: CommandSender, checkLevel: CheckLevel = CheckLevel.FULL): BigDecimal? {
         val amount = amountStr.toValidDecimal()
         return when {
             amount == null -> {
