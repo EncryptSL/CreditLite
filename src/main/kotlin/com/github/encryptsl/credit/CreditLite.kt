@@ -10,10 +10,7 @@ import com.github.encryptsl.credit.common.database.DatabaseConnector
 import com.github.encryptsl.credit.common.database.models.CreditModel
 import com.github.encryptsl.credit.common.database.models.monolog.MonologModel
 import com.github.encryptsl.credit.common.hook.HookManager
-import com.github.encryptsl.credit.listeners.AccountManageListener
-import com.github.encryptsl.credit.listeners.PlayerCreditPayListener
-import com.github.encryptsl.credit.listeners.PlayerJoinListener
-import com.github.encryptsl.credit.listeners.PlayerQuitListener
+import com.github.encryptsl.credit.listeners.*
 import com.github.encryptsl.credit.listeners.admin.*
 import org.bukkit.plugin.PluginManager
 import org.bukkit.plugin.ServicePriority
@@ -88,6 +85,7 @@ class CreditLite : JavaPlugin() {
                 CreditWithdrawListener(this),
                 CreditSetListener(this),
                 PlayerJoinListener(this),
+                PlayerLoginListener(this),
                 PlayerQuitListener(this)
             )
             for (listener in listeners) {

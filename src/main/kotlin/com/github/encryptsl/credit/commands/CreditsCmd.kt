@@ -228,7 +228,18 @@ class CreditsCmd(private val creditLite: com.github.encryptsl.credit.CreditLite)
             }
         }
 
-        commandSender.sendMessage("Into database was insterted $amountStr fake accounts in time $time ms")
+        commandSender.sendMessage("Into database was inserted $amountStr fake accounts in time $time ms")
+    }
+
+    @Command("credits debug database accounts")
+    @Permission("credit.admin.debug.database.accounts")
+    fun onDebugDatabase(commandSender: CommandSender) {
+
+        val data = creditLite.creditModel.getTopBalance()
+
+        commandSender.sendMessage("Accounts list " + data.entries.map { k -> k.key })
+        commandSender.sendMessage("Accounts balances " + data.entries.sumOf { it.value })
+        commandSender.sendMessage("Accounts in database " + data.size.toString())
     }
 
     @Command("credits reload")

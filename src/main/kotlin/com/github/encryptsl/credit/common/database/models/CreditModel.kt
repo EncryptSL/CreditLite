@@ -20,7 +20,7 @@ class CreditModel : CreditDataSourceSQL {
         loggedTransaction {
             Account.insertIgnore {
                 it[Account.username] = username
-                it[Account.uuid] = uuid.toString()
+                it[Account.uuid] = uuid
                 it[Account.credit] = credit
             }
         }
@@ -28,18 +28,18 @@ class CreditModel : CreditDataSourceSQL {
 
     override fun deletePlayerAccount(uuid: UUID) {
         loggedTransaction {
-            Account.deleteWhere { Account.uuid eq uuid.toString() }
+            Account.deleteWhere { Account.uuid eq uuid }
         }
     }
 
     override fun getUserByUUID(uuid: UUID): CompletableFuture<User> {
         val future = CompletableFuture<User>()
         loggedTransaction {
-            val row = Account.select(Account.uuid, Account.username, Account.credit).where(Account.uuid eq uuid.toString()).singleOrNull()
+            val row = Account.select(Account.uuid, Account.username, Account.credit).where(Account.uuid eq uuid).singleOrNull()
             if (row == null) {
                 future.completeExceptionally(RuntimeException("User not found !"))
             } else {
-                future.completeAsync { User(row[Account.username], UUID.fromString(row[Account.uuid]), row[Account.credit]) }
+                future.completeAsync { User(row[Account.username], row[Account.uuid], row[Account.credit]) }
             }
         }
 
@@ -50,7 +50,7 @@ class CreditModel : CreditDataSourceSQL {
         val future = CompletableFuture<Boolean>()
 
         val boolean = loggedTransaction {
-            !Account.select(Account.uuid).where(Account.uuid eq uuid.toString()).empty()
+            !Account.select(Account.uuid).where(Account.uuid eq uuid).empty()
         }
         future.completeAsync { boolean }
         return future
@@ -58,27 +58,27 @@ class CreditModel : CreditDataSourceSQL {
 
     override fun getTopBalance(): MutableMap<String, BigDecimal> = loggedTransaction {
         Account.selectAll().orderBy(Account.credit, SortOrder.DESC).associate {
-            it[Account.uuid] to it[Account.credit]
+            it[Account.username] to it[Account.credit]
         }.toMutableMap()
     }
 
     override fun depositCredit(uuid: UUID, credit: BigDecimal) {
         loggedTransaction {
-            Account.update({ Account.uuid eq uuid.toString() }) {
+            Account.update({ Account.uuid eq uuid }) {
                 it[Account.credit] = Account.credit plus credit
             }
         }
     }
     override fun withdrawCredit(uuid: UUID, credit: BigDecimal) {
         loggedTransaction {
-            Account.update({ Account.uuid eq uuid.toString() }) {
+            Account.update({ Account.uuid eq uuid }) {
                 it[Account.credit] = Account.credit minus credit
             }
         }
     }
     override fun setCredit(uuid: UUID, credit: BigDecimal) {
         loggedTransaction {
-            Account.update({ Account.uuid eq uuid.toString() }) {
+            Account.update({ Account.uuid eq uuid }) {
                 it[Account.credit] = credit
             }
         }
@@ -93,7 +93,7 @@ class CreditModel : CreditDataSourceSQL {
     }
 
     override fun purgeInvalidAccounts() {
-        val validPlayerUUIDs = Bukkit.getOfflinePlayers().mapNotNull { runCatching { it.uniqueId }.getOrNull() }.map { it.toString() }
+        val validPlayerUUIDs = Bukkit.getOfflinePlayers().mapNotNull { runCatching { it.uniqueId }.getOrNull() }.map { it }
         loggedTransaction {
             Account.deleteWhere {
                 uuid notInList validPlayerUUIDs

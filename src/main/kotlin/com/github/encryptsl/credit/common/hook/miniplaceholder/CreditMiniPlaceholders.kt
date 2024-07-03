@@ -5,7 +5,6 @@ import com.github.encryptsl.credit.api.economy.CreditEconomy
 import io.github.miniplaceholders.kotlin.asInsertingTag
 import io.github.miniplaceholders.kotlin.expansion
 import net.kyori.adventure.text.Component
-import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import java.math.BigDecimal
 import java.util.*
@@ -64,8 +63,7 @@ class CreditMiniPlaceholders(private val creditLite: CreditLite) {
     private fun nameByRank(rank: Int): String {
         val topBalance = topBalance()
         return if (rank in 1..topBalance.size) {
-            val playerUuid = topBalance.keys.elementAt(rank - 1)
-            Bukkit.getOfflinePlayer(UUID.fromString(playerUuid)).name ?: "UNKNOWN"
+            Optional.ofNullable(topBalance.keys.elementAt(rank - 1)).orElse("UNKNOWN")
         } else {
             "N/A"
         }

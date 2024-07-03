@@ -6,11 +6,12 @@ import java.util.*
 interface AccountAPI {
     fun cacheAccount(uuid: UUID, value: BigDecimal)
 
+    fun syncAccount(uuid: UUID, value: BigDecimal)
     fun syncAccount(uuid: UUID)
 
     fun syncAccounts()
 
-    fun removeAccount(uuid: UUID)
+    fun clearFromCache(uuid: UUID)
 
     fun getBalance(uuid: UUID): BigDecimal
 

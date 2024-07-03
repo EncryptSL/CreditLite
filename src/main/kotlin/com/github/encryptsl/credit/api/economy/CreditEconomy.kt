@@ -12,23 +12,22 @@ import java.util.concurrent.CompletableFuture
 
 object CreditEconomy : CreditAPI {
 
-    private val walletCache: PlayerWalletCache by lazy { PlayerWalletCache() }
     private val creditModel: CreditModel by lazy { CreditModel() }
 
     override fun createAccount(player: OfflinePlayer, startAmount: BigDecimal): Boolean {
-        return getUserByUUID(player).thenApply { false }.exceptionally {
+        return getUserByUUID(player).thenApply { return@thenApply false }.exceptionally {
             creditModel.createPlayerAccount(player.name.toString(), player.uniqueId, startAmount)
             return@exceptionally true
-        }.get()
+        }.join()
     }
 
     override fun cacheAccount(player: OfflinePlayer, amount: BigDecimal) {
-        getUserByUUID(player).thenAccept { walletCache.cacheAccount(player.uniqueId, amount) }
+        getUserByUUID(player).thenAccept { PlayerWalletCache.cacheAccount(player.uniqueId, amount) }
     }
 
     override fun deleteAccount(player: OfflinePlayer): Boolean {
         return getUserByUUID(player).thenApply {
-            walletCache.removeAccount(player.uniqueId)
+            PlayerWalletCache.clearFromCache(player.uniqueId)
             creditModel.deletePlayerAccount(player.uniqueId)
             return@thenApply true
         }.exceptionally {
@@ -47,8 +46,8 @@ object CreditEconomy : CreditAPI {
     override fun getUserByUUID(player: OfflinePlayer): CompletableFuture<User> {
         val future = CompletableFuture<User>()
 
-        if (walletCache.isPlayerOnline(player.uniqueId) || walletCache.isAccountCached(player.uniqueId)) {
-            future.completeAsync { User(player.name.toString(), player.uniqueId, walletCache.getBalance(player.uniqueId)) }
+        if (PlayerWalletCache.isPlayerOnline(player.uniqueId) || PlayerWalletCache.isAccountCached(player.uniqueId)) {
+            future.completeAsync { User(player.name.toString(), player.uniqueId, PlayerWalletCache.getBalance(player.uniqueId)) }
         } else {
             return creditModel.getUserByUUID(player.uniqueId)
         }
@@ -61,7 +60,7 @@ object CreditEconomy : CreditAPI {
     }
 
     override fun deposit(player: OfflinePlayer, amount: BigDecimal) {
-        if (walletCache.isPlayerOnline(player.uniqueId)) {
+        if (PlayerWalletCache.isPlayerOnline(player.uniqueId)) {
             cacheAccount(player, getBalance(player).plus(amount))
         } else {
             creditModel.depositCredit(player.uniqueId, amount)
@@ -69,7 +68,7 @@ object CreditEconomy : CreditAPI {
     }
 
     override fun withdraw(player: OfflinePlayer, amount: BigDecimal) {
-        if (walletCache.isPlayerOnline(player.uniqueId)) {
+        if (PlayerWalletCache.isPlayerOnline(player.uniqueId)) {
             cacheAccount(player, getBalance(player).minus(amount))
         } else {
             creditModel.withdrawCredit(player.uniqueId, amount)
@@ -77,7 +76,7 @@ object CreditEconomy : CreditAPI {
     }
 
     override fun set(player: OfflinePlayer, amount: BigDecimal) {
-        if (walletCache.isPlayerOnline(player.uniqueId)) {
+        if (PlayerWalletCache.isPlayerOnline(player.uniqueId)) {
             cacheAccount(player, amount)
         } else {
             creditModel.setCredit(player.uniqueId, amount)
@@ -85,11 +84,11 @@ object CreditEconomy : CreditAPI {
     }
 
     override fun syncAccount(player: OfflinePlayer) {
-        walletCache.syncAccount(player.uniqueId)
+        PlayerWalletCache.syncAccount(player.uniqueId)
     }
 
     override fun syncAccounts() {
-        walletCache.syncAccounts()
+        PlayerWalletCache.syncAccounts()
     }
 
     override fun getTopBalance(): Map<String, BigDecimal> {

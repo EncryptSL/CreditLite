@@ -6,7 +6,7 @@ import org.bukkit.Bukkit
 import java.math.BigDecimal
 import java.util.*
 
-class PlayerWalletCache : AccountAPI {
+object PlayerWalletCache : AccountAPI {
 
     private val creditModel: CreditModel by lazy { CreditModel() }
     private val cache: HashMap<UUID, BigDecimal> = HashMap()
@@ -23,26 +23,35 @@ class PlayerWalletCache : AccountAPI {
         return cache.getOrDefault(uuid, BigDecimal.ZERO)
     }
 
+    override fun syncAccount(uuid: UUID, value: BigDecimal) {
+        try {
+            creditModel.setCredit(uuid, value)
+        } catch (_ : Exception) {}
+    }
+
     override fun syncAccount(uuid: UUID) {
         try {
             creditModel.setCredit(uuid, getBalance(uuid))
-            removeAccount(uuid)
+            Bukkit.getLogger().info(getBalance(uuid).toPlainString())
+            clearFromCache(uuid)
         } catch (_ : Exception) {}
     }
 
     override fun syncAccounts() {
         try {
-            val cache = cache
-            if (cache.isEmpty()) return
-            for (p in cache) {
-                creditModel.setCredit(p.key, p.value)
+            val iterator = cache.iterator()
+            while (iterator.hasNext()) {
+                val next = iterator.next()
+                syncAccount(next.key, next.value)
             }
             cache.clear()
         } catch (_: Exception) {}
     }
 
-    override fun removeAccount(uuid: UUID) {
-        cache.remove(uuid)
+    override fun clearFromCache(uuid: UUID) {
+        val player = cache.keys.find { key -> key == uuid } ?: return
+
+        cache.remove(player)
     }
 
     override fun isAccountCached(uuid: UUID): Boolean {

@@ -2,10 +2,10 @@ package com.github.encryptsl.credit.common.hook.placeholderapi
 
 import com.github.encryptsl.credit.api.economy.CreditEconomy
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
-import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import java.math.BigDecimal
 import java.util.*
+
 class CreditPlaceholderAPI(private val creditLite: com.github.encryptsl.credit.CreditLite, private val extVersion: String) : PlaceholderExpansion() {
 
     override fun getIdentifier(): String = "credit"
@@ -47,8 +47,7 @@ class CreditPlaceholderAPI(private val creditLite: com.github.encryptsl.credit.C
     private fun nameByRank(rank: Int): String {
         val topBalance = topBalance()
         return if (rank in 1..topBalance.size) {
-            val playerUuid = topBalance.keys.elementAt(rank - 1)
-            Bukkit.getOfflinePlayer(UUID.fromString(playerUuid)).name ?: "UNKNOWN"
+            Optional.ofNullable(topBalance.keys.elementAt(rank - 1)).orElse("UNKNOWN")
         } else {
             "N/A"
         }
