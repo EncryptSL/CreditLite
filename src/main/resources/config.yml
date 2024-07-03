@@ -4,7 +4,7 @@ plugin:
   # https://github.com/EncryptSL/CreditLite/blob/main/src/main/kotlin/com/github/encryptsl/credit/common/config/Locales.kt
   translation: CS
   # Plugin prefix
-  prefix: "<#64646F>[<#F9AD47>Credits<#64646F>]</#64646F>"
+  prefix: "<#64646F>[<#0ABEEA>Kredit<#64646F>] <dark_green>»</#64646F>"
 
 economy:
   currency_format: '<credits>'
