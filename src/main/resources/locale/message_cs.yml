@@ -9,16 +9,16 @@ messages:
 
   # Self-transaction messages
   self:
-    add_credit: "<prefix> <white>Přidal jsi si <green><credit></green>kreditů."
-    withdraw_credit: "<prefix> <white>Odebral jsi si <green><credit></green>kreditů."
-    set_credit: "<prefix> <white>Nastavil jsi si <green><credit></green>kreditů."
+    add_credit: "<prefix> <white>Přidal jsi si <green><credit></green> kreditů."
+    withdraw_credit: "<prefix> <white>Odebral jsi si <green><credit></green> kreditů."
+    set_credit: "<prefix> <white>Nastavil jsi si <green><credit></green> kreditů."
 
   # Transaction messages for target
   target:
-    add_credit: "<prefix> <gold><sender></gold> <white>vám poslal <green><credit></green>kreditů."
+    add_credit: "<prefix> <gold><sender></gold> <white>vám poslal <green><credit></green> kreditů."
     add_credit_silent: "<gray>+ <green><credit> Kredit"
-    withdraw_credit: "<prefix> <gold><sender></gold> <white>vám odebral <green><credit></green>kreditů."
-    set: "<prefix> <gold><sender></gold> <white>vám nastavil <green><credit></green>kreditů."
+    withdraw_credit: "<prefix> <gold><sender></gold> <white>vám odebral <green><credit></green> kreditů."
+    set: "<prefix> <gold><sender></gold> <white>vám nastavil <green><credit></green> kreditů."
 
   # Transaction messages for sender
   sender:
