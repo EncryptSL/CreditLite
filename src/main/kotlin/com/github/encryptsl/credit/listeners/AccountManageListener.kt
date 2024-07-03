@@ -17,10 +17,9 @@ class AccountManageListener(
         val player: Player = event.player
         when (event.operationType) {
             OperationType.CREATE_ACCOUNT -> CreditEconomy.createAccount(player, creditLite.config.getDouble("economy.starting_balance").toBigDecimal())
-            OperationType.CACHING_ACCOUNT -> { CreditEconomy.getUserByUUID(player)
-                .thenAccept {
+            OperationType.CACHING_ACCOUNT -> {
+                creditLite.creditModel.getUserByUUID(player.uniqueId).thenAccept {
                     CreditEconomy.cacheAccount(player, it.money)
-                    player.sendMessage("Cached credits ${it.money}")
                 }
             }
             OperationType.SYNC_ACCOUNT -> CreditEconomy.syncAccount(player)

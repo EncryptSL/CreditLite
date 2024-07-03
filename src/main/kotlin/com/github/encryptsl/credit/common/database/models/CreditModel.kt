@@ -37,7 +37,7 @@ class CreditModel : CreditDataSourceSQL {
         loggedTransaction {
             val row = Account.select(Account.uuid, Account.username, Account.credit).where(Account.uuid eq uuid).singleOrNull()
             if (row == null) {
-                future.completeExceptionally(RuntimeException("User not found !"))
+                future.completeExceptionally(Exception("User not found !"))
             } else {
                 future.completeAsync { User(row[Account.username], row[Account.uuid], row[Account.credit]) }
             }

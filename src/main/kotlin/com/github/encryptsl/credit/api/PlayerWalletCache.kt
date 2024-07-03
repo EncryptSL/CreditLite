@@ -32,7 +32,6 @@ object PlayerWalletCache : AccountAPI {
     override fun syncAccount(uuid: UUID) {
         try {
             creditModel.setCredit(uuid, getBalance(uuid))
-            Bukkit.getLogger().info(getBalance(uuid).toPlainString())
             clearFromCache(uuid)
         } catch (_ : Exception) {}
     }
