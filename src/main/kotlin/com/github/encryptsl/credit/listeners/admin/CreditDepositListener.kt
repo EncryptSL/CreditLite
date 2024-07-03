@@ -32,7 +32,7 @@ class CreditDepositListener(private val creditLite: com.github.encryptsl.credit.
         }
 
         if (sender.name == target.name || sender.hasPermission("credit.admin.add.self.exempt"))
-            return sender.sendMessage(creditLite.locale.translation("messages.message.self.add_credit",
+            return sender.sendMessage(creditLite.locale.translation("messages.self.add_credit",
                 Placeholder.parsed("credit", creditLite.creditEconomyFormatting.fullFormatting(money))
             ))
 
